@@ -17,6 +17,47 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
   </motion.div>
 );
 
+const HeroMockupElement = () => (
+            <FadeIn delay={0.4}>
+              <div className={styles.heroMockupContainer}>
+                
+                <motion.div 
+                   animate={{ rotateY: [-5, 5, -5], rotateX: [2, -2, 2], y: [0, -10, 0] }} 
+                   transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                   style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 5, padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   
+                   <HeroUseCases />
+
+                </motion.div>
+
+                <motion.div 
+                   animate={{ y: [100, -200], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleLeft}>
+                   &quot;Send me the link! 😍&quot;
+                </motion.div>
+                <motion.div 
+                   animate={{ y: [150, -150], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 4.5, delay: 1.5, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleRight}>
+                   &quot;price pls&quot;
+                </motion.div>
+
+                <motion.div
+                   animate={{ scale: [0.8, 1, 0.8], opacity: [0, 0.95, 0], y: [-20, -40, -20] }}
+                   transition={{ duration: 3, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+                   className={`${styles.ambientDmPopup} glass-panel`}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                      <div style={{width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)'}}/>
+                      <span style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600 }}>DM Delivered</span>
+                   </div>
+                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>&quot;Here is your exclusive link: https://drop.site 🚀&quot;</div>
+                </motion.div>
+
+              </div>
+            </FadeIn>
+);
+
 const CountUpMetric = ({ target, prefix = '', suffix = '', decimals = 0 }: { target: number, prefix?: string, suffix?: string, decimals?: number }) => {
    const ref = useRef(null);
    const isInView = useInView(ref, { once: false, amount: 0.5 });
@@ -560,6 +601,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   <span className="text-gradient" style={{display: 'inline-block'}}>Automatically</span>
                 </h1>
               </FadeIn>
+              
+              <div className={styles.mobileOnlyVisual}>
+                <HeroMockupElement />
+              </div>
+
               <FadeIn delay={0.2}>
                 <p className={styles.heroSub} style={{ maxWidth: '90%', marginBottom: '2rem', lineHeight: 1.6 }}>
                   Reply to every comment, send DMs instantly, and capture leads while you sleep. Turn your engagement into revenue on autopilot.
@@ -590,46 +636,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
               </FadeIn>
             </div>
 
-            <FadeIn delay={0.4}>
-              <div className={styles.heroMockupContainer}>
-                
-                <motion.div 
-                   animate={{ rotateY: [-5, 5, -5], rotateX: [2, -2, 2], y: [0, -10, 0] }} 
-                   transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                   style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 5, padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                   
-                   <HeroUseCases />
-
-                </motion.div>
-
-                {/* Layer 1: IG Comments Bubbles (Glassmorphism over post) */}
-                <motion.div 
-                   animate={{ y: [100, -200], opacity: [0, 0.95, 0] }} 
-                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                   className={styles.ambientBubbleLeft}>
-                   &quot;Send me the link! 😍&quot;
-                </motion.div>
-                <motion.div 
-                   animate={{ y: [150, -150], opacity: [0, 0.95, 0] }} 
-                   transition={{ duration: 4.5, delay: 1.5, repeat: Infinity, ease: "linear" }}
-                   className={styles.ambientBubbleRight}>
-                   &quot;price pls&quot;
-                </motion.div>
-
-                {/* Layer 3: DM Popup (Subtle) */}
-                <motion.div
-                   animate={{ scale: [0.8, 1, 0.8], opacity: [0, 0.95, 0], y: [-20, -40, -20] }}
-                   transition={{ duration: 3, delay: 2, repeat: Infinity, ease: "easeInOut" }}
-                   className={`${styles.ambientDmPopup} glass-panel`}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                      <div style={{width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)'}}/>
-                      <span style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600 }}>DM Delivered</span>
-                   </div>
-                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>&quot;Here is your exclusive link: https://drop.site 🚀&quot;</div>
-                </motion.div>
-
-              </div>
-            </FadeIn>
+            <div className={styles.desktopOnlyVisual}>
+               <HeroMockupElement />
+            </div>
           </div>
         </div>
       </section>

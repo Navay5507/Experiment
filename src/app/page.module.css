@@ -641,8 +641,22 @@
   align-items: start;
 }
 
+.mobileOnlyVisual {
+  display: none;
+}
+
+.desktopOnlyVisual {
+  display: block;
+}
+
 /* ===== TABLET (768px) ===== */
 @media (max-width: 768px) {
+  .mobileOnlyVisual {
+    display: block;
+  }
+  .desktopOnlyVisual {
+    display: none;
+  }
   .container {
     padding: 0 1.25rem;
   }
