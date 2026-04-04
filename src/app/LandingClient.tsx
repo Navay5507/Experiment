@@ -589,11 +589,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
               <FadeIn delay={0.3}>
                 <div className={styles.heroCtas}>
                   {userId ? (
-                     <Link href="/dashboard" className="premium-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Dashboard <ArrowRight size={20}/></Link>
+                     <Link href="/dashboard" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', whiteSpace: 'nowrap' }}>Dashboard <ArrowRight size={20}/></Link>
                   ) : (
-                     <Link href="/sign-up" className="premium-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Start Free Trial <ArrowRight size={20}/></Link>
+                     <Link href="/sign-up" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', whiteSpace: 'nowrap' }}>Start Free Trial <ArrowRight size={20}/></Link>
                   )}
-                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>See How it Works</a>
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>See How it Works</a>
                 </div>
               </FadeIn>
               <FadeIn delay={0.4}>

@@ -670,9 +670,10 @@
     max-width: 100%;
   }
   .heroCtas {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
   }
   .metaBadgeBox {
     flex-direction: column;
@@ -792,7 +793,7 @@
     padding: 80px 0 40px 0;
   }
   .heroHeading {
-    font-size: 28px;
+    font-size: 38px;
   }
   .heroSub {
     font-size: 14px;
