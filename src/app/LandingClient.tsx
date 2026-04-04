@@ -555,23 +555,24 @@ export default function LandingClient({ userId }: { userId: string | null }) {
           <div className={`${styles.heroGrid} ${styles.splitSection}`}>
             <div className={styles.heroContent}>
               <FadeIn delay={0.1}>
-                <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', wordWrap: 'break-word' }}>
-                  Turn Instagram Comments Into Leads <br/> <span className="text-gradient" style={{wordBreak: 'break-word'}}>Automatically</span>
+                <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', lineHeight: 1.15, letterSpacing: '-0.02em' }}>
+                  Turn Instagram Comments Into Leads{' '}
+                  <span className="text-gradient" style={{display: 'inline-block'}}>Automatically</span>
                 </h1>
               </FadeIn>
               <FadeIn delay={0.2}>
-                <p className={styles.heroSub} style={{ maxWidth: '90%', marginBottom: '2rem' }}>
-                  Reply to every comment, send DMs instantly, and capture leads while you sleep. Built for creators scaling past 100k followers.
+                <p className={styles.heroSub} style={{ maxWidth: '90%', marginBottom: '2rem', lineHeight: 1.6 }}>
+                  Reply to every comment, send DMs instantly, and capture leads while you sleep. Turn your engagement into revenue on autopilot.
                 </p>
               </FadeIn>
               <FadeIn delay={0.3}>
                 <div className={styles.heroCtas}>
                   {userId ? (
-                     <Link href="/dashboard" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', whiteSpace: 'nowrap' }}>Dashboard <ArrowRight size={20}/></Link>
+                     <Link href="/dashboard" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '1rem', whiteSpace: 'nowrap' }}>Dashboard <ArrowRight size={20}/></Link>
                   ) : (
-                     <Link href="/sign-up" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', whiteSpace: 'nowrap' }}>Start Free Trial <ArrowRight size={20}/></Link>
+                     <Link href="/sign-up" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '1rem', whiteSpace: 'nowrap' }}>Start Free Trial <ArrowRight size={20}/></Link>
                   )}
-                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(0.5rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>See How it Works</a>
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, color: '#fff', fontWeight: 600, padding: '1rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>See How it Works</a>
                 </div>
               </FadeIn>
               <FadeIn delay={0.4}>
