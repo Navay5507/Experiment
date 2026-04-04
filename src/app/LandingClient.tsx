@@ -560,19 +560,17 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       </div>
 
       <section className={styles.heroSection}>
-        {/* Floating Top-Right Badge */}
-        <motion.div 
-           initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
-           style={{ position: 'absolute', top: 'clamp(70px, 10vw, 100px)', right: 'clamp(2%, 5vw, 5%)', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'clamp(0.6rem, 2vw, 0.8rem)', zIndex: 10, color: '#e5e7eb' }}>
-           <Zap size={14} color="#facc15" fill="#facc15" /> Real-time Instagram Automation
-        </motion.div>
-
         <div className={styles.container}>
           <div className={`${styles.heroGrid} ${styles.splitSection}`}>
             <div className={styles.heroContent}>
               <FadeIn>
-                <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', marginBottom: '1.5rem' }}>
-                    ✨ Autodrop v1 Stable • <span style={{color: '#10b981'}}>Verified Sync v1.1</span>
+                <div style={{ display: 'inline-flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                  <div style={{ padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)' }}>
+                      ✨ Autodrop v1 Stable • <span style={{color: '#10b981'}}>Verified Sync v1.1</span>
+                  </div>
+                  <div style={{ padding: '0.4rem 1rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', color: '#e5e7eb', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Zap size={14} color="#facc15" fill="#facc15" /> Real-time Instagram Automation
+                  </div>
                 </div>
               </FadeIn>
               <FadeIn delay={0.1}>
@@ -591,11 +589,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
               <FadeIn delay={0.3}>
                 <div className={styles.heroCtas}>
                   {userId ? (
-                     <Link href="/dashboard" className="premium-btn" style={{ padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Dashboard <ArrowRight size={20}/></Link>
+                     <Link href="/dashboard" className="premium-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Dashboard <ArrowRight size={20}/></Link>
                   ) : (
-                     <Link href="/sign-up" className="premium-btn" style={{ padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Start Free Trial <ArrowRight size={20}/></Link>
+                     <Link href="/sign-up" className="premium-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Start Free Trial <ArrowRight size={20}/></Link>
                   )}
-                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>See How it Works</a>
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>See How it Works</a>
                 </div>
               </FadeIn>
               <FadeIn delay={0.4}>
