@@ -144,7 +144,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         </motion.div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)', gap: '1.5rem', marginTop: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', gap: '1.25rem', marginTop: '1.5rem' }}>
          
          {/* Live Activity Feed - HONEST DB DATA */}
          <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>

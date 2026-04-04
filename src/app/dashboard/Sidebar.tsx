@@ -73,13 +73,13 @@ export default function Sidebar() {
         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} />
         <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} />
         <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} />
-        <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
-        <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={false} isComingSoon={true} />
-        <NavItem href="/dashboard/logs" icon={Activity} label="System Logs" isActive={isActive('/dashboard/logs')} />
-        <NavItem href="/dashboard/settings" icon={Settings} label="Setup &amp; Policy" isActive={isActive('/dashboard/settings')} />
+        <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Base" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/referral" icon={Gift} label="Referral" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/logs" icon={Activity} label="Sys Logs" isActive={isActive('/dashboard/logs')} />
+        <NavItem href="/dashboard/settings" icon={Settings} label="Settings" isActive={isActive('/dashboard/settings')} />
 
         <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <NavItem href="/support" icon={Headphones} label="Get Support" isBottom isActive={isActive('/support')} />
+          <NavItem href="/support" icon={Headphones} label="Support" isBottom isActive={isActive('/support')} />
         </div>
       </nav>
     </aside>
