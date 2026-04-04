@@ -554,19 +554,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container}>
           <div className={`${styles.heroGrid} ${styles.splitSection}`}>
             <div className={styles.heroContent}>
-              <FadeIn>
-                <div style={{ display: 'inline-flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                  <div style={{ padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)' }}>
-                      ✨ Autodrop v1 Stable • <span style={{color: '#10b981'}}>Verified Sync v1.1</span>
-                  </div>
-                  <div style={{ padding: '0.4rem 1rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '100px', color: '#e5e7eb', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <Zap size={14} color="#facc15" fill="#facc15" /> Real-time Instagram Automation
-                  </div>
-                </div>
-              </FadeIn>
               <FadeIn delay={0.1}>
                 <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', wordWrap: 'break-word' }}>
-                  Turn Instagram Comments into Leads — <br/> <span className="text-gradient" style={{wordBreak: 'break-word'}}>Automatically</span>
+                  Turn Instagram Comments Into Leads <br/> <span className="text-gradient" style={{wordBreak: 'break-word'}}>Automatically</span>
                 </h1>
               </FadeIn>
               <FadeIn delay={0.2}>
