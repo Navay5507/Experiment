@@ -232,28 +232,32 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     let result;
 
     if (usesComplexFlow) {
-      // Pro features require 24h messaging window interactions, so we prompt for a Button interaction
-      // This ensures compatibility across Stories, Live Streams, and modern IG clients
-      const initialButtons: any[] = [
-        { type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }
+      // Pro features require 24h messaging window interactions.
+      // We MUST use Quick Replies here because sending a Button Template in a Private Reply 
+      // is completely invalid in Instagram's API and causes the iOS/Android client to literally crash.
+      const initialQuickReplies: any[] = [
+        { content_type: 'text', title: 'Send me access', payload: 'GET_LINK' }
       ];
 
       if (commentId) {
-        result = await sendPrivateReply(token, commentId, dmText, undefined, initialButtons);
+        result = await sendPrivateReply(token, commentId, dmText, initialQuickReplies);
       } else {
-        result = await sendButtonTemplateDM(token, recipientId, dmText, initialButtons);
+        result = await sendQuickReplyDM(token, recipientId, dmText, initialQuickReplies);
       }
     } else {
-      // Standard flow skips the proxy Quick Reply and instantly sends the URL Button Template
-      const buttonTemplates: any[] = [];
-      if (automation.dm_link) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        buttonTemplates.push({ type: 'web_url', title: 'Link', url: redirectUrl });
-      }
-
+      // Standard flow: For a Private Reply, we MUST append the URL to the text.
+      // Button Templates will fail or crash the app.
       if (commentId) {
-        result = await sendPrivateReply(token, commentId, dmText, undefined, buttonTemplates);
+        const redirectUrl = automation.dm_link ? `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}` : '';
+        const finalText = redirectUrl ? `${dmText}\n\n🔗 ${redirectUrl}` : dmText;
+        result = await sendPrivateReply(token, commentId, finalText);
       } else {
+        // If not a Private Reply (e.g. story reply), we CAN use button templates
+        const buttonTemplates: any[] = [];
+        if (automation.dm_link) {
+          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+          buttonTemplates.push({ type: 'web_url', title: 'Link', url: redirectUrl });
+        }
         if (buttonTemplates.length > 0) {
           result = await sendButtonTemplateDM(token, recipientId, dmText, buttonTemplates);
         } else {
