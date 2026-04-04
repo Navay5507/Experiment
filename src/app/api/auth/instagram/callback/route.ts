@@ -4,9 +4,13 @@ import crypto from 'crypto';
 
 const INSTAGRAM_APP_ID = process.env.INSTAGRAM_APP_ID;
 const INSTAGRAM_APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
-const REDIRECT_URI = APP_URL + '/api/auth/instagram/callback';
-const FRONTEND_DASHBOARD = APP_URL + '/dashboard';
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+if (!APP_URL) {
+  throw new Error("NEXT_PUBLIC_APP_URL is not configured in Vercel environment variables.");
+}
+const CLEAN_APP_URL = APP_URL.replace(/\/$/, '');
+const REDIRECT_URI = CLEAN_APP_URL + '/api/auth/instagram/callback';
+const FRONTEND_DASHBOARD = CLEAN_APP_URL + '/dashboard';
 
 export async function GET(req: Request) {
   console.log('[IG Callback] Hit callback route');
