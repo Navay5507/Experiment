@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import crypto from 'crypto';
 
-const INSTAGRAM_APP_ID = process.env.INSTAGRAM_APP_ID;
-const INSTAGRAM_APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
+const INSTAGRAM_APP_SECRET = (process.env.INSTAGRAM_APP_SECRET || '').trim();
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || '').trim();
 
 if (!APP_URL) {
   throw new Error("NEXT_PUBLIC_APP_URL is not configured in Vercel environment variables.");

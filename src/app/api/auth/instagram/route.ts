@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 
-const INSTAGRAM_APP_ID = process.env.INSTAGRAM_APP_ID;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || '').trim();
 
 if (!APP_URL) {
   throw new Error("NEXT_PUBLIC_APP_URL is not configured in Vercel environment variables.");
@@ -12,8 +12,10 @@ const CLEAN_APP_URL = APP_URL.replace(/\/$/, '');
 const REDIRECT_URI = CLEAN_APP_URL + '/api/auth/instagram/callback';
 
 export async function GET() {
-  console.log("Constructed Redirect URI:", REDIRECT_URI);
-  console.log("Using Instagram App ID:", INSTAGRAM_APP_ID);
+  console.log("--- INSTAGRAM AUTH DIAGNOSTIC ---");
+  console.log("PRE-TRIM APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+  console.log("CONSTRUCTED REDIRECT_URI:", REDIRECT_URI);
+  console.log("USING APP_ID:", INSTAGRAM_APP_ID);
   
   if (!INSTAGRAM_APP_ID) {
     return new NextResponse('Instagram App ID not configured.', { status: 500 });
@@ -38,6 +40,9 @@ export async function GET() {
     `&scope=${scopes}` +
     `&force_authentication=1` +
     `&state=${userId}`;
+
+  console.log("FINAL AUTH URL:", authUrl);
+  console.log("--- END DIAGNOSTIC ---");
 
   return NextResponse.redirect(authUrl);
 }
