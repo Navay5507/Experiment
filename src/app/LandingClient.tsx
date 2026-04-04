@@ -559,11 +559,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         </nav>
       </div>
 
-      <section className={styles.heroSection} style={{ padding: '8rem 0 4rem 0' }}>
+      <section className={styles.heroSection}>
         {/* Floating Top-Right Badge */}
         <motion.div 
            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
-           style={{ position: 'absolute', top: '100px', right: '5%', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', zIndex: 10, color: '#e5e7eb' }}>
+           style={{ position: 'absolute', top: 'clamp(70px, 10vw, 100px)', right: 'clamp(2%, 5vw, 5%)', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'clamp(0.6rem, 2vw, 0.8rem)', zIndex: 10, color: '#e5e7eb' }}>
            <Zap size={14} color="#facc15" fill="#facc15" /> Real-time Instagram Automation
         </motion.div>
 
@@ -571,17 +571,17 @@ export default function LandingClient({ userId }: { userId: string | null }) {
           <div className={`${styles.heroGrid} ${styles.splitSection}`}>
             <div className={styles.heroContent}>
               <FadeIn>
-                <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', marginBottom: '1.5rem' }}>
                     ✨ Autodrop v1 Stable • <span style={{color: '#10b981'}}>Verified Sync v1.1</span>
                 </div>
               </FadeIn>
               <FadeIn delay={0.1}>
-                <h1 style={{ fontSize: '4.5rem', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '1.5rem', color: '#fff' }}>
-                  Turn Instagram Comments into Leads — <br/> <span className="text-gradient">Automatically</span>
+                <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', wordWrap: 'break-word' }}>
+                  Turn Instagram Comments into Leads — <br/> <span className="text-gradient" style={{wordBreak: 'break-word'}}>Automatically</span>
                 </h1>
               </FadeIn>
               <FadeIn delay={0.2}>
-                <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '90%' }}>
+                <p className={styles.heroSub} style={{ maxWidth: '90%' }}>
                   Reply to every comment, send DMs instantly, and capture leads while you sleep. Built for creators scaling past 100k followers.
                 </p>
                 <div style={{ marginTop: '1.5rem', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -591,22 +591,22 @@ export default function LandingClient({ userId }: { userId: string | null }) {
               <FadeIn delay={0.3}>
                 <div className={styles.heroCtas}>
                   {userId ? (
-                     <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>Dashboard <ArrowRight size={20}/></Link>
+                     <Link href="/dashboard" className="premium-btn" style={{ padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Dashboard <ArrowRight size={20}/></Link>
                   ) : (
-                     <Link href="/sign-up" className="premium-btn" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>Start Free Trial <ArrowRight size={20}/></Link>
+                     <Link href="/sign-up" className="premium-btn" style={{ padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)' }}>Start Free Trial <ArrowRight size={20}/></Link>
                   )}
-                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: '1rem 2rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none' }}>See How it Works</a>
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: 'clamp(0.75rem, 3vw, 1rem) clamp(1.25rem, 4vw, 2rem)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>See How it Works</a>
                 </div>
               </FadeIn>
               <FadeIn delay={0.4}>
                 <div className={styles.metaBadgeBox}>
                    <div style={{ textAlign: 'left', flex: 1 }}>
                       <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Badged Partner</div>
-                      <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>Autodrop is a Meta Business Partner</h3>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
+                      <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>Autodrop is a Meta Business Partner</h3>
+                      <p style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
                    </div>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: '0.95rem', whiteSpace: 'nowrap' }}>
-                      <InfinityIcon size={36} color="#3b82f6" strokeWidth={2.5} />
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', whiteSpace: 'nowrap' }}>
+                      <InfinityIcon size={32} color="#3b82f6" strokeWidth={2.5} />
                       <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>Meta Business<span style={{fontWeight: 400}}>Partners</span></span>
                    </div>
                 </div>
