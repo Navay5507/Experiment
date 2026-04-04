@@ -15,7 +15,8 @@ export default function SignUpPage() {
             elements: { formButtonPrimary: { backgroundColor: '#8b5cf6', '&:hover': { backgroundColor: '#7c3aed' } } } 
          }} 
          routing="path" 
-         path="/sign-up" 
+         path="/sign-up"
+         forceRedirectUrl="/"
       />
     </main>
   );
