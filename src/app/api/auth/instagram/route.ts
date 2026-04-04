@@ -7,6 +7,7 @@ const REDIRECT_URI = APP_URL + '/api/auth/instagram/callback';
 
 export async function GET() {
   console.log("Constructed Redirect URI:", REDIRECT_URI);
+  console.log("Using Instagram App ID:", INSTAGRAM_APP_ID);
   if (!INSTAGRAM_APP_ID) {
     return new NextResponse('Instagram App ID not configured.', { status: 500 });
   }
