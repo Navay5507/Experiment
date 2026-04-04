@@ -2,20 +2,25 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import crypto from 'crypto';
 
-const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
-const INSTAGRAM_APP_SECRET = (process.env.INSTAGRAM_APP_SECRET || '').trim();
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || '').trim();
-
-if (!APP_URL) {
-  throw new Error("NEXT_PUBLIC_APP_URL is not configured in Vercel environment variables.");
-}
-
-const CLEAN_APP_URL = APP_URL.replace(/\/$/, '');
-const REDIRECT_URI = CLEAN_APP_URL + '/api/auth/instagram/callback';
-const FRONTEND_DASHBOARD = CLEAN_APP_URL + '/dashboard';
-
 export async function GET(req: Request) {
+  const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
+  const INSTAGRAM_APP_SECRET = (process.env.INSTAGRAM_APP_SECRET || '').trim();
+  const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || '').trim();
+
+  if (!APP_URL || !INSTAGRAM_APP_ID || !INSTAGRAM_APP_SECRET) {
+    return new NextResponse(
+      `Missing env vars. APP_URL=${APP_URL ? 'set' : 'MISSING'}, APP_ID=${INSTAGRAM_APP_ID ? 'set' : 'MISSING'}, SECRET=${INSTAGRAM_APP_SECRET ? 'set' : 'MISSING'}`,
+      { status: 500 }
+    );
+  }
+
+  const CLEAN_APP_URL = APP_URL.replace(/\/$/, '');
+  const REDIRECT_URI = CLEAN_APP_URL + '/api/auth/instagram/callback';
+  const FRONTEND_DASHBOARD = CLEAN_APP_URL + '/dashboard';
+
   console.log('[IG Callback] Hit callback route');
+  console.log('[IG Callback] REDIRECT_URI:', REDIRECT_URI);
+
   const { searchParams } = new URL(req.url);
 
   const code = searchParams.get('code');
