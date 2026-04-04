@@ -6,6 +6,7 @@ const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').rep
 const REDIRECT_URI = APP_URL + '/api/auth/instagram/callback';
 
 export async function GET() {
+  console.log("Constructed Redirect URI:", REDIRECT_URI);
   if (!INSTAGRAM_APP_ID) {
     return new NextResponse('Instagram App ID not configured.', { status: 500 });
   }
