@@ -4,10 +4,9 @@ import crypto from 'crypto';
 
 const INSTAGRAM_APP_ID = process.env.INSTAGRAM_APP_ID;
 const INSTAGRAM_APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
 const REDIRECT_URI = APP_URL + '/api/auth/instagram/callback';
-// Always bounce the user back to fast localhost after the OAuth round-trip
-const FRONTEND_DASHBOARD = 'http://localhost:3000/dashboard';
+const FRONTEND_DASHBOARD = APP_URL + '/dashboard';
 
 export async function GET(req: Request) {
   console.log('[IG Callback] Hit callback route');

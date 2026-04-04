@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 
 const INSTAGRAM_APP_ID = process.env.INSTAGRAM_APP_ID;
-const REDIRECT_URI = 'https://autodrop-three.vercel.app/api/auth/instagram/callback';
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000').replace(/\/$/, '');
+const REDIRECT_URI = APP_URL + '/api/auth/instagram/callback';
 
 export async function GET() {
   console.log("Constructed Redirect URI:", REDIRECT_URI);
