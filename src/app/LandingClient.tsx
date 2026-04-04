@@ -17,15 +17,6 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
   </motion.div>
 );
 
-const CountUpDynamic = () => {
-   const [val, setVal] = useState(23847);
-   useEffect(() => {
-     const i = setInterval(() => setVal(v => v + Math.floor(Math.random() * 3)), 3000);
-     return () => clearInterval(i);
-   }, []);
-   return <span>{val.toLocaleString()}</span>;
-};
-
 const CountUpMetric = ({ target, prefix = '', suffix = '', decimals = 0 }: { target: number, prefix?: string, suffix?: string, decimals?: number }) => {
    const ref = useRef(null);
    const isInView = useInView(ref, { once: false, amount: 0.5 });
@@ -579,12 +570,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                 </h1>
               </FadeIn>
               <FadeIn delay={0.2}>
-                <p className={styles.heroSub} style={{ maxWidth: '90%' }}>
+                <p className={styles.heroSub} style={{ maxWidth: '90%', marginBottom: '2rem' }}>
                   Reply to every comment, send DMs instantly, and capture leads while you sleep. Built for creators scaling past 100k followers.
                 </p>
-                <div style={{ marginTop: '1.5rem', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                   <Zap size={16} color="#10b981" /> <CountUpDynamic /> DMs transmitted successfully today
-                </div>
               </FadeIn>
               <FadeIn delay={0.3}>
                 <div className={styles.heroCtas}>
