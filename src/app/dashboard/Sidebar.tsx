@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X } from "lucide-react";
 import styles from "./dashboard.module.css";
+import { useState, useEffect } from "react";
 
-// Defined OUTSIDE the render function to prevent recreation on every render
 interface NavItemProps {
   href: string;
   icon: LucideIcon;
@@ -14,9 +14,10 @@ interface NavItemProps {
   isActive: boolean;
   isComingSoon?: boolean;
   target?: string;
+  onNavigate?: () => void;
 }
 
-function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComingSoon = false, target }: NavItemProps) {
+function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComingSoon = false, target, onNavigate }: NavItemProps) {
   const content = (
     <motion.div
         whileHover={!isComingSoon ? { x: 4, backgroundColor: "rgba(255,255,255,0.03)" } : {}}
@@ -49,39 +50,96 @@ function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComing
   );
   
   if (isComingSoon) return <div style={{ opacity: 0.6, cursor: 'not-allowed' }}>{content}</div>;
-  return <Link href={href} target={target} style={{ textDecoration: 'none' }}>{content}</Link>;
+  return <Link href={href} target={target} style={{ textDecoration: 'none' }} onClick={onNavigate}>{content}</Link>;
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  isMobileOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const isActive = (path: string) => {
     if (path === '/dashboard') return pathname === '/dashboard';
     return pathname === path || pathname?.startsWith(`${path}/`);
   };
 
-  return (
-    <aside className={styles.sidebar} style={{ background: 'rgba(18,24,33,0.4)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
-      <div className={styles.brand} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '2rem 1.75rem' }}>
+  // Close sidebar on route change
+  useEffect(() => {
+    onClose();
+  }, [pathname]);
+
+  const navContent = (
+    <>
+      <div className={styles.brand} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1.5rem 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.4 }}>
-            <MessageCircle size={28} className={styles.brandIcon} style={{ color: 'var(--primary)' }} />
+            <MessageCircle size={26} className={styles.brandIcon} style={{ color: 'var(--primary)' }} />
           </motion.div>
-          <span style={{ fontSize: '1.4rem', letterSpacing: '-0.03em', color: '#fff' }}>Autodrop</span>
+          <span style={{ fontSize: '1.3rem', letterSpacing: '-0.03em', color: '#fff', fontWeight: 700 }}>Autodrop</span>
         </Link>
+        {/* Close button on mobile */}
+        <button
+          onClick={onClose}
+          className={styles.sidebarCloseBtn}
+          aria-label="Close sidebar"
+        >
+          <X size={20} color="var(--text-muted)" />
+        </button>
       </div>
-      <nav className={styles.nav} style={{ padding: '2rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
-        <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} />
-        <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} />
-        <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} />
-        <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Base" isActive={false} isComingSoon={true} />
-        <NavItem href="/dashboard/referral" icon={Gift} label="Referral" isActive={false} isComingSoon={true} />
-        <NavItem href="/dashboard/logs" icon={Activity} label="Sys Logs" isActive={isActive('/dashboard/logs')} />
-        <NavItem href="/dashboard/settings" icon={Settings} label="Settings" isActive={isActive('/dashboard/settings')} />
+      <nav className={styles.nav} style={{ padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
+        <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} onNavigate={onClose} />
+        <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} onNavigate={onClose} />
+        <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} onNavigate={onClose} />
+        <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/logs" icon={Activity} label="System Logs" isActive={isActive('/dashboard/logs')} onNavigate={onClose} />
+        <NavItem href="/dashboard/settings" icon={Settings} label="Settings" isActive={isActive('/dashboard/settings')} onNavigate={onClose} />
 
         <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <NavItem href="/support" icon={Headphones} label="Support" isBottom isActive={isActive('/support')} />
+          <NavItem href="/support" icon={Headphones} label="Get Support" isBottom isActive={isActive('/support')} onNavigate={onClose} />
         </div>
       </nav>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop: always-visible sidebar */}
+      <aside className={`${styles.sidebar} ${styles.desktopSidebar}`} style={{ background: 'rgba(18,24,33,0.4)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+        {navContent}
+      </aside>
+
+      {/* Mobile: slide-in drawer */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className={styles.sidebarBackdrop}
+              onClick={onClose}
+            />
+            {/* Drawer */}
+            <motion.aside
+              key="drawer"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className={`${styles.sidebar} ${styles.mobileSidebar}`}
+              style={{ background: 'rgba(12,16,23,0.98)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.07)' }}
+            >
+              {navContent}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

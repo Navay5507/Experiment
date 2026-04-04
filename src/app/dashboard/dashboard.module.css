@@ -59,6 +59,63 @@
   color: #fff;
 }
 
+/* Desktop sidebar: always visible */
+.desktopSidebar {
+  display: flex;
+}
+
+/* Mobile sidebar: managed by JS, hidden by default */
+.mobileSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 499;
+  cursor: pointer;
+}
+
+/* Hamburger button — hidden on desktop */
+.hamburgerBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.hamburgerBtn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Sidebar close button — hidden on desktop */
+.sidebarCloseBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sidebarCloseBtn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
 .active {
   background: rgba(99, 102, 241, 0.1);
   color: var(--primary);
@@ -285,96 +342,45 @@
 /* ===== MOBILE (768px) ===== */
 @media (max-width: 768px) {
 
-  /* Root layout stacks vertically */
+  /* Desktop sidebar hidden on mobile */
+  .desktopSidebar {
+    display: none;
+  }
+
+  /* Show hamburger on mobile */
+  .hamburgerBtn {
+    display: flex;
+  }
+
+  /* Show close button inside the mobile drawer */
+  .sidebarCloseBtn {
+    display: flex;
+  }
+
+  /* Main content: full width, normal scroll */
+  .mainContent {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
   .layout {
-    flex-direction: column;
     height: 100dvh;
     overflow: hidden;
   }
 
-  /* Sidebar becomes bottom tab bar */
-  .sidebar {
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 200;
-    border-right: none;
-    border-top: 1px solid var(--border);
-    flex-shrink: 0;
-    background: rgba(12,16,23,0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  .brand {
-    display: none;
-  }
-
-  .nav {
-    flex-direction: row;
-    padding: 0.5rem 0.5rem;
-    gap: 0;
-    justify-content: space-around;
-    align-items: stretch;
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-  }
-
-  .nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .navItem {
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.6rem 0.4rem;
-    font-size: 0.65rem;
-    border-radius: 8px;
-    min-width: 52px;
-    flex: 1;
-    justify-content: center;
-    text-align: center;
-    border-left: none !important;
-  }
-
-  /* Show short label on mobile tab bar */
-  .navItem span {
-    display: block;
-    font-size: 0.6rem;
-    font-weight: 500;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 56px;
-    margin: 0 auto;
-  }
-
-  /* Main content scrolls, with room for top header + bottom tab bar */
-  .mainContent {
-    flex: 1;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0));
-  }
-
   .header {
-    height: 54px;
-    min-height: 54px;
+    height: 56px;
+    min-height: 56px;
     padding: 0 1rem;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .pageTitle {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    flex: 1;
   }
 
   .content {
