@@ -1,0 +1,415 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Progress Bar */
+.progressContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progressBarBg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--border);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.progressBarFill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 2px;
+  background: var(--primary);
+  z-index: 2;
+  transform: translateY(-50%);
+  transition: width 0.4s ease;
+}
+
+.stepDot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 3;
+  transition: all 0.3s;
+  color: var(--text-muted);
+}
+
+.stepDotActive {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.stepDotCompleted {
+  background: var(--bg-primary);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Glass Panel */
+.glassPanel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.stepTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #e5e7eb;
+}
+
+/* Inputs */
+.input, .textarea {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Feature Cards Grid (for Config) */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.featureCard {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.featureCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.featureActive {
+  background: rgba(99, 102, 241, 0.05);
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+}
+
+.featureCard h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: #fff;
+}
+.featureCard p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Post Selector */
+.postGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.postCard {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.postCard:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.postSelected {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.postImage {
+  height: 100px;
+  background: var(--surface-hover);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.footerNav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 3rem;
+}
+
+.btnNext {
+  background: var(--primary);
+  color: #fff;
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btnNext:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: scale(0.98);
+}
+
+.btnNext:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btnBack {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 1rem 2.5rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnBack:hover {
+  background: var(--surface-hover);
+  color: #fff;
+}
+
+/* Type Selector Grid (Step 1) */
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ===== TABLET / MOBILE (768px) ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .progressContainer {
+    margin-bottom: 2rem;
+    max-width: 100%;
+  }
+
+  .stepDot {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .glassPanel {
+    padding: 1.5rem;
+    min-height: auto;
+    border-radius: 16px;
+  }
+
+  .stepTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .featureGrid, .typeGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .featureCard {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .postGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .footerNav {
+    padding-top: 2rem;
+    gap: 1rem;
+  }
+
+  .btnNext, .btnBack {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+
+  .input, .textarea {
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+  }
+}
+
+/* ===== SMALL MOBILE (480px) ===== */
+@media (max-width: 480px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .progressContainer {
+    margin-bottom: 1.5rem;
+  }
+
+  .stepDot {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .glassPanel {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .stepTitle {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .postGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .postImage {
+    height: 70px;
+  }
+
+  .footerNav {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .btnNext, .btnBack {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    justify-content: center;
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+}

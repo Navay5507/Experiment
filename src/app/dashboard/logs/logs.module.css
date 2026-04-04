@@ -1,0 +1,170 @@
+.container {
+  animation: fadeIn 0.4s ease-out;
+  max-width: 1000px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #a1a1aa;
+  font-size: 0.95rem;
+}
+
+.logCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.logHeaderRow {
+  display: grid;
+  grid-template-columns: 100px 200px 1fr 150px;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.logItem {
+  display: grid;
+  grid-template-columns: 100px 200px 1fr 150px;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s;
+}
+
+.logItem:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.logItem:last-child {
+  border-bottom: none;
+}
+
+.timestamp {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+.userCol {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.username {
+  font-size: 0.95rem;
+  color: #e4e4e7;
+  font-weight: 500;
+}
+
+.eventText {
+  font-size: 0.9rem;
+  color: #a1a1aa;
+}
+
+.statusCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.badgeSuccess {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.badgeError {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: #f87171;
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* ===== MOBILE (768px) ===== */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .logHeaderRow {
+    display: none;
+  }
+
+  .logItem {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .timestamp {
+    font-size: 0.75rem;
+  }
+
+  .username {
+    font-size: 0.85rem;
+  }
+
+  .eventText {
+    font-size: 0.85rem;
+  }
+
+  .errorText {
+    max-width: 100%;
+    white-space: normal;
+  }
+}

@@ -1,0 +1,958 @@
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView } from "framer-motion";
+import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown } from "lucide-react";
+import styles from "./page.module.css";
+
+const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+  >
+    {children}
+  </motion.div>
+);
+
+const CountUpDynamic = () => {
+   const [val, setVal] = useState(23847);
+   useEffect(() => {
+     const i = setInterval(() => setVal(v => v + Math.floor(Math.random() * 3)), 3000);
+     return () => clearInterval(i);
+   }, []);
+   return <span>{val.toLocaleString()}</span>;
+};
+
+const CountUpMetric = ({ target, prefix = '', suffix = '', decimals = 0 }: { target: number, prefix?: string, suffix?: string, decimals?: number }) => {
+   const ref = useRef(null);
+   const isInView = useInView(ref, { once: false, amount: 0.5 });
+   const [val, setVal] = useState(0);
+
+   useEffect(() => {
+      if (isInView) {
+         setVal(0);
+         let current = 0;
+         const inc = target / 40; 
+         const interval = setInterval(() => {
+            current += inc;
+            if (current >= target) {
+               current = target;
+               clearInterval(interval);
+            }
+            setVal(current);
+         }, 40);
+         return () => clearInterval(interval);
+      } else {
+         setVal(0);
+      }
+   }, [isInView, target]);
+
+   return <span ref={ref}>{prefix}{val.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{suffix}</span>
+};
+
+const Typewriter = ({ text }: { text: string }) => {
+   const [display, setDisplay] = useState('');
+   useEffect(() => {
+     let i = 0;
+     const int = setInterval(() => {
+        setDisplay(text.substr(0, i+1));
+        i++;
+        if (i === text.length) clearInterval(int);
+     }, 100); 
+     return () => clearInterval(int);
+   }, [text]);
+   return <span style={{color:'#fff'}}>{display}<motion.span animate={{opacity:[1,0]}} transition={{repeat:Infinity, duration:0.4}}>|</motion.span></span>;
+}
+
+const UI_Step1 = () => {
+   const ref = useRef(null);
+   const [step, setStep] = useState(0); 
+
+   useEffect(() => {
+       let isActive = true;
+       const run = async () => {
+           while(isActive) {
+               setStep(0);
+               await new Promise(r => setTimeout(r, 1000));
+               if(!isActive) break;
+               setStep(1); // Cursor hovers
+               await new Promise(r => setTimeout(r, 600));
+               if(!isActive) break;
+               setStep(2); // Clicks
+               await new Promise(r => setTimeout(r, 200));
+               if(!isActive) break;
+               setStep(3); // Loading
+               await new Promise(r => setTimeout(r, 1500));
+               if(!isActive) break;
+               setStep(4); // Connected!
+               await new Promise(r => setTimeout(r, 3500));
+           }
+       };
+       run();
+       return () => { isActive = false; };
+   }, []);
+
+   return (
+      <div ref={ref} style={{position:'relative', display:'flex', flexDirection:'column', alignItems:'center', gap:'1rem', width:'100%', maxWidth:'400px'}}>
+         <motion.div 
+            animate={{ 
+               x: step === 0 ? 120 : 0, 
+               y: step === 0 ? 150 : 20, 
+               scale: step === 2 ? 0.8 : 1,
+               opacity: step >= 3 ? 0 : 1 
+            }} 
+            transition={{ duration: step === 0 ? 0 : 0.5 }}
+            style={{ position:'absolute', top:'10%', right:'30%', zIndex:10 }}
+         >
+            <MousePointer2 size={24} fill="#fff" color="#000" />
+         </motion.div>
+
+         <div style={{position:'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width:'100%', height:'120px'}}>
+            <AnimatePresence mode="wait">
+               {step <= 2 ? (
+                  <motion.div key="btn" initial={{opacity:0}} animate={{opacity:1, scale: step===1 ? 1.05 : step===2 ? 0.95 : 1}} exit={{opacity:0, scale:0.8}} style={{background:'#3b82f6', color:'#fff', padding:'1rem 2rem', borderRadius:'100px', fontWeight:600, display:'flex', alignItems:'center', gap:'0.5rem', boxShadow: step===1 ? '0 10px 20px rgba(59,130,246,0.4)': 'none', zIndex: 5}}>
+                     Connect Instagram
+                  </motion.div>
+               ) : (
+                  <motion.div key="loader" initial={{scale:0}} animate={{scale:1}} exit={{scale:0}} style={{width: 80, height: 80, borderRadius:'50%', background: step === 4 ? '#10b981' : 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)', display:'flex', alignItems:'center', justifyContent:'center', zIndex: 5}}>
+                     {step === 3 ? (
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} style={{display: 'flex'}}>
+                           <Loader2 size={40} color="#fff" />
+                        </motion.div>
+                     ) : (
+                        <MessageCircle size={40} color="#fff" />
+                     )}
+                  </motion.div>
+               )}
+            </AnimatePresence>
+
+            {step === 4 && (
+               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }} style={{position:'absolute', bottom:10, right: '35%', background:'#10b981', borderRadius:'50%', border:'3px solid #000', padding:'4px', zIndex: 6}}>
+                  <CheckCircle2 size={16} color="#fff" strokeWidth={3} />
+               </motion.div>
+            )}
+         </div>
+
+         <div style={{textAlign:'center', height: '60px'}}>
+            <div style={{fontSize:'1.2rem', fontWeight:600, color:'#fff'}}>{step <= 2 ? 'Connect with Meta' : step === 3 ? 'Authenticating...' : 'Instagram Connected'}</div>
+            <div style={{fontSize:'0.9rem', color: step === 4 ? '#10b981' : '#888'}}>{step <= 2 ? '1-click secure connect' : step === 3 ? 'Talking to Meta API' : 'Active & Listening'}</div>
+         </div>
+      </div>
+   );
+};
+
+const UI_Step2 = () => {
+   const ref = useRef(null);
+   const [step, setStep] = useState(0);
+
+   useEffect(() => {
+       let isActive = true;
+       const run = async () => {
+          while (isActive) {
+             setStep(0);
+             await new Promise(r => setTimeout(r, 1000));
+             if(!isActive) break;
+             setStep(1); // Typing pricing
+             await new Promise(r => setTimeout(r, 1500));
+             if(!isActive) break;
+             setStep(2); // Badge pricing
+             await new Promise(r => setTimeout(r, 800));
+             if(!isActive) break;
+             setStep(3); // Typing link
+             await new Promise(r => setTimeout(r, 1500));
+             if(!isActive) break;
+             setStep(4); // Badge link
+             await new Promise(r => setTimeout(r, 600));
+             if(!isActive) break;
+             setStep(5); // Complete
+             await new Promise(r => setTimeout(r, 4000));
+          }
+       };
+       run();
+       return () => { isActive = false; };
+   }, []);
+
+   return (
+      <div ref={ref} style={{width:'100%', maxWidth:'400px', display:'flex', flexDirection:'column', gap:'1.5rem'}}>
+         <div style={{background:'#16181D', border:'1px solid #2A2D35', borderRadius:'12px', padding:'1.5rem'}}>
+            <div style={{fontSize:'0.85rem', color:'#888', marginBottom:'0.5rem'}}>If User comments any of these words:</div>
+            
+            <div style={{display:'flex', gap:'0.5rem', flexWrap:'wrap', minHeight: '34px', alignItems: 'center', marginBottom:'1rem'}}>
+               <AnimatePresence>
+                  {step >= 2 && (
+                     <motion.div key="badge-pricing" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} style={{background:'rgba(59,130,246,0.2)', color:'#3b82f6', border:'1px solid rgba(59,130,246,0.3)', padding:'0.4rem 1rem', borderRadius:'100px', fontSize:'0.85rem'}}>pricing</motion.div>
+                  )}
+                  {step >= 4 && (
+                     <motion.div key="badge-link" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} style={{background:'rgba(59,130,246,0.2)', color:'#3b82f6', border:'1px solid rgba(59,130,246,0.3)', padding:'0.4rem 1rem', borderRadius:'100px', fontSize:'0.85rem'}}>link</motion.div>
+                  )}
+               </AnimatePresence>
+            </div>
+
+            <div style={{background:'#0a0a0a', border:'1px solid #333', padding:'0.75rem 1rem', borderRadius:'8px', fontSize:'0.9rem', color:'#888', display:'flex', alignItems:'center', height:'45px'}}>
+               <Plus size={14} style={{marginRight: '0.5rem'}}/> 
+               {step === 1 ? <Typewriter key="tw-pricing" text="pricing" /> : 
+                step === 3 ? <Typewriter key="tw-link" text="link" /> : 
+                step >= 5 ? <span key="tw-done" style={{opacity:0.5}}>Add keyword...</span> :
+                <span key="tw-typing" style={{opacity:0.5}}>Add keyword...<motion.span animate={{opacity:[1,0]}} transition={{repeat:Infinity, duration:0.4}}>|</motion.span></span>}
+            </div>
+         </div>
+         <div style={{display:'flex', gap:'1rem', alignItems:'center'}}>
+            <motion.div animate={{ color: step >= 5 ? "#10b981" : "#666", x: step >= 5 ? [0, 5, 0] : 0 }} transition={{ repeat: step >= 5 ? Infinity : 0, duration: 1 }}>
+               <ArrowRight size={20} color="inherit" />
+            </motion.div>
+            <motion.div animate={{ borderColor: step >= 5 ? "#10b981" : "#2A2D35" }} style={{background:'#18201D', border:'1px solid #2A2D35', borderRadius:'12px', padding:'1rem', flex:1, display:'flex', alignItems:'center', gap:'1rem', transition: 'border-color 0.5s'}}>
+               <motion.div animate={{ scale: step >= 5 ? [1, 1.2, 1] : 1 }} transition={{ repeat: step >= 5 ? Infinity : 0, duration: 2 }}>
+                  <Send size={20} color={step >= 5 ? "#10b981" : "#666"} style={{ transition: 'color 0.5s' }} />
+               </motion.div>
+               <div style={{fontSize:'0.9rem', color: step >= 5 ? '#dedede' : '#888', fontWeight: 600, transition: 'color 0.5s'}}>Send Private Message</div>
+            </motion.div>
+         </div>
+      </div>
+   );
+};
+
+const UI_Step3 = () => {
+   const ref = useRef(null);
+   const [step, setStep] = useState(0);
+
+   useEffect(() => {
+       let isActive = true;
+       const run = async () => {
+          while (isActive) {
+             setStep(0);
+             await new Promise(r => setTimeout(r, 1000));
+             if(!isActive) break;
+             setStep(1); // Trigger graph and count up
+             await new Promise(r => setTimeout(r, 6000));
+          }
+       };
+       run();
+       return () => { isActive = false; };
+   }, []);
+
+   return (
+      <div ref={ref} style={{width:'100%', maxWidth:'400px', display:'flex', flexDirection:'column', gap:'1.5rem'}}>
+         <div style={{background:'#16181D', border:'1px solid #2A2D35', borderRadius:'16px', padding:'1.5rem', display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+            <div>
+               <div style={{fontSize:'0.85rem', color:'#888', marginBottom:'0.25rem'}}>Captured Revenue</div>
+               <div style={{fontSize:'2.5rem', fontWeight:800, color: step >= 1 ? '#10b981' : '#444', transition: 'color 0.5s'}}>${step >= 1 ? <CountUpMetric target={6420} /> : "0"}</div>
+            </div>
+            <div style={{width:60, height:45, display:'flex', alignItems:'flex-end', gap:'4px'}}>
+               <motion.div animate={{ height: step >= 1 ? '40%' : '10%' }} transition={{ duration: 0.5 }} style={{width:12, background:'#10b981', borderRadius:'4px', opacity:0.3}} />
+               <motion.div animate={{ height: step >= 1 ? '60%' : '10%' }} transition={{ duration: 0.5, delay: 0.1 }} style={{width:12, background:'#10b981', borderRadius:'4px', opacity:0.5}} />
+               <motion.div animate={{ height: step >= 1 ? '80%' : '10%' }} transition={{ duration: 0.5, delay: 0.2 }} style={{width:12, background:'#10b981', borderRadius:'4px', opacity:0.8}} />
+               <motion.div animate={{ height: step >= 1 ? '100%' : '10%' }} transition={{ duration: 0.5, delay: 0.3 }} style={{width:12, background:'#10b981', borderRadius:'4px'}} />
+            </div>
+         </div>
+         
+         <div style={{display:'flex', gap:'1rem'}}>
+            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: step >= 1 ? 0 : 20, opacity: step >= 1 ? 1 : 0 }} transition={{ delay: 0.4 }} style={{background:'#16181D', border:'1px solid #2A2D35', borderRadius:'100px', padding:'1rem 1.5rem', display:'flex', alignItems:'center', gap:'0.75rem', flex:1, justifyContent:'center'}}>
+               <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} style={{width:10, height:10, borderRadius:'50%', background:'#3b82f6'}} />
+               <div style={{fontSize:'0.95rem', color:'#dedede', fontWeight:600}}>{step >= 1 ? <CountUpMetric target={14.2} suffix="k DMs" decimals={1} /> : "0k DMs"}</div>
+            </motion.div>
+            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: step >= 1 ? 0 : 20, opacity: step >= 1 ? 1 : 0 }} transition={{ delay: 0.5 }} style={{background:'#16181D', border:'1px solid #2A2D35', borderRadius:'100px', padding:'1rem 1.5rem', display:'flex', alignItems:'center', gap:'0.75rem', flex:1, justifyContent:'center'}}>
+               <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 1 }} style={{width:10, height:10, borderRadius:'50%', background:'#10b981'}} />
+               <div style={{fontSize:'0.95rem', color:'#dedede', fontWeight:600}}>{step >= 1 ? <CountUpMetric target={12.5} suffix="% CTR" decimals={1} /> : "0% CTR"}</div>
+            </motion.div>
+         </div>
+      </div>
+   );
+};
+
+const HowItWorksInteractive = () => {
+   return (
+      <div className={styles.container}>
+         <FadeIn><h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '6rem', color: '#fff', textAlign: 'center' }}>How it works</h2></FadeIn>
+         
+         <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem' }}>
+            
+            {/* Step 1 */}
+            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+               <div style={{ flex: 1, minWidth: '300px' }}>
+                  <FadeIn>
+                     <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 1</div>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Connect securely</h3>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>OAuth directly into Meta's official API node. No passwords required, strictly compliant.</p>
+                  </FadeIn>
+               </div>
+               <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
+                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                     <UI_Step1 />
+                  </motion.div>
+               </div>
+            </motion.div>
+
+            {/* Step 2 */}
+            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row-reverse', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+               <div style={{ flex: 1, minWidth: '300px' }}>
+                  <FadeIn delay={0.1}>
+                     <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 2</div>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Train the triggers</h3>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>Deploy keywords specific to your newest Reel or Static Post instantly from the dashboard.</p>
+                  </FadeIn>
+               </div>
+               <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
+                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                     <UI_Step2 />
+                  </motion.div>
+               </div>
+            </motion.div>
+
+            {/* Step 3 */}
+            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+               <div style={{ flex: 1, minWidth: '300px' }}>
+                  <FadeIn delay={0.2}>
+                     <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 3</div>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Capture revenue</h3>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>Autodrop routes inbound requests 24/7 capturing core analytics live in your CRM.</p>
+                  </FadeIn>
+               </div>
+               <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
+                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                     <UI_Step3 />
+                  </motion.div>
+               </div>
+            </motion.div>
+
+         </div>
+      </div>
+   );
+};
+
+const useCases = [
+    {
+       avatar: 'linear-gradient(45deg, #f09433, #dc2743)',
+       handle: '@tech_gadgets',
+       postPrefix: 'New desk setup! Comment ',
+       trigger: 'DESK',
+       postSuffix: ' for the full parts list.',
+       dm: 'Sent! 📦 Check out the desk setup parts here: drop.link/desk',
+       image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=600&q=80' // cool desk tech
+    },
+    {
+       avatar: 'linear-gradient(45deg, #3b82f6, #8b5cf6)',
+       handle: '@finance_coach',
+       postPrefix: 'Paying too much tax? Comment ',
+       trigger: 'TAX',
+       postSuffix: ' to get my free 2026 cheat sheet.',
+       dm: 'Here is your cheat sheet! 📄 Download: drop.link/tax-pdf',
+       image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80' // finance spreadsheet
+    },
+    {
+       avatar: 'linear-gradient(45deg, #f43f5e, #f97316)',
+       handle: '@stylebysarah',
+       postPrefix: 'New summer drop! Comment ',
+       trigger: 'LINK',
+       postSuffix: " to grab it before it sells out.",
+       dm: 'Sent the exact links to your DMs! 👗 drop.link/spring',
+       image: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=600&q=80' // single dress hanging
+    },
+    {
+       avatar: 'linear-gradient(45deg, #10b981, #3b82f6)',
+       handle: '@vegan_eats',
+       postPrefix: '15-minute healthy pasta! Comment ',
+       trigger: 'RECIPE',
+       postSuffix: " and I'll DM you the ingredients.",
+       dm: 'Here is the recipe! 🥦 Enjoy your pasta: drop.link/pasta',
+       image: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80' // healthy pasta
+    },
+    {
+       avatar: 'linear-gradient(45deg, #8b5cf6, #ec4899)',
+       handle: '@mr_math',
+       postPrefix: 'Struggling with calculus? Comment ',
+       trigger: 'STUDY',
+       postSuffix: " and I'll send my free prep guide.",
+       dm: 'Ace that test! 📚 Here is the prep guide: drop.link/calc',
+       image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80' // notebooks / study
+    }
+];
+
+const HeroUseCases = () => {
+    const [idx, setIdx] = useState(0);
+
+    useEffect(() => {
+        const int = setInterval(() => {
+            setIdx(i => (i + 1) % useCases.length);
+        }, 5500); // 5.5 seconds per case (slower)
+        return () => clearInterval(int);
+    }, []);
+
+    const current = useCases[idx];
+
+    return (
+        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Ambient volumetric glow */}
+            <div style={{position: 'absolute', width: '90%', height: '90%', background: 'radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 60%)', filter: 'blur(50px)', zIndex: 0}} />
+            
+            <AnimatePresence mode="wait">
+               <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 15, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -15, scale: 0.98 }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }} // Slower, smoother fade
+                  style={{ width: '380px', background: '#111318', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', padding: '1.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 1, display: 'flex', flexDirection: 'column' }}
+               >
+                   {/* IG Post Header Mockup */}
+                   <div style={{display:'flex', alignItems:'center', gap:'1rem', marginBottom:'1rem'}}>
+                      <div style={{width: 44, height: 44, borderRadius: '50%', background: current.avatar, flexShrink: 0}}/>
+                      <div>
+                         <div style={{fontWeight: 700, fontSize:'1rem', color:'#fff'}}>{current.handle}</div>
+                         <div style={{fontSize:'0.75rem', color:'#888'}}>Just now • Instagram</div>
+                      </div>
+                   </div>
+
+                   {/* IG Post Image Visual */}
+                   <div style={{width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '1.25rem', border: '1px solid rgba(255,255,255,0.05)', background: '#222'}}>
+                      <img src={current.image} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Post preview" />
+                   </div>
+
+                   {/* IG Post Caption */}
+                   <p style={{color:'#e5e7eb', fontSize:'0.95rem', lineHeight:1.5, marginBottom:'1.5rem'}}>
+                      {current.postPrefix}
+                      <span style={{color: '#3b82f6', fontWeight:700}}>&apos;{current.trigger}&apos;</span>
+                      {current.postSuffix}
+                   </p>
+
+                   {/* Simulated Trigger Comment */}
+                   <div style={{display:'flex', alignItems:'center', gap:'1rem', padding:'0.75rem', background:'rgba(255,255,255,0.02)', borderRadius:'12px', border:'1px solid rgba(255,255,255,0.05)', marginBottom:'1.5rem'}}>
+                      <MessageCircle size={20} color="#888" />
+                      <span style={{fontSize:'0.9rem', color:'#888', flex:1}}>Add a comment...</span>
+                      <motion.div 
+                         initial={{scale: 1}} animate={{scale: [1, 1.05, 1]}} transition={{repeat:Infinity, duration:2.5, repeatDelay: 1}}
+                         style={{fontSize:'0.85rem', fontWeight:600, color:'#3b82f6', background:'rgba(59,130,246,0.1)', padding:'0.2rem 0.5rem', borderRadius:'6px'}}
+                      >
+                         {current.trigger}
+                      </motion.div>
+                   </div>
+
+                   {/* DM Reply Box popping up */}
+                   <motion.div 
+                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 1, type: 'spring', bounce: 0.3 }} // Pop delayed slower
+                      style={{background:'linear-gradient(145deg, #181a20, #0a0a0a)', padding:'1.25rem', borderRadius:'16px', border:'1px solid rgba(16,185,129,0.3)', position:'relative'}}
+                   >
+                      <div style={{position:'absolute', top:'-8px', right:'-8px', background:'#111318', borderRadius:'50%', padding: '2px'}}>
+                         <div style={{background:'#10b981', width:18, height:18, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize: '10px'}}>
+                            ✓
+                         </div>
+                      </div>
+                      <div style={{fontSize:'0.75rem', color:'#10b981', fontWeight:700, marginBottom:'0.5rem', letterSpacing:'0.05em', textTransform:'uppercase'}}>DM Instant Reply</div>
+                      <div style={{color:'#fff', fontSize:'0.9rem', lineHeight:1.5}}>
+                         {current.dm}
+                      </div>
+                   </motion.div>
+               </motion.div>
+            </AnimatePresence>
+        </div>
+    );
+};
+
+const faqs = [
+  { q: "What is Autodrop?", a: "Autodrop is a Meta Business Partner tool that automatically replies to Instagram comments and sends DMs to your audience when they comment a specific trigger word." },
+  { q: "Is Autodrop free to use?", a: "Yes, we offer a generous free tier that lets you test our core automation features. No credit card required." },
+  { q: "Why is Autodrop free? What's the catch?", a: "There is no catch! We offer a free tier so creators can experience the magic. Our premium plans are designed for creators who want advanced automations and priority support." },
+  { q: "Is Autodrop safe to use?", a: "Absolutely. We use the official Meta Instagram Graph API, ensuring 100% compliance with Instagram's terms of service. You will never be shadowbanned for using Autodrop." },
+  { q: "Is Autodrop compliant with Instagram's Terms of Service?", a: "Yes. Being an official Meta Business Partner, our application undergoes rigorous automated and manual security reviews by Facebook's engineering team." },
+  { q: "Do I need a credit card to use Autodrop for free?", a: "No, you don't need a credit card to start. Our free plan is truly free to help you get started." },
+  { q: "How do I sign up for Autodrop?", a: "Click 'Start Free Trial' or 'Sign In', link your Facebook account that manages your Instagram Professional account, and you're ready to go!" },
+  { q: "Can Autodrop be used on other social media platforms?", a: "Currently, Autodrop is laser-focused on providing the best possible experience for Instagram. We plan to roll out Facebook Messenger automation soon." },
+  { q: "Why do I need to connect my Facebook account to use Autodrop?", a: "Instagram's official API requires all third-party apps to authenticate via Facebook Business Manager. This is Meta's standard security requirement." },
+  { q: "How many DMs can I send with Autodrop?", a: "You can send completely unlimited DMs! Unlike our competitors that charge you per message, we do not restrict how many automated DMs you can send to your audience, ensuring your viral posts are fully covered." },
+  { q: "Can I try Autodrop for free before committing to a subscription?", a: "Yes! Your account starts on the free tier by default. You only upgrade when you're ready to scale your workflow." },
+  { q: "Is Autodrop an alternative to Link-in-bio services?", a: "Yes! Instead of telling users to 'click the link in my bio' (which lowers algorithmic reach), you tell them to 'Comment DESK' and the link is instantly DM'd to them." },
+  { q: "How do I contact customer support if I need help?", a: "You can email us anytime or click the 'Support' link in our footer. Pro users get priority response within 24 hours." },
+  { q: "Does Autodrop need my Instagram password?", a: "Never. We use secure OAuth linking via Meta, meaning Autodrop will never see or store your actual Instagram password." }
+];
+
+const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div style={{ marginBottom: '1rem', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', background: '#111318' }}>
+      <button 
+        onClick={() => setIsOpen(!isOpen)} 
+        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', background: 'transparent', border: 'none', color: '#fff', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', textAlign: 'left' }}
+      >
+        <span>{question}</span>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+          <ChevronDown size={20} color="var(--text-muted)" />
+        </motion.div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '0 1.5rem 1.25rem 1.5rem', color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              {answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default function LandingClient({ userId }: { userId: string | null }) {
+  // Cursor tracking & Mobile state
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  useEffect(() => {
+    const updateMousePos = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", updateMousePos);
+    return () => window.removeEventListener("mousemove", updateMousePos);
+  }, []);
+
+  const { scrollYProgress } = useScroll();
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  return (
+    <main className={styles.main}>
+      {/* Premium Cursor Glow */}
+      <motion.div 
+        animate={{ x: mousePosition.x - 250, y: mousePosition.y - 250 }}
+        transition={{ type: "tween", ease: "linear", duration: 0 }}
+        style={{
+           position: 'fixed', top: 0, left: 0, width: 500, height: 500,
+           background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 60%)',
+           pointerEvents: 'none', zIndex: 9999, borderRadius: '50%'
+        }}
+      />
+
+      <div className={styles.navbarWrapper}>
+        <nav className={styles.navbar}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div className={styles.logo}>
+              <MessageCircle className={styles.logoIcon} style={{ color: 'var(--primary)' }} /> Autodrop
+            </div>
+          </Link>
+
+          <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+             {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
+          </button>
+
+          <div className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
+            <a href="#features" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); setIsMobileMenuOpen(false); }}>Features</a>
+            <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); setIsMobileMenuOpen(false); }}>How it Works</a>
+            <Link href="/pricing" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
+            <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
+            {isMobileMenuOpen && (
+               userId ? (
+                 <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Dashboard</Link>
+               ) : (
+                 <Link href="/sign-in" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Sign In</Link>
+               )
+            )}
+          </div>
+          <div className={styles.authCol}>
+            {userId ? (
+               <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
+            ) : (
+               <Link href="/sign-in" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Sign In</Link>
+            )}
+          </div>
+        </nav>
+      </div>
+
+      <section className={styles.heroSection} style={{ padding: '8rem 0 4rem 0' }}>
+        {/* Floating Top-Right Badge */}
+        <motion.div 
+           initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
+           style={{ position: 'absolute', top: '100px', right: '5%', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '100px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', zIndex: 10, color: '#e5e7eb' }}>
+           <Zap size={14} color="#facc15" fill="#facc15" /> Real-time Instagram Automation
+        </motion.div>
+
+        <div className={styles.container}>
+          <div className={`${styles.heroGrid} ${styles.splitSection}`}>
+            <div className={styles.heroContent}>
+              <FadeIn>
+                <div style={{ display: 'inline-block', padding: '0.4rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '100px', color: 'var(--primary)', fontWeight: 600, fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                    ✨ Autodrop v1 Stable • <span style={{color: '#10b981'}}>Verified Sync v1.1</span>
+                </div>
+              </FadeIn>
+              <FadeIn delay={0.1}>
+                <h1 style={{ fontSize: '4.5rem', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: '1.5rem', color: '#fff' }}>
+                  Turn Instagram Comments into Leads — <br/> <span className="text-gradient">Automatically</span>
+                </h1>
+              </FadeIn>
+              <FadeIn delay={0.2}>
+                <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '90%' }}>
+                  Reply to every comment, send DMs instantly, and capture leads while you sleep. Built for creators scaling past 100k followers.
+                </p>
+                <div style={{ marginTop: '1.5rem', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                   <Zap size={16} color="#10b981" /> <CountUpDynamic /> DMs transmitted successfully today
+                </div>
+              </FadeIn>
+              <FadeIn delay={0.3}>
+                <div className={styles.heroCtas}>
+                  {userId ? (
+                     <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>Dashboard <ArrowRight size={20}/></Link>
+                  ) : (
+                     <Link href="/sign-up" className="premium-btn" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>Start Free Trial <ArrowRight size={20}/></Link>
+                  )}
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ color: '#fff', fontWeight: 600, padding: '1rem 2rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none' }}>See How it Works</a>
+                </div>
+              </FadeIn>
+              <FadeIn delay={0.4}>
+                <div className={styles.metaBadgeBox}>
+                   <div style={{ textAlign: 'left', flex: 1 }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Badged Partner</div>
+                      <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>Autodrop is a Meta Business Partner</h3>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
+                   </div>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: '0.95rem', whiteSpace: 'nowrap' }}>
+                      <InfinityIcon size={36} color="#3b82f6" strokeWidth={2.5} />
+                      <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>Meta Business<span style={{fontWeight: 400}}>Partners</span></span>
+                   </div>
+                </div>
+              </FadeIn>
+            </div>
+
+            <FadeIn delay={0.4}>
+              <div className={styles.heroMockupContainer}>
+                
+                <motion.div 
+                   animate={{ rotateY: [-5, 5, -5], rotateX: [2, -2, 2], y: [0, -10, 0] }} 
+                   transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                   style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 5, padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   
+                   <HeroUseCases />
+
+                </motion.div>
+
+                {/* Layer 1: IG Comments Bubbles (Glassmorphism over post) */}
+                <motion.div 
+                   animate={{ y: [100, -200], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleLeft}>
+                   &quot;Send me the link! 😍&quot;
+                </motion.div>
+                <motion.div 
+                   animate={{ y: [150, -150], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 4.5, delay: 1.5, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleRight}>
+                   &quot;price pls&quot;
+                </motion.div>
+
+                {/* Layer 3: DM Popup (Subtle) */}
+                <motion.div
+                   animate={{ scale: [0.8, 1, 0.8], opacity: [0, 0.95, 0], y: [-20, -40, -20] }}
+                   transition={{ duration: 3, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+                   className={`${styles.ambientDmPopup} glass-panel`}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                      <div style={{width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)'}}/>
+                      <span style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600 }}>DM Delivered</span>
+                   </div>
+                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>&quot;Here is your exclusive link: https://drop.site 🚀&quot;</div>
+                </motion.div>
+
+              </div>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Advanced 8-Grid Features Section */}
+      <section id="features" style={{ padding: '8rem 0' }}>
+        <div className={styles.container}>
+          <FadeIn>
+            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>Unlock the full Power of Instagram</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>A complete toolkit designed to harvest leads predictably without triggering ban limits.</p>
+            </div>
+          </FadeIn>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+             
+             {/* 1. Comment Automation */}
+             <FadeIn delay={0.1}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#fff', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #efefef' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                       <MessageCircle size={16} color="#000" /><span style={{fontSize: '0.85rem', fontWeight: 700, color: '#000'}}>Comments</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                       <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
+                       <div style={{ flex: 1 }}>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>sarajohnson</span>
+                          <span style={{ fontSize: '0.85rem', color: '#000' }}>Drop the link! 😍</span>
+                          <div style={{ fontSize: '0.75rem', color: '#8e8e8e', marginTop: '0.2rem', display: 'flex', gap: '1rem' }}>
+                             <span>2w</span><span style={{fontWeight: 600}}>Reply</span>
+                          </div>
+                       </div>
+                       <Heart size={12} color="#8e8e8e" />
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2.5rem', marginTop: '1rem' }}>
+                       <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                       <div style={{ flex: 1 }}>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>autodrop</span>
+                          <span style={{ fontSize: '0.8rem', color: '#000' }}>Just sent the link to your DMs! 🚀</span>
+                       </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Comment Automation</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to post & reel comments and send a DM to capture leads instantly.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 2. Story Automation */}
+             <FadeIn delay={0.2}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1540228232483-1dfdec35e955?auto=format&fit=crop&w=400&q=80) center/cover' }}>
+                       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}>
+                          <div style={{ width: '100%', height: '2px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }}><div style={{ width: '50%', height: '100%', background: '#fff', borderRadius: '2px' }}/></div>
+                       </div>
+                       <div style={{ position: 'absolute', top: '15px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                          <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>autodrop <span style={{opacity: 0.8, fontWeight: 400}}>3h</span></span>
+                       </div>
+                       <div style={{ position: 'absolute', top: '35%', width: '100%', textAlign: 'center' }}>
+                          <span style={{ background: '#fff', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 800 }}>Reply with "PARTY" 🎉</span>
+                       </div>
+                       <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.5rem' }}>
+                          <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.5)', borderRadius: '100px', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center' }}>
+                             <span style={{ fontSize: '0.75rem', color: '#fff' }}>Send message</span>
+                          </div>
+                          <Heart size={20} color="#fff" />
+                          <Send size={20} color="#fff" />
+                       </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Story Automation</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Trigger specific DMs based on keywords or exact emoji reactions on your Stories.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 3. Live Automation */}
+             <FadeIn delay={0.3}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#161616', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80) center/cover' }}>
+                      <div style={{ position:'absolute', top:'10px', left:'10px', background:'linear-gradient(45deg, #f05252, #e1306c)', color:'#fff', fontSize:'0.7rem', fontWeight:800, padding:'0.2rem 0.5rem', borderRadius:'4px' }}>LIVE</div>
+                      <div style={{ position:'absolute', top:'10px', right:'10px', background:'rgba(0,0,0,0.5)', color:'#fff', fontSize:'0.75rem', fontWeight:600, padding:'0.2rem 0.5rem', borderRadius:'6px', display:'flex', alignItems:'center', gap:'0.4rem' }}>
+                         <span style={{width:6, height:6, background:'#e1306c', borderRadius:'50%'}}></span> 1.2k
+                      </div>
+                      <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '160px', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))', padding: '0.5rem 1rem 1rem 1rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: '0.75rem' }}>
+                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                            <span style={{ fontSize: '0.85rem', color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}><span style={{fontWeight: 700}}>alex_j</span> How do I buy?</span>
+                            <span style={{ fontSize: '0.85rem', color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}><span style={{fontWeight: 700}}>sarah22</span> LINK please!!</span>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.4)', borderRadius: '100px', padding: '0.4rem 1rem' }}>
+                               <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>Add a comment...</span>
+                            </div>
+                         </div>
+                      </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Live Automation</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Seamlessly send private DMs to followers commenting keywords during your IG Live.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 4. DM Check */}
+             <FadeIn delay={0.4}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Hey! I&apos;m interested in the course.</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Awesome! Here is the exclusive link to sign up 🚀</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e5e7eb', borderRadius: '100px', padding: '0.5rem 1rem', marginTop: 'auto' }}>
+                          <span style={{ fontSize: '0.75rem', color: '#aaa' }}>Message...</span>
+                       </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>DM Keyword Triggers</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to users who natively DM you specific keywords or questions.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 5. Ask For Follow */}
+             <FadeIn delay={0.5}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Please follow us to unlock the link!</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Followed you!</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Thanks! Here is your download. 👇<div style={{background:'rgba(255,255,255,0.2)', padding:'0.4rem', borderRadius:'6px', marginTop:'0.5rem', fontWeight:600, textAlign: 'center'}}>Download Now</div></div>
+                       </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Follow-Gates</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Verify if the user is following your profile before dispatching the link automation.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 6. Re-trigger */}
+             <FadeIn delay={0.6}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#fff', height: '220px', padding: '0', position: 'relative', overflow: 'hidden' }}>
+                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(55, 151, 240, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
+                       <RefreshCcw size={48} color="#fff" />
+                       <div style={{ fontWeight: 800, color: '#fff', fontSize: '1.2rem' }}>Reactivate Viral Posts</div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Historically Re-Trigger</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Run automations on posts published months ago to revive dead traffic streams.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 7. Collect User Data */}
+             <FadeIn delay={0.7}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>What is the best email to send this to?</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>user@gmail.com</div>
+                       </div>
+                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Sent! Check your inbox. 📥</div>
+                       </div>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Data Capture</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Seamlessly build your external email lists directly inside the IG DM ecosystem.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 8. AI Replies Coming Soon */}
+             <FadeIn delay={0.8}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    
+                    {/* Glowing dynamic background */}
+                    <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(168,85,247,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+
+                    <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                       <Sparkles size={48} color="#a855f7" />
+                       <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Autodrop <span style={{ color: '#a855f7' }}>AI</span></span>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Custom Trained AI <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span></h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Train an AI model on your store data to contextually answer queries and close sales.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* Sticky Section Trick for How it works */}
+      <section id="how-it-works" style={{ padding: '8rem 0', position: 'relative', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+         <HowItWorksInteractive />
+      </section>
+
+      {/* FAQ SECTION */}
+      <section style={{ padding: '8rem 0', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+        <div className={styles.container} style={{ maxWidth: '800px' }}>
+          <FadeIn>
+             <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Frequently Asked Questions</h2>
+             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '3rem', textAlign: 'center' }}>Everything you need to know about the product and billing.</p>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+              {faqs.map((faq, idx) => (
+                 <FAQItem key={idx} question={faq.q} answer={faq.a} />
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      <section style={{ padding: '10rem 0', textAlign: 'center' }}>
+        <div className={styles.container}>
+          <FadeIn>
+             <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em', color: '#fff' }}>Ready to Scale?</h2>
+             <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: 1.6 }}>Join the 10,000+ creators literally saving 15 hours a week manually answering DMs.</p>
+             {userId ? (
+                <Link href="/dashboard" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.2rem' }}>Dashboard</Link>
+             ) : (
+                <Link href="/sign-up" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.2rem' }}>Start Free Trial</Link>
+             )}
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: 'var(--surface)' }}>
+        <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
+          {/* Logo + Tagline */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <MessageCircle size={28} color="var(--primary)" />
+              <span style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.03em', background: 'linear-gradient(90deg, #6366F1, #22D3EE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Autodrop</span>
+            </div>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
+          </div>
+
+          {/* Nav Links */}
+          <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Link href="#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
+            <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
+            <a href="https://forms.gle/nu3PBCRRNQDs1DoT6" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
+            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
+            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
+            <Link href="/refund-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Refund Policy</Link>
+          </div>
+
+          {/* Gradient Divider */}
+          <div style={{ width: '100%', maxWidth: '400px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)' }} />
+
+          {/* Copyright + Small Text */}
+          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
+            <p>&copy; {new Date().getFullYear()} Autodrop. All rights reserved.</p>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
+               <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
+            </p>
+          </div>
+        </div>
+
+        {/* GIANT BACKGROUND WATERMARK */}
+        <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip', overflowY: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
+          <span style={{ fontSize: 'clamp(3rem, 15vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            Autodrop
+          </span>
+        </div>
+      </footer>
+    </main>
+  );
+}

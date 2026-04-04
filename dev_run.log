@@ -1,0 +1,853 @@
+﻿
+> autodrop-web@0.1.0 dev
+> next dev
+
+Γû▓ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.66:3000
+- Environments: .env.local
+Γ£ô Ready in 405ms
+node.exe : ΓÜá The 
+"middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https
+://nextjs.org/docs/message
+s/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (Γ  
+  Üá The "middle...lewa   
+ re-to-proxy:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+[Autodrop] ≡ƒÜÇ Workers booted: autodrop-queue + comment-reply
+
+[Autodrop] Γ£à Comment Worker ready
+[Autodrop] Γ£à DM Worker ready
+IMPORTANT! Eviction 
+policy is 
+optimistic-volatile. It 
+should be "noeviction"
+IMPORTANT! Eviction 
+policy is 
+optimistic-volatile. It 
+should be "noeviction"
+IMPORTANT! Eviction 
+policy is 
+optimistic-volatile. It 
+should be "noeviction"
+IMPORTANT! Eviction 
+policy is 
+optimistic-volatile. It 
+should be "noeviction"
+Γùï Compiling / ...
+ GET / 200 in 6.4s (next.js: 4.5s, proxy.ts: 1446ms, application-code: 453ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 123ms (next.js: 5ms, proxy.ts: 12ms, application-code: 106ms)
+ GET / 200 in 98ms (next.js: 4ms, proxy.ts: 8ms, application-code: 86ms)
+ GET / 200 in 216ms (next.js: 5ms, proxy.ts: 9ms, application-code: 203ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 285ms (next.js: 9ms, proxy.ts: 24ms, application-code: 252ms)
+ GET / 200 in 263ms (next.js: 10ms, proxy.ts: 17ms, application-code: 237ms)
+ GET / 200 in 252ms (next.js: 7ms, proxy.ts: 17ms, application-code: 228ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 254ms (next.js: 8ms, proxy.ts: 14ms, application-code: 232ms)
+ GET / 200 in 246ms (next.js: 7ms, proxy.ts: 17ms, application-code: 221ms)
+ GET / 200 in 268ms (next.js: 9ms, proxy.ts: 13ms, application-code: 245ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 241ms (next.js: 9ms, proxy.ts: 11ms, application-code: 221ms)
+ GET / 200 in 98ms (next.js: 4ms, proxy.ts: 7ms, application-code: 87ms)
+ GET / 200 in 94ms (next.js: 3ms, proxy.ts: 6ms, application-code: 84ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 83ms (next.js: 3ms, proxy.ts: 6ms, application-code: 74ms)
+ GET / 200 in 96ms (next.js: 3ms, proxy.ts: 6ms, application-code: 87ms)
+ GET / 200 in 123ms (next.js: 5ms, proxy.ts: 5ms, application-code: 113ms)
+ GET / 200 in 86ms (next.js: 3ms, proxy.ts: 5ms, application-code: 78ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 97ms (next.js: 3ms, proxy.ts: 5ms, application-code: 88ms)
+ GET / 200 in 90ms (next.js: 3ms, proxy.ts: 6ms, application-code: 82ms)
+ GET / 200 in 305ms (next.js: 8ms, proxy.ts: 13ms, application-code: 283ms)
+ GET / 200 in 368ms (next.js: 8ms, proxy.ts: 12ms, application-code: 348ms)
+
+-----
+[1m[31mFATAL[39m[0m: 
+An unexpected Turbopack 
+error occurred. A panic 
+log has been written to C:
+\Users\navay\AppData\Local
+\Temp\next-panic-429646560
+cf334be07a41dc644c76a3.log
+.
+
+To help make Turbopack 
+better, report this error 
+by ]8;;https://bugs.nextj
+s.org/search?category=turb
+opack-error-report&title=T
+urbopack%20Error%3A%20Fail
+ed%20to%20write%20app%20en
+dpoint%20%2Fdashboard%2Fpa
+ge&body=Turbopack%20versio
+n%3A%20%603e37bb42%60%0ANe
+xt.js%20version%3A%20%600.
+0.0%60%0A%0AError%20messag
+e%3A%0A%60%60%60%0AFailed%
+20to%20write%20app%20endpo
+int%20%2Fdashboard%2Fpage%
+0A%0ACaused%20by%3A%0A-%20
+Next.js%20package%20not%20
+found%0A%0ADebug%20info%3A
+%0A-%20Execution%20of%20Pr
+oject%3A%3Ahmr_version_sta
+te%20failed%0A-%20Executio
+n%20of%20hmr_version_opera
+tion%20failed%0A-%20Execut
+ion%20of%20VersionedConten
+tMap%3A%3Aget%20failed%0A-
+%20Execution%20of%20Versio
+nedContentMap%3A%3Aget_ass
+et%20failed%0A-%20Executio
+n%20of%20VersionedContentM
+ap%3A%3Acompute_entry%20fa
+iled%0A-%20Execution%20of%
+20%2Aemit_assets%20failed%
+0A-%20Execution%20of%20all
+_assets_from_entries_opera
+tion%20failed%0A-%20Execut
+ion%20of%20%2Aall_assets_f
+rom_entries%20failed%0A-%2
+0Execution%20of%20endpoint
+_output_assets_operation%2
+0failed%0A-%20Execution%20
+of%20%3CAppEndpoint%20as%2
+0Endpoint%3E%3A%3Aoutput%2
+0failed%0A-%20Failed%20to%
+20write%20app%20endpoint%2
+0%2Fdashboard%2Fpage%0A-%2
+0Execution%20of%20%2Aall_a
+sset_paths%20failed%0A-%20
+Execution%20of%20%2AAppEnd
+pointOutput%3A%3Aoutput_as
+sets%20failed%0A-%20Execut
+ion%20of%20AppEndpoint%3A%
+3Aoutput%20failed%0A-%20Ex
+ecution%20of%20AppEndpoint
+%3A%3Aapp_page_entry%20fai
+led%0A-%20Execution%20of%2
+0%2Aget_app_page_entry%20f
+ailed%0A-%20Execution%20of
+%20AppProject%3A%3Arsc_mod
+ule_context%20failed%0A-%2
+0Execution%20of%20%2AModul
+eAssetContext%3A%3Anew%20f
+ailed%0A-%20Execution%20of
+%20%2AAppProject%3A%3Aget_
+rsc_transitions%20failed%0
+A-%20Execution%20of%20AppP
+roject%3A%3Aecmascript_cli
+ent_reference_transition%2
+0failed%0A-%20Execution%20
+of%20%2ANextEcmascriptClie
+ntReferenceTransition%3A%3
+Anew%20failed%0A-%20Execut
+ion%20of%20AppProject%3A%3
+Assr_transition%20failed%0
+A-%20Execution%20of%20%2AF
+ullContextTransition%3A%3A
+new%20failed%0A-%20Executi
+on%20of%20AppProject%3A%3A
+ssr_module_context%20faile
+d%0A-%20Execution%20of%20A
+ppProject%3A%3Ashared_tran
+sition%20failed%0A-%20Exec
+ution%20of%20%2AFullContex
+tTransition%3A%3Anew%20fai
+led%0A-%20Execution%20of%2
+0AppProject%3A%3Ashared_mo
+dule_context%20failed%0A-%
+20Execution%20of%20%2AModu
+leAssetContext%3A%3Anew%20
+failed%0A-%20Execution%20o
+f%20get_server_resolve_opt
+ions_context%20failed%0A-%
+20Execution%20of%20get_nex
+t_server_import_map%20fail
+ed%0A-%20Next.js%20package
+%20not%20found%0A%60%60%60
+&labels=Turbopack,Turbopac
+k%20Panic%20Backtrace\cli
+cking here.]8;;\
+-----
+
+ GET / 200 in 286ms (next.js: 12ms, proxy.ts: 15ms, application-code: 259ms)

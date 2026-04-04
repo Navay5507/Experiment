@@ -1,0 +1,438 @@
+/* Dashboard Wrapper */
+.layout {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.brand {
+  padding: 1.5rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.brandIcon {
+  color: var(--primary);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+}
+
+.active {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+/* Main Content Area */
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg-primary);
+}
+
+/* Minimal Topbar */
+.header {
+  height: 70px;
+  min-height: 70px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.pageTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Page Containers */
+.content {
+  padding: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Shared UI Components for Pages */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metricTitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.metricIcon {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.metricTrend {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.trendUp { color: #10b981; }
+.trendDown { color: #ef4444; }
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  gap: 1rem;
+}
+
+.emptyState p {
+  color: var(--text-muted);
+}
+
+/* Base Data Tables */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.table th {
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(255,255,255,0.01);
+}
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.table tr:last-child td {
+  border-bottom: none;
+}
+.table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.btnAction {
+  background: var(--surface);
+  color: #fff;
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+}
+.btnAction:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.titleArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.titleArea h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.titleArea p {
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ===== TABLET / MOBILE (768px) ===== */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  /* Sidebar → Bottom Tab Bar */
+  .sidebar {
+    width: 100%;
+    height: 64px;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    border-right: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    padding: 0;
+    gap: 0;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .navItem {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.65rem;
+    border-radius: 0;
+    min-width: 0;
+    flex-shrink: 0;
+  }
+
+  /* Hide text labels in bottom nav - show only icons */
+  .navItem span {
+    display: none;
+  }
+
+  /* Main content adjustments */
+  .mainContent {
+    padding-bottom: 72px; /* space for bottom nav */
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .header {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 1rem;
+  }
+
+  .pageTitle {
+    font-size: 0.9rem;
+  }
+
+  .content {
+    padding: 1.5rem 1rem;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .metricCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .metricTitle {
+    font-size: 0.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .titleArea {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .titleArea h1 {
+    font-size: 1.5rem;
+  }
+
+  /* Tables scroll horizontally */
+  .tableContainer {
+    border-radius: 12px;
+  }
+
+  .table th, .table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .btnAction {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .emptyState {
+    padding: 2.5rem 1.5rem;
+    border-radius: 12px;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+}
+
+/* ===== SMALL MOBILE (480px) ===== */
+@media (max-width: 480px) {
+  .header {
+    height: 50px;
+    min-height: 50px;
+    padding: 0 0.75rem;
+  }
+
+  .pageTitle {
+    font-size: 0.8rem;
+  }
+
+  .content {
+    padding: 1rem 0.75rem;
+  }
+
+  .metricGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .metricCard {
+    padding: 0.75rem;
+  }
+
+  .metricValue {
+    font-size: 1.25rem;
+  }
+
+  .titleArea h1 {
+    font-size: 1.3rem;
+  }
+
+  .table th, .table td {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
