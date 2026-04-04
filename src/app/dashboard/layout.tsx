@@ -1,10 +1,7 @@
-import styles from "./dashboard.module.css";
 import SidebarWrapper from "./_SidebarWrapper";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
-import { AlertCircle } from "lucide-react";
 import crypto from "crypto";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -44,9 +41,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <SidebarWrapper isConnected={isConnected}>
-      <div className={styles.content}>
-        {children}
-      </div>
+      {children}
     </SidebarWrapper>
   );
 }

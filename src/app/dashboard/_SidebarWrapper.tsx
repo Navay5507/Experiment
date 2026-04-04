@@ -46,7 +46,9 @@ export default function SidebarWrapper({ isConnected, children }: SidebarWrapper
             <UserButton appearance={{ elements: { avatarBox: { width: 34, height: 34 } } }} />
           </div>
         </header>
-        {children}
+        <div className={styles.content}>
+          {children}
+        </div>
       </main>
     </div>
   );
