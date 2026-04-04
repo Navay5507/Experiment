@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
+import { isCommentProcessed } from '@/lib/queue/dedup';
 
 /**
  * GET /api/cron/poll-comments
@@ -15,9 +16,6 @@ import { commentQueue, dmQueue } from '@/lib/queue/queues';
  *   - Manual GET request
  */
 export const dynamic = 'force-dynamic';
-
-// In-memory set of already-processed comment IDs (resets on server restart)
-const processedComments = new Set<string>();
 
 export async function GET() {
   console.log('[Poll] 🔄 Starting comment poll cycle...');
@@ -82,8 +80,10 @@ export async function GET() {
           const keywords: string[] = Array.isArray(automation.keywords) ? automation.keywords : [];
 
           for (const comment of comments) {
-            // Skip if already processed
-            if (processedComments.has(comment.id)) continue;
+            // Deduplicate via Redis
+            if (await isCommentProcessed(comment.id)) {
+                continue;
+            }
 
             const commentText = (comment.text || '').toLowerCase().trim();
             const matched = keywords.some((kw: string) =>
@@ -95,12 +95,9 @@ export async function GET() {
             // Skip comments from the account owner (don't DM yourself)
             const commenterId = comment.from?.id || comment.username;
             if (commenterId === user.instagramUserId) {
-              processedComments.add(comment.id);
               continue;
             }
 
-            // Mark as processed immediately to prevent duplicates
-            processedComments.add(comment.id);
             totalMatched++;
 
             console.log(`[Poll] 🎯 MATCH! Comment "${comment.text}" by @${comment.username} on media ${mediaId}`);

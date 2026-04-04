@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
+import { isCommentProcessed } from '@/lib/queue/dedup';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
 const APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
@@ -148,6 +149,12 @@ export async function POST(req: Request) {
               // Also skips our own bot auto-replies being echo'd back
               if (parentId) {
                 console.log(`[Webhook] ⏩ Skipping reply-comment (parentId: ${parentId}) — Private Reply only works on top-level comments`);
+                continue;
+              }
+
+              // Deduplication Check
+              if (await isCommentProcessed(commentId)) {
+                console.log(`[Webhook] ⏩ Skipping duplicate comment (commentId: ${commentId})`);
                 continue;
               }
 
