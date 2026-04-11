@@ -242,38 +242,50 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
 
+      // CRITICAL: The Private Reply response returns the correct Instagram-scoped ID (IGSID).
+      // The recipientId from the webhook (commenter's IG user ID) is NOT the same as the IGSID
+      // required for sending DMs via recipient: { id }. We MUST use the IGSID from the response.
+      const igsid = result.recipient_id || recipientId;
+      console.log(`[Worker DM] IGSID from Private Reply: ${igsid} (original recipientId: ${recipientId})`);
+
       // Step 2: Now that the conversation is opened, send a follow-up Button Template via IGSID
-      // Wait briefly to let Instagram process the Private Reply and establish the conversation thread
-      await delay(1000);
+      // Wait for Instagram to process the Private Reply and establish the conversation thread
+      await delay(2000);
 
       if (usesComplexFlow) {
         // Pro Flow: Send "Send me the access" button
-        const followUpResult = await sendButtonTemplateDM(token, recipientId,
+        console.log(`[Worker DM] Sending follow-up button template to IGSID: ${igsid}`);
+        const followUpResult = await sendButtonTemplateDM(token, igsid,
           '👆 Tap below to continue!',
           [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
         );
         console.log(`[Worker DM] Follow-up button template result:`, JSON.stringify(followUpResult));
         if (followUpResult.error) {
-          console.warn(`[Worker DM] Follow-up button failed, falling back to quick reply:`, followUpResult.error);
-          // Fallback: use Quick Replies if Button Template fails
-          await sendQuickReplyDM(token, recipientId,
+          console.warn(`[Worker DM] Follow-up button failed (${followUpResult.error.message}), trying quick reply...`);
+          const qrResult = await sendQuickReplyDM(token, igsid,
             '👆 Tap below to continue!',
             [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
           );
+          console.log(`[Worker DM] Quick reply fallback result:`, JSON.stringify(qrResult));
+          if (qrResult.error) {
+            console.warn(`[Worker DM] Quick reply also failed, sending as text`);
+            await sendTextDM(token, igsid, '👆 Reply "YES" to get the link!');
+          }
         }
       } else {
         // Standard Flow: Send URL button directly
         if (automation.dm_link) {
           const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-          const followUpResult = await sendButtonTemplateDM(token, recipientId,
+          console.log(`[Worker DM] Sending follow-up link button to IGSID: ${igsid}`);
+          const followUpResult = await sendButtonTemplateDM(token, igsid,
             '👇 Here\'s your link!',
             [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
           );
           console.log(`[Worker DM] Follow-up link button result:`, JSON.stringify(followUpResult));
           if (followUpResult.error) {
-            console.warn(`[Worker DM] Button template failed, sending link as text:`, followUpResult.error);
+            console.warn(`[Worker DM] Button template failed (${followUpResult.error.message}), sending as text`);
             // Fallback: send as plain text with URL
-            await sendTextDM(token, recipientId, `Here's your link: ${redirectUrl}`);
+            await sendTextDM(token, igsid, `Here's your link 🔗\n${redirectUrl}`);
           }
         }
       }
