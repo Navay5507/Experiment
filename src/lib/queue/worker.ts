@@ -4,6 +4,8 @@ import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 // =============================================
 // JOB INTERFACES
 // =============================================
@@ -35,46 +37,19 @@ async function sendTextDM(token: string, recipientId: string, text: string) {
 /**
  * Send a Private Reply to a commenter. Uses comment_id in recipient.
  * 
- * IMPORTANT (Meta Docs): Private Reply only supports TEXT messages.
+ * IMPORTANT (Meta Docs): Private Reply ONLY supports plain TEXT messages.
  * Button Templates, Generic Templates, and Quick Replies are NOT supported
  * on the Private Reply endpoint (recipient: { comment_id }).
+ * Any template sent here will corrupt the chat and crash the Instagram app.
  * Templates can only be sent via IGSID (recipient: { id }) after the
  * conversation has been opened by the Private Reply.
  */
-async function sendPrivateReply(
-  token: string, 
-  commentId: string, 
-  text: string,
-  buttons?: { type: 'web_url' | 'postback'; title: string; url?: string; payload?: string }[]
-) {
-  console.log(`[Worker] Sending Private Reply to comment ${commentId}`);
-  
-  const payload: any = {
+async function sendPrivateReply(token: string, commentId: string, text: string) {
+  console.log(`[Worker] Sending Private Reply (text-only) to comment ${commentId}`);
+  const payload = {
     recipient: { comment_id: commentId },
-    message: {}
+    message: { text },
   };
-
-  if (buttons && buttons.length > 0) {
-    // Wrap buttons in a generic template card. Meta fully supports Generic Templates in Private Replies.
-    // The title field is required for a generic template card, so we use a truncated text.
-    payload.message = {
-      attachment: {
-        type: 'template',
-        payload: {
-          template_type: 'generic',
-          elements: [
-            {
-              title: text.length > 80 ? text.substring(0, 77) + '...' : text,
-              subtitle: text.length > 80 ? text : 'Autodrop',
-              buttons: buttons
-            }
-          ]
-        }
-      }
-    };
-  } else {
-    payload.message.text = text;
-  }
 
   const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
     method: 'POST',
@@ -256,20 +231,10 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     let result;
 
     if (commentId) {
-      // ===== PRIVATE REPLY PATH =====
-      // We directly send the Private Reply using a generic template card if buttons are provided.
-      let buttonsToUse: any[] = [];
-      let finalDmText = dmText;
-
-      if (usesComplexFlow) {
-        buttonsToUse = [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }];
-      } else if (automation.dm_link) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        buttonsToUse = [{ type: 'web_url', title: 'Open Link', url: redirectUrl }];
-        finalDmText = `${dmText}\n👇 Here's your link!`;
-      }
-
-      result = await sendPrivateReply(token, commentId, finalDmText, buttonsToUse.length ? buttonsToUse : undefined);
+      // ===== PRIVATE REPLY PATH (Two-Step) =====
+      // Step 1: Send TEXT-ONLY Private Reply. This opens the DM conversation.
+      //         NO templates of ANY kind are allowed here — they crash Instagram.
+      result = await sendPrivateReply(token, commentId, dmText);
       console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
 
       if (result.error) {
@@ -279,6 +244,44 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
           metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
         });
         return { success: false, reason: result.error.message || 'Private Reply failed' };
+      }
+
+      // Step 2: Extract the IGSID from the Private Reply response.
+      //         The webhook recipientId (commenter IG user ID) is NOT the same as the IGSID
+      //         required for sending DMs via recipient: { id }.
+      const igsid = result.recipient_id || recipientId;
+      console.log(`[Worker DM] IGSID from Private Reply: ${igsid} (original recipientId: ${recipientId})`);
+
+      // Step 3: Brief pause to let Instagram establish the conversation thread.
+      await delay(1500);
+
+      // Step 4: Send clickable Button Template as a follow-up via IGSID.
+      if (usesComplexFlow) {
+        console.log(`[Worker DM] Sending follow-up button template to IGSID: ${igsid}`);
+        const followUpResult = await sendButtonTemplateDM(token, igsid,
+          '👆 Tap below to continue!',
+          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
+        );
+        console.log(`[Worker DM] Follow-up button result:`, JSON.stringify(followUpResult));
+        if (followUpResult.error) {
+          console.warn(`[Worker DM] Button failed, trying quick reply fallback`);
+          await sendQuickReplyDM(token, igsid,
+            '👆 Tap below to continue!',
+            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
+          );
+        }
+      } else if (automation.dm_link) {
+        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        console.log(`[Worker DM] Sending follow-up link button to IGSID: ${igsid}`);
+        const followUpResult = await sendButtonTemplateDM(token, igsid,
+          '👇 Here\'s your link!',
+          [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
+        );
+        console.log(`[Worker DM] Follow-up link result:`, JSON.stringify(followUpResult));
+        if (followUpResult.error) {
+          console.warn(`[Worker DM] Button failed, sending as text fallback`);
+          await sendTextDM(token, igsid, `Here's your link 🔗\n${redirectUrl}`);
+        }
       }
 
 
