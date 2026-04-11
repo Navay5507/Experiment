@@ -56,6 +56,22 @@ export async function POST(req: Request) {
 
     const payload = await req.json();
 
+    // PLAN ENFORCEMENT: Free users cannot use Pro features
+    if (userPlan === 'FREE') {
+      if (payload.featureType === 'follow_gate' || payload.featureType === 'lead_capture') {
+        return NextResponse.json(
+          { error: 'Follow-Gate and Lead Capture require a Pro plan. Please upgrade to unlock these features.' },
+          { status: 403 }
+        );
+      }
+      if (payload.targetType === 'story' || payload.targetType === 'live') {
+        return NextResponse.json(
+          { error: 'Story and Live automations require a Pro plan. Please upgrade to unlock these features.' },
+          { status: 403 }
+        );
+      }
+    }
+
     const newAutomation = {
       user_id: internalUserId,
       campaign_name: payload.campaignName || 'Unnamed Campaign',

@@ -74,10 +74,13 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
     <>
       <div className={styles.brand} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1.5rem 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.4 }}>
-            <MessageCircle size={26} className={styles.brandIcon} style={{ color: 'var(--primary)' }} />
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+            <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 34, objectFit: 'contain' }} />
           </motion.div>
-          <span style={{ fontSize: '1.3rem', letterSpacing: '-0.03em', color: '#fff', fontWeight: 700 }}>Autodrop</span>
+          <div style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+            <span style={{ color: '#5b85ff' }}>Auto</span>
+            <span style={{ color: '#ffffff' }}>Drop</span>
+          </div>
         </Link>
         {/* Close button on mobile */}
         <button

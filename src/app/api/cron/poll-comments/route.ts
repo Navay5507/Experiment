@@ -85,6 +85,16 @@ export async function GET() {
                 continue;
             }
 
+            // Skip comments older than 2 hours — the webhook should have handled them already.
+            // This prevents the cron from re-processing old comments if Redis keys expire.
+            if (comment.timestamp) {
+              const commentAge = Date.now() - new Date(comment.timestamp).getTime();
+              const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
+              if (commentAge > TWO_HOURS_MS) {
+                continue;
+              }
+            }
+
             const commentText = (comment.text || '').toLowerCase().trim();
             const matched = keywords.some((kw: string) =>
               commentText.includes(kw.toLowerCase())

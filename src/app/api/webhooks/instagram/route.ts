@@ -252,6 +252,9 @@ export async function POST(req: Request) {
                       metadata: { automation_id: automation.id, recipient_id: commenterId }
                     });
                   } catch (e) { console.error('[Webhook] Analytics insert error:', e); }
+
+                  // IMPORTANT: Only trigger ONE automation per comment to prevent duplicate DMs
+                  break;
                 }
               }
             }

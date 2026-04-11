@@ -339,7 +339,7 @@ const HowItWorksInteractive = () => {
                   <FadeIn delay={0.2}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 3</div>
                      <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Capture revenue</h3>
-                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>Autodrop routes inbound requests 24/7 capturing core analytics live in your CRM.</p>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>AutoDrop routes inbound requests 24/7 capturing core analytics live in your CRM.</p>
                   </FadeIn>
                </div>
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
@@ -485,20 +485,20 @@ const HeroUseCases = () => {
 };
 
 const faqs = [
-  { q: "What is Autodrop?", a: "Autodrop is a Meta Business Partner tool that automatically replies to Instagram comments and sends DMs to your audience when they comment a specific trigger word." },
-  { q: "Is Autodrop free to use?", a: "Yes, we offer a generous free tier that lets you test our core automation features. No credit card required." },
-  { q: "Why is Autodrop free? What's the catch?", a: "There is no catch! We offer a free tier so creators can experience the magic. Our premium plans are designed for creators who want advanced automations and priority support." },
-  { q: "Is Autodrop safe to use?", a: "Absolutely. We use the official Meta Instagram Graph API, ensuring 100% compliance with Instagram's terms of service. You will never be shadowbanned for using Autodrop." },
-  { q: "Is Autodrop compliant with Instagram's Terms of Service?", a: "Yes. Being an official Meta Business Partner, our application undergoes rigorous automated and manual security reviews by Facebook's engineering team." },
-  { q: "Do I need a credit card to use Autodrop for free?", a: "No, you don't need a credit card to start. Our free plan is truly free to help you get started." },
-  { q: "How do I sign up for Autodrop?", a: "Click 'Start Free Trial' or 'Sign In', link your Facebook account that manages your Instagram Professional account, and you're ready to go!" },
-  { q: "Can Autodrop be used on other social media platforms?", a: "Currently, Autodrop is laser-focused on providing the best possible experience for Instagram. We plan to roll out Facebook Messenger automation soon." },
-  { q: "Why do I need to connect my Facebook account to use Autodrop?", a: "Instagram's official API requires all third-party apps to authenticate via Facebook Business Manager. This is Meta's standard security requirement." },
-  { q: "How many DMs can I send with Autodrop?", a: "You can send completely unlimited DMs! Unlike our competitors that charge you per message, we do not restrict how many automated DMs you can send to your audience, ensuring your viral posts are fully covered." },
-  { q: "Can I try Autodrop for free before committing to a subscription?", a: "Yes! Your account starts on the free tier by default. You only upgrade when you're ready to scale your workflow." },
-  { q: "Is Autodrop an alternative to Link-in-bio services?", a: "Yes! Instead of telling users to 'click the link in my bio' (which lowers algorithmic reach), you tell them to 'Comment DESK' and the link is instantly DM'd to them." },
+  { q: "What is AutoDrop?", a: "AutoDrop is a Meta Business Partner tool that automatically replies to Instagram comments and sends DMs to your audience when they comment a specific trigger word." },
+  { q: "Is AutoDrop free to use?", a: "Yes, we offer a generous free tier that lets you test our core automation features. No credit card required." },
+  { q: "Why is AutoDrop free? What's the catch?", a: "There is no catch! We offer a free tier so creators can experience the magic. Our premium plans are designed for creators who want advanced automations and priority support." },
+  { q: "Is AutoDrop safe to use?", a: "Absolutely. We use the official Meta Instagram Graph API, ensuring 100% compliance with Instagram's terms of service. You will never be shadowbanned for using AutoDrop." },
+  { q: "Is AutoDrop compliant with Instagram's Terms of Service?", a: "Yes. Being an official Meta Business Partner, our application undergoes rigorous automated and manual security reviews by Facebook's engineering team." },
+  { q: "Do I need a credit card to use AutoDrop for free?", a: "No, you don't need a credit card to start. Our free plan is truly free to help you get started." },
+  { q: "How do I sign up for AutoDrop?", a: "Click 'Start Free Trial' or 'Sign In', link your Facebook account that manages your Instagram Professional account, and you're ready to go!" },
+  { q: "Can AutoDrop be used on other social media platforms?", a: "Currently, AutoDrop is laser-focused on providing the best possible experience for Instagram. We plan to roll out Facebook Messenger automation soon." },
+  { q: "Why do I need to connect my Facebook account to use AutoDrop?", a: "Instagram's official API requires all third-party apps to authenticate via Facebook Business Manager. This is Meta's standard security requirement." },
+  { q: "How many DMs can I send with AutoDrop?", a: "You can send completely unlimited DMs! Unlike our competitors that charge you per message, we do not restrict how many automated DMs you can send to your audience, ensuring your viral posts are fully covered." },
+  { q: "Can I try AutoDrop for free before committing to a subscription?", a: "Yes! Your account starts on the free tier by default. You only upgrade when you're ready to scale your workflow." },
+  { q: "Is AutoDrop an alternative to Link-in-bio services?", a: "Yes! Instead of telling users to 'click the link in my bio' (which lowers algorithmic reach), you tell them to 'Comment DESK' and the link is instantly DM'd to them." },
   { q: "How do I contact customer support if I need help?", a: "You can email us anytime or click the 'Support' link in our footer. Pro users get priority response within 24 hours." },
-  { q: "Does Autodrop need my Instagram password?", a: "Never. We use secure OAuth linking via Meta, meaning Autodrop will never see or store your actual Instagram password." }
+  { q: "Does AutoDrop need my Instagram password?", a: "Never. We use secure OAuth linking via Meta, meaning AutoDrop will never see or store your actual Instagram password." }
 ];
 
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
@@ -559,8 +559,12 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <div className={styles.navbarWrapper}>
         <nav className={styles.navbar}>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <div className={styles.logo}>
-              <MessageCircle className={styles.logoIcon} style={{ color: 'var(--primary)' }} /> Autodrop
+            <div className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 38, objectFit: 'contain' }} />
+              <div style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                <span style={{ color: '#5b85ff' }}>Auto</span>
+                <span style={{ color: '#ffffff' }}>Drop</span>
+              </div>
             </div>
           </Link>
 
@@ -625,7 +629,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                 <div className={styles.metaBadgeBox}>
                    <div style={{ textAlign: 'left', flex: 1 }}>
                       <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Badged Partner</div>
-                      <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>Autodrop is a Meta Business Partner</h3>
+                      <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>AutoDrop is a Meta Business Partner</h3>
                       <p style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
                    </div>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', whiteSpace: 'nowrap' }}>
@@ -903,9 +907,12 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <MessageCircle size={28} color="var(--primary)" />
-              <span style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.03em', background: 'linear-gradient(90deg, #6366F1, #22D3EE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Autodrop</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 48, objectFit: 'contain' }} />
+              <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                <span style={{ color: '#5b85ff' }}>Auto</span>
+                <span style={{ color: '#ffffff' }}>Drop</span>
+              </div>
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
           </div>

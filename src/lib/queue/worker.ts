@@ -33,32 +33,21 @@ async function sendTextDM(token: string, recipientId: string, text: string) {
 }
 
 /**
- * Send a Private Reply to a commenter. Uses comment_id in recipient
- * instead of user id. This bypasses the 24-hour messaging window
- * restriction — allowed within 7 days of the comment.
+ * Send a Private Reply to a commenter. Uses comment_id in recipient.
+ * 
+ * IMPORTANT (Meta Docs): Private Reply only supports TEXT messages.
+ * Button Templates, Generic Templates, and Quick Replies are NOT supported
+ * on the Private Reply endpoint (recipient: { comment_id }).
+ * Templates can only be sent via IGSID (recipient: { id }) after the
+ * conversation has been opened by the Private Reply.
  */
-async function sendPrivateReply(token: string, commentId: string, text: string, quickReplies?: { content_type: string; title: string; payload: string }[], buttonTemplate?: { type: string, title: string, url?: string, payload?: string }[]) {
-  console.log(`[Worker] Sending Private Reply to comment ${commentId}`);
-  const payload: any = {
+async function sendPrivateReply(token: string, commentId: string, text: string) {
+  console.log(`[Worker] Sending Private Reply (text-only) to comment ${commentId}`);
+  const payload = {
     recipient: { comment_id: commentId },
     message: { text },
   };
 
-  if (quickReplies && quickReplies.length > 0) {
-    payload.message.quick_replies = quickReplies;
-  } else if (buttonTemplate && buttonTemplate.length > 0) {
-    payload.message = {
-      attachment: {
-        type: 'template',
-        payload: {
-          template_type: 'button',
-          text,
-          buttons: buttonTemplate
-        }
-      }
-    };
-  }
-  
   const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -178,6 +167,13 @@ async function upsertConversation(
 }
 
 // =============================================
+// HELPER: Small delay to let Instagram process the Private Reply
+// =============================================
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// =============================================
 // 1. DM WORKER (STATE MACHINE)
 // =============================================
 export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJob>) => {
@@ -231,46 +227,96 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     let result;
 
-    if (usesComplexFlow) {
-      // Pro features require 24h messaging window interactions, so we prompt for a Button interaction
-      // This ensures compatibility across Stories, Live Streams, and modern IG clients
-      const initialButtons: any[] = [
-        { type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }
-      ];
+    if (commentId) {
+      // ===== PRIVATE REPLY PATH =====
+      // Step 1: Send text-only Private Reply (templates NOT supported on comment_id recipient)
+      result = await sendPrivateReply(token, commentId, dmText);
+      console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
 
-      if (commentId) {
-        result = await sendPrivateReply(token, commentId, dmText, undefined, initialButtons);
-      } else {
-        result = await sendButtonTemplateDM(token, recipientId, dmText, initialButtons);
+      if (result.error) {
+        console.error(`[Worker DM] Private Reply FAILED:`, result.error.message || JSON.stringify(result.error));
+        await supabase.from('analytics_events').insert({
+          user_id: userId, event_type: 'dm_failed',
+          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
+        });
+        return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
+
+      // Step 2: Now that the conversation is opened, send a follow-up Button Template via IGSID
+      // Wait briefly to let Instagram process the Private Reply and establish the conversation thread
+      await delay(1000);
+
+      if (usesComplexFlow) {
+        // Pro Flow: Send "Send me the access" button
+        const followUpResult = await sendButtonTemplateDM(token, recipientId,
+          '👆 Tap below to continue!',
+          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
+        );
+        console.log(`[Worker DM] Follow-up button template result:`, JSON.stringify(followUpResult));
+        if (followUpResult.error) {
+          console.warn(`[Worker DM] Follow-up button failed, falling back to quick reply:`, followUpResult.error);
+          // Fallback: use Quick Replies if Button Template fails
+          await sendQuickReplyDM(token, recipientId,
+            '👆 Tap below to continue!',
+            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
+          );
+        }
+      } else {
+        // Standard Flow: Send URL button directly
+        if (automation.dm_link) {
+          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+          const followUpResult = await sendButtonTemplateDM(token, recipientId,
+            '👇 Here\'s your link!',
+            [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
+          );
+          console.log(`[Worker DM] Follow-up link button result:`, JSON.stringify(followUpResult));
+          if (followUpResult.error) {
+            console.warn(`[Worker DM] Button template failed, sending link as text:`, followUpResult.error);
+            // Fallback: send as plain text with URL
+            await sendTextDM(token, recipientId, `Here's your link: ${redirectUrl}`);
+          }
+        }
+      }
+
     } else {
-      // Standard flow skips the proxy Quick Reply and instantly sends the URL Button Template
-      const buttonTemplates: any[] = [];
-      if (automation.dm_link) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        buttonTemplates.push({ type: 'web_url', title: 'Link', url: redirectUrl });
-      }
-
-      if (commentId) {
-        result = await sendPrivateReply(token, commentId, dmText, undefined, buttonTemplates);
+      // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers) =====
+      // Can use Button Templates directly since we're sending via IGSID
+      if (usesComplexFlow) {
+        result = await sendButtonTemplateDM(token, recipientId, dmText,
+          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
+        );
+        if (result.error) {
+          console.warn(`[Worker DM] Button template failed, trying quick reply:`, result.error);
+          result = await sendQuickReplyDM(token, recipientId, dmText,
+            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
+          );
+        }
       } else {
-        if (buttonTemplates.length > 0) {
-          result = await sendButtonTemplateDM(token, recipientId, dmText, buttonTemplates);
+        // Standard flow: send URL button template
+        if (automation.dm_link) {
+          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+          result = await sendButtonTemplateDM(token, recipientId, dmText,
+            [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
+          );
+          if (result.error) {
+            console.warn(`[Worker DM] Button template failed, sending as text:`, result.error);
+            result = await sendTextDM(token, recipientId, `${dmText}\n\n${redirectUrl}`);
+          }
         } else {
           result = await sendTextDM(token, recipientId, dmText);
         }
       }
-    }
 
-    console.log(`[Worker DM] Send result:`, JSON.stringify(result));
+      console.log(`[Worker DM] Send result:`, JSON.stringify(result));
 
-    if (result.error) {
-      console.error(`[Worker DM] FAILED:`, result.error.message || JSON.stringify(result.error));
-      await supabase.from('analytics_events').insert({
-        user_id: userId, event_type: 'dm_failed',
-        metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
-      });
-      return { success: false, reason: result.error.message || 'DM send failed' };
+      if (result.error) {
+        console.error(`[Worker DM] FAILED:`, result.error.message || JSON.stringify(result.error));
+        await supabase.from('analytics_events').insert({
+          user_id: userId, event_type: 'dm_failed',
+          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
+        });
+        return { success: false, reason: result.error.message || 'DM send failed' };
+      }
     }
 
     // Determine state tracking based on flow
@@ -285,10 +331,10 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     await supabase.from('analytics_events').insert({
       user_id: userId, event_type: 'dm_delivered',
-      metadata: { type: commentId ? 'private_reply' : 'direct_dm', message_id: result.message_id, recipient_id: recipientId, automation_id: automationId }
+      metadata: { type: commentId ? 'private_reply' : 'direct_dm', message_id: result?.message_id, recipient_id: recipientId, automation_id: automationId }
     });
 
-    return { success: true, metaId: result.message_id };
+    return { success: true, metaId: result?.message_id };
   }
 
   // ---- JOB TYPE: BUTTON-RESPONSE (User tapped "Send me the link") ----
@@ -297,13 +343,24 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     // FOLLOW-GATE (Pro/Elite)
     if (isPro && automation.follow_gate_enabled) {
-      await sendButtonTemplateDM(token, recipientId,
+      const followGateResult = await sendButtonTemplateDM(token, recipientId,
         'Oops! Looks like you haven\'t followed me yet 👀\nIt would mean a lot if you could visit my profile and hit that follow button 😁.',
         [
           { type: 'web_url', title: 'Visit Profile', url: `https://instagram.com/${user.instagramHandle || ''}` },
           { type: 'postback', title: '✅ I\'m following', payload: 'FOLLOWING' }
         ]
       );
+
+      // Fallback to Quick Replies if Button Template fails
+      if (followGateResult.error) {
+        console.warn(`[Worker DM] Follow-gate button failed, using quick replies:`, followGateResult.error);
+        await sendQuickReplyDM(token, recipientId,
+          `Oops! Looks like you haven't followed me yet 👀\nPlease follow @${user.instagramHandle || 'us'} and tap "I'm Following" below!`,
+          [
+            { content_type: 'text', title: '✅ I\'m following', payload: 'FOLLOWING' }
+          ]
+        );
+      }
 
       await upsertConversation(userId, automationId, recipientId, 'awaiting_follow');
 
@@ -341,9 +398,13 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     // STANDARD — Send link directly
     if (automation.dm_link) {
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
+      const linkResult = await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
         { type: 'web_url', title: 'Click me', url: redirectUrl }
       ]);
+      if (linkResult.error) {
+        console.warn(`[Worker DM] Link button failed, sending as text:`, linkResult.error);
+        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link:\n${redirectUrl}`);
+      }
     } else {
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
@@ -379,9 +440,13 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     if (isFollowing) {
       if (automation.dm_link) {
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
+        const linkResult = await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
           { type: 'web_url', title: 'Click me', url: redirectUrl }
         ]);
+        if (linkResult.error) {
+          console.warn(`[Worker DM] Link button failed, sending as text:`, linkResult.error);
+          await sendTextDM(token, recipientId, `Thanks for following! Here's your link:\n${redirectUrl}`);
+        }
       } else {
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
@@ -392,13 +457,20 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         metadata: { type: 'link_after_follow', recipient_id: recipientId }
       });
     } else {
-      await sendButtonTemplateDM(token, recipientId,
+      const retryResult = await sendButtonTemplateDM(token, recipientId,
         "❌ It seems like you haven't followed us yet. Please follow our profile and try again!",
         [
           { type: 'web_url', title: 'Visit Profile', url: `https://instagram.com/${user.instagramHandle || ''}` },
           { type: 'postback', title: '✅ I\'m following', payload: 'FOLLOWING' }
         ]
       );
+      if (retryResult.error) {
+        console.warn(`[Worker DM] Retry button failed, using quick replies:`, retryResult.error);
+        await sendQuickReplyDM(token, recipientId,
+          `❌ It seems like you haven't followed us yet. Please follow @${user.instagramHandle || 'us'} and try again!`,
+          [{ content_type: 'text', title: '✅ I\'m following', payload: 'FOLLOWING' }]
+        );
+      }
     }
     return { success: true };
   }
@@ -428,9 +500,13 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     if (!currentField) {
       // All fields collected already — send the link
       if (automation.dm_link) {
-        await sendButtonTemplateDM(token, recipientId, `🚀 Here's your link!`, [
-          { type: 'web_url', title: 'Click me', url: automation.dm_link }
+        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        const linkResult = await sendButtonTemplateDM(token, recipientId, `🚀 Here's your link!`, [
+          { type: 'web_url', title: 'Click me', url: redirectUrl }
         ]);
+        if (linkResult.error) {
+          await sendTextDM(token, recipientId, `🚀 Here's your link: ${redirectUrl}`);
+        }
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
       }
@@ -482,9 +558,12 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     if (automation.dm_link) {
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      await sendButtonTemplateDM(token, recipientId, `🎉 Thank you! Here's your link ⬇`, [
+      const linkResult = await sendButtonTemplateDM(token, recipientId, `🎉 Thank you! Here's your link ⬇`, [
         { type: 'web_url', title: 'Click me', url: redirectUrl }
       ]);
+      if (linkResult.error) {
+        await sendTextDM(token, recipientId, `🎉 Thank you! Here's your link: ${redirectUrl}`);
+      }
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
     }

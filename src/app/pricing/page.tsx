@@ -171,7 +171,7 @@ export default function PricingPage() {
       <div className={styles.blob} />
       <header className={styles.header}>
         <h1 className={styles.title}>Simple, transparent pricing</h1>
-        <p className={styles.subtitle}>Unlock Autodrop&apos;s full potential and convert your audience into revenue.</p>
+        <p className={styles.subtitle}>Unlock AutoDrop&apos;s full potential and convert your audience into revenue.</p>
       </header>
 
       <div className={styles.controlsRow}>
@@ -374,11 +374,11 @@ export default function PricingPage() {
         <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
-             { q: 'Can I cancel or change my plan later?', a: 'Yes! Autodrop is fully self-serve. You can upgrade, downgrade, or cancel your subscription at any time directly from your dashboard. No questions asked.' },
-             { q: 'Is my Instagram account safe using Autodrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
+             { q: 'Can I cancel or change my plan later?', a: 'Yes! AutoDrop is fully self-serve. You can upgrade, downgrade, or cancel your subscription at any time directly from your dashboard. No questions asked.' },
+             { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
              { q: 'What happens if I hit my limit on the Free plan?', a: 'If you exceed your 100 DM monthly limit on the Free plan, we will simply pause sending new DMs. We’ll notify you by email so you can upgrade to Pro to continue processing comments automatically.' },
              { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations.' },
-             { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed Autodrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
+             { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed AutoDrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
           ].map((faq, idx) => (
              <details key={idx} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
                 <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -397,9 +397,12 @@ export default function PricingPage() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <MessageCircle size={28} color="var(--primary)" />
-              <span style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.03em', background: 'linear-gradient(90deg, #6366F1, #22D3EE)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Autodrop</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 48, objectFit: 'contain' }} />
+              <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                <span style={{ color: '#5b85ff' }}>Auto</span>
+                <span style={{ color: '#ffffff' }}>Drop</span>
+              </div>
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
           </div>
@@ -417,7 +420,7 @@ export default function PricingPage() {
 
           {/* Copyright + Small Text */}
           <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
-            <p>&copy; {new Date().getFullYear()} Autodrop. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} AutoDrop. All rights reserved.</p>
             <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
                <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
             </p>
@@ -427,7 +430,7 @@ export default function PricingPage() {
         {/* GIANT BACKGROUND WATERMARK */}
         <div style={{ width: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
           <span style={{ fontSize: 'min(24vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase' }}>
-            Autodrop
+            AutoDrop
           </span>
         </div>
       </footer>

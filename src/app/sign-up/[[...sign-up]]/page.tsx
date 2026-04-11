@@ -11,7 +11,7 @@ export default function SignUpPage() {
     }}>
       <SignUp 
          appearance={{ 
-            layout: { logoPlacement: 'none' },
+            layout: { logoPlacement: 'inside', logoImageUrl: '/autodrop_icon_transparent.png' },
             elements: { formButtonPrimary: { backgroundColor: '#8b5cf6', '&:hover': { backgroundColor: '#7c3aed' } } } 
          }} 
          routing="path" 

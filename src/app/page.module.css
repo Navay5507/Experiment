@@ -653,6 +653,7 @@
 @media (max-width: 768px) {
   .mobileOnlyVisual {
     display: block;
+    width: 100%;
   }
   .desktopOnlyVisual {
     display: none;
@@ -676,12 +677,19 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
+  .heroContent {
+    align-items: center;
+    text-align: center;
+  }
   .heroHeading {
     font-size: 36px;
+    text-align: center;
   }
   .heroSub {
     font-size: 16px;
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
   .heroCtas {
     flex-direction: row;

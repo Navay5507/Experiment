@@ -321,23 +321,43 @@ export default function CreateAutomation() {
               </div>
 
               {/* Feature Type Selection */}
-              <div className={styles.featureGrid} style={{ marginBottom: '1.5rem' }}>
-                <div onClick={() => setFeatureType('standard')} className={`${styles.featureCard} ${featureType === 'standard' ? styles.featureActive : ''}`}>
-                  <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🔗</div>
-                  <h4>Standard Link</h4>
-                  <p>Sends the link directly after they tap the button.</p>
-                </div>
-                <div onClick={() => setFeatureType('follow_gate')} className={`${styles.featureCard} ${featureType === 'follow_gate' ? styles.featureActive : ''}`}>
-                  <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🔒</div>
-                  <h4>Follow-Gate</h4>
-                  <p>Requires following your account first. <span style={{ color: '#a855f7', fontWeight: 600, fontSize: '0.75rem' }}>PRO</span></p>
-                </div>
-                <div onClick={() => setFeatureType('lead_capture')} className={`${styles.featureCard} ${featureType === 'lead_capture' ? styles.featureActive : ''}`}>
-                  <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>📋</div>
-                  <h4>Lead Capture</h4>
-                  <p>Collects data before sending the link. <span style={{ color: '#a855f7', fontWeight: 600, fontSize: '0.75rem' }}>PRO</span></p>
-                </div>
-              </div>
+              {(() => {
+                const isPro = userPlan === 'PRO' || userPlan === 'ELITE';
+                const featureOptions = [
+                  { key: 'standard', icon: '🔗', title: 'Standard Link', desc: 'Sends the link directly after they tap the button.', pro: false },
+                  { key: 'follow_gate', icon: '🔒', title: 'Follow-Gate', desc: 'Requires following your account first.', pro: true },
+                  { key: 'lead_capture', icon: '📋', title: 'Lead Capture', desc: 'Collects data before sending the link.', pro: true },
+                ];
+                return (
+                  <div className={styles.featureGrid} style={{ marginBottom: '1.5rem' }}>
+                    {featureOptions.map(f => {
+                      const locked = f.pro && !isPro;
+                      return (
+                        <div
+                          key={f.key}
+                          onClick={() => !locked && setFeatureType(f.key)}
+                          className={`${styles.featureCard} ${featureType === f.key ? styles.featureActive : ''}`}
+                          style={{
+                            opacity: locked ? 0.4 : 1,
+                            cursor: locked ? 'default' : 'pointer',
+                            position: 'relative',
+                          }}
+                        >
+                          {f.pro && (
+                            <div style={{ position: 'absolute', top: 8, right: 8, fontSize: '0.6rem', padding: '0.1rem 0.4rem', borderRadius: '4px', background: 'rgba(168,85,247,0.15)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.3)', fontWeight: 700 }}>PRO</div>
+                          )}
+                          <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{f.icon}</div>
+                          <h4>{f.title}</h4>
+                          <p>{f.desc}</p>
+                          {locked && (
+                            <a href="/pricing" style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 600, marginTop: '0.5rem', display: 'block', textDecoration: 'none' }}>Upgrade to Unlock</a>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
 
               {/* Follow-Gate Explanation */}
               {featureType === 'follow_gate' && (

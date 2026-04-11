@@ -124,19 +124,19 @@ export default async function AutomationsList() {
             const matchedMedia = postIds.map(id => recentMedia.find(m => m.id === id)).filter(Boolean);
 
             return (
-              <div key={auto.id} className={styles.card} style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '1.5rem' }}>
-                <div style={{ width: 60, height: 60, background: 'var(--bg-primary)', borderRadius: '12px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: auto.is_active ? 'var(--primary)' : 'var(--text-muted)' }}>
+              <div key={auto.id} className={styles.card} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <div style={{ width: 60, height: 60, flexShrink: 0, background: 'var(--bg-primary)', borderRadius: '12px', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: auto.is_active ? 'var(--primary)' : 'var(--text-muted)' }}>
                   <Zap size={24} />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div style={{ flex: '1 1 200px', minWidth: 'min-content' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.5rem' }}>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>
                       {auto.campaign_name || 'Unnamed Campaign'}
                     </h3>
                     <span style={{
                       background: auto.is_active ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.05)',
                       color: auto.is_active ? '#10b981' : 'var(--text-muted)',
-                      padding: '0.2rem 0.75rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600
+                      padding: '0.2rem 0.75rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap'
                     }}>
                       {auto.is_active ? 'Active' : 'Paused'}
                     </span>
@@ -157,7 +157,7 @@ export default async function AutomationsList() {
                     </div>
                   )}
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, marginTop: 'auto' }}>
                   <RetriggerButton automationId={auto.id} hasMediaId={postIds.length > 0} />
                   <form action={toggleAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
