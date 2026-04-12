@@ -4,8 +4,6 @@ import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 // =============================================
 // JOB INTERFACES
 // =============================================
