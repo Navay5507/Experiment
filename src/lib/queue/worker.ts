@@ -79,6 +79,13 @@ async function sendQuickReplyDM(
   return res.json();
 }
 
+/**
+ * Send a DM with clickable buttons using Instagram's Generic Template.
+ * 
+ * IMPORTANT: Instagram does NOT support template_type: 'button' — that is
+ * a Facebook Messenger feature. Sending it crashes the Instagram mobile app.
+ * Instagram only supports template_type: 'generic' for structured messages.
+ */
 async function sendButtonTemplateDM(
   token: string,
   recipientId: string,
@@ -94,9 +101,14 @@ async function sendButtonTemplateDM(
         attachment: {
           type: 'template',
           payload: {
-            template_type: 'button',
-            text,
-            buttons,
+            template_type: 'generic',
+            elements: [
+              {
+                title: text.length > 80 ? text.substring(0, 77) + '...' : text,
+                subtitle: text.length > 80 ? text : undefined,
+                buttons,
+              }
+            ],
           }
         }
       }
