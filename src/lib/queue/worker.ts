@@ -241,10 +241,22 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     let result;
 
     if (commentId) {
-      // ===== PRIVATE REPLY PATH (Two-Step) =====
-      // Step 1: Send TEXT-ONLY Private Reply. This opens the DM conversation.
-      //         NO templates of ANY kind are allowed here — they crash Instagram.
-      result = await sendPrivateReply(token, commentId, dmText);
+      // ===== PRIVATE REPLY PATH =====
+      // Send a single TEXT-ONLY Private Reply.
+      // Include the URL inline — Instagram auto-renders it as a clickable link preview.
+      // NO templates, NO follow-ups, NO delays — keeps it fast & crash-free.
+      let finalText = dmText;
+
+      if (usesComplexFlow) {
+        // Pro Flow: ask user to reply
+        finalText = `${dmText}\n\n👆 Reply "YES" to get the link!`;
+      } else if (automation.dm_link) {
+        // Standard Flow: include URL directly in the text
+        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        finalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
+      }
+
+      result = await sendPrivateReply(token, commentId, finalText);
       console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
 
       if (result.error) {
@@ -255,45 +267,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         });
         return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
-
-      // Step 2: Extract the IGSID from the Private Reply response.
-      //         The webhook recipientId (commenter IG user ID) is NOT the same as the IGSID
-      //         required for sending DMs via recipient: { id }.
-      const igsid = result.recipient_id || recipientId;
-      console.log(`[Worker DM] IGSID from Private Reply: ${igsid} (original recipientId: ${recipientId})`);
-
-      // Step 3: Brief pause to let Instagram establish the conversation thread.
-      await delay(1500);
-
-      // Step 4: Send clickable Button Template as a follow-up via IGSID.
-      if (usesComplexFlow) {
-        console.log(`[Worker DM] Sending follow-up button template to IGSID: ${igsid}`);
-        const followUpResult = await sendButtonTemplateDM(token, igsid,
-          '👆 Tap below to continue!',
-          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
-        );
-        console.log(`[Worker DM] Follow-up button result:`, JSON.stringify(followUpResult));
-        if (followUpResult.error) {
-          console.warn(`[Worker DM] Button failed, trying quick reply fallback`);
-          await sendQuickReplyDM(token, igsid,
-            '👆 Tap below to continue!',
-            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
-          );
-        }
-      } else if (automation.dm_link) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        console.log(`[Worker DM] Sending follow-up link button to IGSID: ${igsid}`);
-        const followUpResult = await sendButtonTemplateDM(token, igsid,
-          '👇 Here\'s your link!',
-          [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
-        );
-        console.log(`[Worker DM] Follow-up link result:`, JSON.stringify(followUpResult));
-        if (followUpResult.error) {
-          console.warn(`[Worker DM] Button failed, sending as text fallback`);
-          await sendTextDM(token, igsid, `Here's your link 🔗\n${redirectUrl}`);
-        }
-      }
-
 
     } else {
       // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers) =====
