@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
-import { Copy, Link2, Activity, CreditCard, AlertTriangle, Trash } from "lucide-react";
+import { Copy, Link2, Activity, CreditCard, AlertTriangle, Trash, Zap } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -55,6 +55,19 @@ export default async function SettingsPage() {
       await supabase.from('analytics_events').delete().eq('user_id', u.id);
     }
     redirect('/dashboard');
+  }
+
+  async function clearQueue() {
+    "use server";
+    const { userId } = await auth();
+    if (!userId) return;
+    // Call internal API to flush BullMQ queues
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    await fetch(`${appUrl}/api/queue/clear`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    redirect('/dashboard/settings');
   }
 
   return (
@@ -121,6 +134,11 @@ export default async function SettingsPage() {
                Destructive actions that will halt all automation pipelines.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+               <form action={clearQueue}>
+                 <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <Zap size={18} /> Clear Automation Queue
+                 </button>
+               </form>
                <form action={disconnectInstagram}>
                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Link2 size={18} /> Disconnect Instagram
