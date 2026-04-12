@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
-import { Activity } from "lucide-react";
+import { Activity, Zap } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +33,12 @@ export default async function LogsPage() {
            <h1>Application Trace Logs</h1>
            <p>Chronological background worker events verifying outbound API states.</p>
         </div>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+           <form action={async () => { "use server"; const { userId } = await auth(); if (!userId) return; const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'; await fetch(`${appUrl}/api/queue/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json' } }); redirect('/dashboard/logs'); }}>
+             <button type="submit" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#f59e0b', background: 'rgba(245,158,11,0.1)', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600, border: '1px solid rgba(245,158,11,0.3)', cursor: 'pointer' }}>
+               <Zap size={16} /> Clear Queue
+             </button>
+           </form>
            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 600 }}>
              <Activity size={16} /> Live Streaming
            </span>
