@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
 import { Copy, Link2, Activity, CreditCard, AlertTriangle, Trash, Zap } from "lucide-react";
+import ConfirmForm from "../ConfirmForm";
 
 export const dynamic = 'force-dynamic';
 
@@ -134,26 +135,26 @@ export default async function SettingsPage() {
                Destructive actions that will halt all automation pipelines.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-               <form action={clearQueue}>
+               <ConfirmForm message="Clear all pending automation jobs? This will stop any scheduled DMs from being sent." action={clearQueue}>
                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Zap size={18} /> Clear Automation Queue
                  </button>
-               </form>
-               <form action={disconnectInstagram}>
+               </ConfirmForm>
+               <ConfirmForm message="Disconnect your Instagram account? All automations will stop working." action={disconnectInstagram}>
                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Link2 size={18} /> Disconnect Instagram
                  </button>
-               </form>
-               <form action={resetStats}>
+               </ConfirmForm>
+               <ConfirmForm message="Reset all dashboard stats to zero? This cannot be undone." action={resetStats}>
                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Activity size={18} /> Reset Dashboard Stats
                  </button>
-               </form>
-               <form action={deleteAccount}>
+               </ConfirmForm>
+               <ConfirmForm message="⚠️ DELETE YOUR ACCOUNT? This will permanently erase all data, automations, and leads. IRREVERSIBLE." action={deleteAccount}>
                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                     <Trash size={18} /> Delete Account Permanently
                  </button>
-               </form>
+               </ConfirmForm>
             </div>
          </div>
          

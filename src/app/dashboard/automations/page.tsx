@@ -5,6 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
 import RetriggerButton from "./RetriggerButton";
+import ConfirmForm from "../ConfirmForm";
 
 export const dynamic = 'force-dynamic';
 
@@ -159,19 +160,19 @@ export default async function AutomationsList() {
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, marginTop: 'auto' }}>
                   <RetriggerButton automationId={auto.id} hasMediaId={postIds.length > 0} />
-                  <form action={toggleAutomation}>
+                  <ConfirmForm message={auto.is_active ? "Pause this automation? It will stop responding to new comments." : "Activate this automation?"} action={toggleAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
                     <input type="hidden" name="currentState" value={String(auto.is_active)} />
                     <button type="submit" className={styles.btnAction} title={auto.is_active ? "Pause" : "Start"}>
                       {auto.is_active ? <Pause size={16} /> : <Play size={16} />}
                     </button>
-                  </form>
-                  <form action={deleteAutomation}>
+                  </ConfirmForm>
+                  <ConfirmForm message="Delete this automation permanently? This cannot be undone." action={deleteAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
                     <button type="submit" className={styles.btnAction} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
                       <Trash2 size={16} />
                     </button>
-                  </form>
+                  </ConfirmForm>
                 </div>
               </div>
             );
