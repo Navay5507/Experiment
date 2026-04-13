@@ -241,10 +241,22 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     let result;
 
     if (commentId) {
-      // ===== PRIVATE REPLY PATH (Two-Step) =====
-      // Step 1: Send TEXT-ONLY Private Reply to open the DM conversation.
-      //         NO templates allowed here — they crash Instagram.
-      result = await sendPrivateReply(token, commentId, dmText);
+      // ===== PRIVATE REPLY PATH =====
+      // Instagram only allows ONE text message via Private Reply (comment_id recipient).
+      // The 24-hour IGSID messaging window does NOT open until the user replies.
+      // So we MUST include everything (CTA, URL) in this single message.
+      let finalText = dmText;
+
+      if (usesComplexFlow) {
+        // Pro Flow: ask user to reply to open the 24-hr messaging window
+        finalText = `${dmText}\n\n👇 Reply "YES" to get the link!`;
+      } else if (automation.dm_link) {
+        // Standard Flow: include URL directly in the text
+        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        finalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
+      }
+
+      result = await sendPrivateReply(token, commentId, finalText);
       console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
 
       if (result.error) {
@@ -254,45 +266,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
           metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
         });
         return { success: false, reason: result.error.message || 'Private Reply failed' };
-      }
-
-      // Step 2: Extract the IGSID from the Private Reply response
-      const igsid = result.recipient_id || recipientId;
-      console.log(`[Worker DM] IGSID from Private Reply: ${igsid} (original recipientId: ${recipientId})`);
-
-      // Step 3: Send follow-up with Quick Replies via IGSID
-      // Quick Replies are tappable suggestion pills — guaranteed to work on Instagram.
-      // Generic Templates are silently dropped by Instagram's API.
-      await delay(1500);
-
-      if (usesComplexFlow) {
-        // Pro Flow: Quick Reply with "Send me the access"
-        const followUp = await sendQuickReplyDM(token, igsid,
-          '👆 Tap below and I\'ll send you the access in just a moment ✨',
-          [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
-        );
-        console.log(`[Worker DM] Follow-up quick reply result:`, JSON.stringify(followUp));
-        if (followUp.error) {
-          console.error(`[Worker DM] Follow-up quick reply FAILED:`, followUp.error);
-          // Last resort: plain text
-          await sendTextDM(token, igsid, '👆 Reply "YES" to get the link!');
-          await supabase.from('analytics_events').insert({
-            user_id: userId, event_type: 'followup_failed',
-            metadata: { error: followUp.error.message || JSON.stringify(followUp.error), igsid, type: 'quick_reply' }
-          });
-        }
-      } else if (automation.dm_link) {
-        // Standard Flow: send link as plain text (Quick Replies can't do web_url)
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        const followUp = await sendTextDM(token, igsid, `👇 Here's your link!\n${redirectUrl}`);
-        console.log(`[Worker DM] Follow-up link result:`, JSON.stringify(followUp));
-        if (followUp.error) {
-          console.error(`[Worker DM] Follow-up link FAILED:`, followUp.error);
-          await supabase.from('analytics_events').insert({
-            user_id: userId, event_type: 'followup_failed',
-            metadata: { error: followUp.error.message || JSON.stringify(followUp.error), igsid, type: 'link_text' }
-          });
-        }
       }
 
     } else {
