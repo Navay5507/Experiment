@@ -338,6 +338,62 @@ export async function POST(req: Request) {
               continue;
             }
 
+            // ---- PLAIN TEXT: Handle typed responses as button-tap equivalents ----
+            if (messageText && !quickReplyPayload) {
+              const normalizedText = messageText.trim().toLowerCase();
+
+              // Check if user typed "yes", "send", "link", etc. while awaiting button tap
+              if (['yes', 'yeah', 'send', 'link', 'send me the access', 'access', 'get link'].includes(normalizedText)) {
+                const { data: convo } = await supabase
+                  .from('dm_conversations')
+                  .select('automation_id')
+                  .eq('user_id', user.id)
+                  .eq('recipient_ig_id', senderId)
+                  .eq('state', 'awaiting_link_tap')
+                  .order('updated_at', { ascending: false })
+                  .limit(1)
+                  .maybeSingle();
+
+                if (convo) {
+                  try {
+                    await dmQueue.add('button-response', {
+                      userId: user.id,
+                      automationId: convo.automation_id,
+                      recipientId: senderId,
+                      quickReplyPayload: 'GET_LINK',
+                    });
+                    console.log('[Webhook] ✅ Text "yes" → button-response job queued');
+                  } catch (e) { console.error('[Webhook] Text button-response queue error:', e); }
+                  continue;
+                }
+              }
+
+              // Check if user typed "following", "i'm following", etc. while awaiting follow
+              if (['following', "i'm following", 'im following', 'followed', 'i follow', 'done'].includes(normalizedText)) {
+                const { data: convo } = await supabase
+                  .from('dm_conversations')
+                  .select('automation_id')
+                  .eq('user_id', user.id)
+                  .eq('recipient_ig_id', senderId)
+                  .eq('state', 'awaiting_follow')
+                  .order('updated_at', { ascending: false })
+                  .limit(1)
+                  .maybeSingle();
+
+                if (convo) {
+                  try {
+                    await dmQueue.add('follow-verify', {
+                      userId: user.id,
+                      automationId: convo.automation_id,
+                      recipientId: senderId,
+                    });
+                    console.log('[Webhook] ✅ Text "following" → follow-verify job queued');
+                  } catch (e) { console.error('[Webhook] Text follow-verify queue error:', e); }
+                  continue;
+                }
+              }
+            }
+
             // ---- PLAIN TEXT: Check if we're awaiting lead data ----
             if (messageText) {
               const { data: convo } = await supabase
