@@ -260,33 +260,38 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       const igsid = result.recipient_id || recipientId;
       console.log(`[Worker DM] IGSID from Private Reply: ${igsid} (original recipientId: ${recipientId})`);
 
-      // Step 3: Send follow-up Generic Template with buttons via IGSID
-      await delay(1000);
+      // Step 3: Send follow-up with Quick Replies via IGSID
+      // Quick Replies are tappable suggestion pills — guaranteed to work on Instagram.
+      // Generic Templates are silently dropped by Instagram's API.
+      await delay(1500);
 
       if (usesComplexFlow) {
-        // Pro Flow: "Send me the access" button
-        const followUp = await sendButtonTemplateDM(token, igsid,
+        // Pro Flow: Quick Reply with "Send me the access"
+        const followUp = await sendQuickReplyDM(token, igsid,
           '👆 Tap below and I\'ll send you the access in just a moment ✨',
-          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
+          [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
         );
-        console.log(`[Worker DM] Follow-up button result:`, JSON.stringify(followUp));
+        console.log(`[Worker DM] Follow-up quick reply result:`, JSON.stringify(followUp));
         if (followUp.error) {
-          // Fallback: quick reply
-          await sendQuickReplyDM(token, igsid,
-            '👆 Tap below to continue!',
-            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
-          );
+          console.error(`[Worker DM] Follow-up quick reply FAILED:`, followUp.error);
+          // Last resort: plain text
+          await sendTextDM(token, igsid, '👆 Reply "YES" to get the link!');
+          await supabase.from('analytics_events').insert({
+            user_id: userId, event_type: 'followup_failed',
+            metadata: { error: followUp.error.message || JSON.stringify(followUp.error), igsid, type: 'quick_reply' }
+          });
         }
       } else if (automation.dm_link) {
-        // Standard Flow: direct link button
+        // Standard Flow: send link as plain text (Quick Replies can't do web_url)
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        const followUp = await sendButtonTemplateDM(token, igsid,
-          '👇 Here\'s your link!',
-          [{ type: 'web_url', title: 'Click me', url: redirectUrl }]
-        );
+        const followUp = await sendTextDM(token, igsid, `👇 Here's your link!\n${redirectUrl}`);
         console.log(`[Worker DM] Follow-up link result:`, JSON.stringify(followUp));
         if (followUp.error) {
-          await sendTextDM(token, igsid, `Here's your link 🔗\n${redirectUrl}`);
+          console.error(`[Worker DM] Follow-up link FAILED:`, followUp.error);
+          await supabase.from('analytics_events').insert({
+            user_id: userId, event_type: 'followup_failed',
+            metadata: { error: followUp.error.message || JSON.stringify(followUp.error), igsid, type: 'link_text' }
+          });
         }
       }
 
@@ -355,22 +360,19 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     // FOLLOW-GATE (Pro/Elite)
     if (isPro && automation.follow_gate_enabled) {
-      const followGateResult = await sendButtonTemplateDM(token, recipientId,
-        'Oops! Looks like you haven\'t followed me yet 👀\nIt would mean a lot if you could visit my profile and hit that follow button 😁.',
+      // Send follow gate with Quick Replies and profile link in text
+      const profileUrl = `https://instagram.com/${user.instagramHandle || ''}`;
+      const followGateResult = await sendQuickReplyDM(token, recipientId,
+        `Oops! Looks like you haven't followed me yet 👀\nVisit my profile: ${profileUrl}\nFollow me and tap \"I'm following\" below! 😁`,
         [
-          { type: 'web_url', title: 'Visit Profile', url: `https://instagram.com/${user.instagramHandle || ''}` },
-          { type: 'postback', title: '✅ I\'m following', payload: 'FOLLOWING' }
+          { content_type: 'text', title: "✅ I'm following", payload: 'FOLLOWING' }
         ]
       );
 
-      // Fallback to Quick Replies if Button Template fails
       if (followGateResult.error) {
-        console.warn(`[Worker DM] Follow-gate button failed, using quick replies:`, followGateResult.error);
-        await sendQuickReplyDM(token, recipientId,
-          `Oops! Looks like you haven't followed me yet 👀\nPlease follow @${user.instagramHandle || 'us'} and tap "I'm Following" below!`,
-          [
-            { content_type: 'text', title: '✅ I\'m following', payload: 'FOLLOWING' }
-          ]
+        console.error(`[Worker DM] Follow-gate quick reply failed:`, followGateResult.error);
+        await sendTextDM(token, recipientId,
+          `Oops! Looks like you haven't followed me yet 👀\nFollow @${user.instagramHandle || 'us'} and reply \"following\" to continue!`
         );
       }
 
@@ -410,13 +412,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     // STANDARD — Send link directly
     if (automation.dm_link) {
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      const linkResult = await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
-        { type: 'web_url', title: 'Click me', url: redirectUrl }
-      ]);
-      if (linkResult.error) {
-        console.warn(`[Worker DM] Link button failed, sending as text:`, linkResult.error);
-        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link:\n${redirectUrl}`);
-      }
+      await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
     } else {
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
@@ -452,13 +448,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     if (isFollowing) {
       if (automation.dm_link) {
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        const linkResult = await sendButtonTemplateDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇`, [
-          { type: 'web_url', title: 'Click me', url: redirectUrl }
-        ]);
-        if (linkResult.error) {
-          console.warn(`[Worker DM] Link button failed, sending as text:`, linkResult.error);
-          await sendTextDM(token, recipientId, `Thanks for following! Here's your link:\n${redirectUrl}`);
-        }
+        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
       } else {
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
@@ -469,18 +459,15 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         metadata: { type: 'link_after_follow', recipient_id: recipientId }
       });
     } else {
-      const retryResult = await sendButtonTemplateDM(token, recipientId,
-        "❌ It seems like you haven't followed us yet. Please follow our profile and try again!",
-        [
-          { type: 'web_url', title: 'Visit Profile', url: `https://instagram.com/${user.instagramHandle || ''}` },
-          { type: 'postback', title: '✅ I\'m following', payload: 'FOLLOWING' }
-        ]
+      // Not following — send Quick Reply to retry
+      const profileUrl = `https://instagram.com/${user.instagramHandle || ''}`;
+      const retryResult = await sendQuickReplyDM(token, recipientId,
+        `❌ It seems like you haven't followed us yet.\nVisit my profile: ${profileUrl}\nFollow and tap below to try again!`,
+        [{ content_type: 'text', title: "✅ I'm following", payload: 'FOLLOWING' }]
       );
       if (retryResult.error) {
-        console.warn(`[Worker DM] Retry button failed, using quick replies:`, retryResult.error);
-        await sendQuickReplyDM(token, recipientId,
-          `❌ It seems like you haven't followed us yet. Please follow @${user.instagramHandle || 'us'} and try again!`,
-          [{ content_type: 'text', title: '✅ I\'m following', payload: 'FOLLOWING' }]
+        await sendTextDM(token, recipientId,
+          `❌ You haven't followed us yet. Follow @${user.instagramHandle || 'us'} and reply "following" to get the link!`
         );
       }
     }
