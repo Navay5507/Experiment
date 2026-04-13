@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
@@ -510,6 +510,15 @@ export async function POST(req: Request) {
           }
         }
       }
+      // Keep the serverless function alive so BullMQ worker can process queued jobs.
+      // Without this, Vercel freezes the process immediately after responding and
+      // the worker never picks up the job.
+      after(async () => {
+        console.log('[Webhook] after() → keeping alive for worker processing...');
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        console.log('[Webhook] after() → done.');
+      });
+
       return new NextResponse('EVENT_RECEIVED', { status: 200 });
     }
 
