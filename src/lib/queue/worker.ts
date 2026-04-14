@@ -473,12 +473,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       // All fields collected already — send the link
       if (automation.dm_link) {
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        const linkResult = await sendButtonTemplateDM(token, recipientId, `🚀 Here's your link!`, [
-          { type: 'web_url', title: 'Click me', url: redirectUrl }
-        ]);
-        if (linkResult.error) {
-          await sendTextDM(token, recipientId, `🚀 Here's your link: ${redirectUrl}`);
-        }
+        await sendTextDM(token, recipientId, `🚀 Here's your link:\n${redirectUrl}`);
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
       }
@@ -530,12 +525,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     if (automation.dm_link) {
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      const linkResult = await sendButtonTemplateDM(token, recipientId, `🎉 Thank you! Here's your link ⬇`, [
-        { type: 'web_url', title: 'Click me', url: redirectUrl }
-      ]);
-      if (linkResult.error) {
-        await sendTextDM(token, recipientId, `🎉 Thank you! Here's your link: ${redirectUrl}`);
-      }
+      await sendTextDM(token, recipientId, `🎉 Thank you! Here's your link ⬇\n${redirectUrl}`);
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
     }
