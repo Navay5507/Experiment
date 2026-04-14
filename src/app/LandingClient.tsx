@@ -42,6 +42,18 @@ const HeroMockupElement = () => (
                    className={styles.ambientBubbleRight}>
                    &quot;price pls&quot;
                 </motion.div>
+                <motion.div 
+                   animate={{ y: [80, -180], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 5, delay: 0.8, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleTopLeft}>
+                   &quot;DESK&quot;
+                </motion.div>
+                <motion.div 
+                   animate={{ y: [120, -120], opacity: [0, 0.95, 0] }} 
+                   transition={{ duration: 4.2, delay: 2.5, repeat: Infinity, ease: "linear" }}
+                   className={styles.ambientBubbleTopRight}>
+                   &quot;details? 🔥&quot;
+                </motion.div>
 
                 <motion.div
                    animate={{ scale: [0.8, 1, 0.8], opacity: [0, 0.95, 0], y: [-20, -40, -20] }}
