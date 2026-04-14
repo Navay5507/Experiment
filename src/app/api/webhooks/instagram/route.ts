@@ -32,7 +32,7 @@ async function findUserByInstagramId(igId: string) {
     .from('users')
     .select('id, instagramUserId, instagramAccessToken, plan')
     .eq('instagramUserId', igId)
-    .single();
+    .maybeSingle();
 
   if (user) return user;
 
