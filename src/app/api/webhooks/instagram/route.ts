@@ -271,13 +271,60 @@ export async function POST(req: Request) {
 
             if (!senderId) continue;
 
-            console.log(`[Webhook] 📩 DM from ${senderId}: "${messageText}" | QR/Postback: ${quickReplyPayload || 'none'}`);
+            // Skip echo messages (messages sent BY the page itself)
+            if (messageEvent.message?.is_echo) continue;
+
+            const isStoryReply = !!messageEvent.message?.reply_to?.story;
+            console.log(`[Webhook] 📩 DM from ${senderId}: "${messageText}" | QR: ${quickReplyPayload || 'none'} | Story: ${isStoryReply}`);
 
             const user = await findUserByInstagramId(igUserId);
 
             if (!user) {
               console.warn(`[Webhook] ❌ No user found for IG ID (DM): ${igUserId}`);
               continue;
+            }
+
+            // ---- STORY AUTOMATION TRIGGER (checked FIRST so it can't be hijacked) ----
+            if (isStoryReply && messageText) {
+              console.log(`[Webhook] 📖 Story reply detected: "${messageText}"`);
+              if (user.plan === 'FREE') {
+                console.log(`[Webhook] Skipping story: Pro feature, user is FREE`);
+              } else {
+                const { data: storyAutomations } = await supabase
+                  .from('automations')
+                  .select('*')
+                  .eq('user_id', user.id)
+                  .eq('is_active', true)
+                  .eq('target_type', 'story');
+
+                console.log(`[Webhook] Found ${storyAutomations?.length || 0} story automations`);
+                if (storyAutomations && storyAutomations.length > 0) {
+                  let storyMatched = false;
+                  for (const automation of storyAutomations) {
+                    const keywords: string[] = Array.isArray(automation.keywords) ? automation.keywords : JSON.parse(automation.keywords || '[]');
+                    const cleanMsg = messageText.toLowerCase().replace(/[^\w\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/g, '').trim();
+                    const matched = keywords.length === 0 || keywords.some(kw => {
+                      const cleanKw = kw.toLowerCase().replace(/[^\w\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/g, '').trim();
+                      return cleanMsg === cleanKw;
+                    });
+                    if (matched) {
+                      storyMatched = true;
+                      console.log(`[Webhook] 🎯 Story keyword match! automation: ${automation.id}`);
+                      try {
+                        await dmQueue.add('send', {
+                          userId: user.id,
+                          automationId: automation.id,
+                          recipientId: senderId,
+                          commenterUsername: 'follower',
+                        });
+                        console.log('[Webhook] ✅ Story DM job queued');
+                      } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
+                      break;
+                    }
+                  }
+                  if (storyMatched) continue;
+                }
+              }
             }
 
             // ---- QUICK REPLY: "Send me the link" ----
@@ -420,51 +467,7 @@ export async function POST(req: Request) {
                 continue;
               }
 
-              // ---- STORY AUTOMATION TRIGGER (Keyword Matching) ----
-              const isStoryReply = !!messageEvent.message?.reply_to?.story;
-              
-              if (isStoryReply) {
-                if (user.plan === 'FREE') {
-                  console.log(`[Webhook] Skipping story trigger: Pro feature restricted for Free user ${user.id}`);
-                } else {
-                  const { data: storyAutomations } = await supabase
-                    .from('automations')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .eq('is_active', true)
-                    .eq('target_type', 'story');
-                    
-                  if (storyAutomations && storyAutomations.length > 0) {
-                    let storyMatched = false;
-                    for (const automation of storyAutomations) {
-                      const keywords: string[] = Array.isArray(automation.keywords) ? automation.keywords : JSON.parse(automation.keywords || '[]');
-                      
-                      // Exact match (ignoring punctuation): only triggers if message is precisely the keyword (sent alone)
-                      const cleanMsg = messageText.toLowerCase().replace(/[^\w\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/g, '').trim();
-                      const matched = keywords.length === 0 || keywords.some(kw => {
-                        const cleanKw = kw.toLowerCase().replace(/[^\w\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/g, '').trim();
-                        return cleanMsg === cleanKw;
-                      });
-                      
-                      if (matched) {
-                        storyMatched = true;
-                        console.log(`[Webhook] 🎯 Story match for automation: ${automation.id}`);
-                        try {
-                          await dmQueue.add('send', {
-                            userId: user.id,
-                            automationId: automation.id,
-                            recipientId: senderId,
-                            commenterUsername: 'follower', // Placeholder
-                          });
-                          console.log('[Webhook] ✅ DM send job queued (Story Automation payload)');
-                        } catch (e) { console.error('[Webhook] DM queue error:', e); }
-                        break; 
-                      }
-                    }
-                    if (storyMatched) continue; // Skip legacy/AI checks if it hit a story trigger
-                  }
-                }
-              } // end isStoryReply
+              // Story automation already handled at top of message handler (before text handlers)
 
               // ---- Email detection (legacy fallback for non-conversational capture) ----
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
