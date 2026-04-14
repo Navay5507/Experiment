@@ -7,6 +7,7 @@ import { Suspense } from "react";
 function SignUpContent() {
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
+  const redirectUrl = searchParams.get("redirect_url") || "/";
 
   return (
     <main style={{ 
@@ -23,7 +24,7 @@ function SignUpContent() {
          }} 
          routing="path" 
          path="/sign-up"
-         forceRedirectUrl="/"
+         forceRedirectUrl={redirectUrl}
          unsafeMetadata={ref ? { referral_code: ref } : undefined}
       />
     </main>

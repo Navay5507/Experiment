@@ -45,11 +45,11 @@ export default function AffiliatesPage() {
              <Link href="/pricing" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
              <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
              {isMobileMenuOpen && (
-               <Link href="/sign-up" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Become a Partner</Link>
+               <Link href="/sign-up?redirect_url=/dashboard/referral" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Become a Partner</Link>
              )}
           </div>
           <div className={styles.authCol}>
-             <Link href="/sign-up" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Become a Partner</Link>
+             <Link href="/sign-up?redirect_url=/dashboard/referral" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Become a Partner</Link>
           </div>
         </nav>
       </div>
@@ -74,7 +74,7 @@ export default function AffiliatesPage() {
                   Earn a 25% cut of their subscription every single month for their first year.
                </p>
                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <Link href="/sign-up" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Link href="/sign-up?redirect_url=/dashboard/referral" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                      Join the Program <ArrowRight size={20} />
                   </Link>
                </div>
@@ -191,7 +191,7 @@ export default function AffiliatesPage() {
              <Zap size={48} color="#3b82f6" style={{ marginBottom: '1.5rem' }} />
              <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em', color: '#fff' }}>Start Earning Today.</h2>
              <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: 1.6 }}>Join hundreds of partners generating passive income by recommending the best IG automation tool on the market.</p>
-             <Link href="/sign-up" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.2rem' }}>Become a Partner</Link>
+             <Link href="/sign-up?redirect_url=/dashboard/referral" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.2rem' }}>Become a Partner</Link>
           </FadeIn>
         </div>
       </section>
