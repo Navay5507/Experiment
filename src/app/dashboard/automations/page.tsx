@@ -159,7 +159,7 @@ export default async function AutomationsList() {
                   )}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, marginTop: 'auto' }}>
-                  <RetriggerButton automationId={auto.id} hasMediaId={postIds.length > 0} />
+                  <RetriggerButton automationId={auto.id} hasMediaId={postIds.length > 0} targetType={auto.target_type} />
                   <ConfirmForm message={auto.is_active ? "Pause this automation? It will stop responding to new comments." : "Activate this automation?"} action={toggleAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
                     <input type="hidden" name="currentState" value={String(auto.is_active)} />

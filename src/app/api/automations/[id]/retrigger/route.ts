@@ -40,7 +40,25 @@ export async function POST(
 
     const token = user.instagramAccessToken;
 
-    // We can only process specific media IDs for historical comments easily
+    // ---- STORY / NON-POST AUTOMATIONS: Send test DM to self ----
+    if (automation.target_type !== 'post') {
+      try {
+        await dmQueue.add('send', {
+          userId: user.id,
+          automationId: automation.id,
+          recipientId: user.instagramUserId, // Send to self
+          commenterUsername: 'test_retrigger',
+        });
+
+        console.log(`[Retrigger] Test DM queued for ${automation.target_type} automation ${automation.id}`);
+        return NextResponse.json({ success: true, queuedCount: 1, type: 'test_dm' });
+      } catch (e) {
+        console.error('[Retrigger] Test DM queue error:', e);
+        return NextResponse.json({ error: 'Failed to queue test DM' }, { status: 500 });
+      }
+    }
+
+    // ---- POST AUTOMATIONS: Scan past comments ----
     const mediaIds = automation.instagram_media_id
       ? automation.instagram_media_id.split(',').map((id: string) => id.trim()).filter(Boolean)
       : [];
@@ -94,7 +112,6 @@ export async function POST(
           if (commenterId === user.instagramUserId) continue;
 
           // MATCH!
-          // Mark as processed safely (so it's not processed twice in the same loop logic)
           processedIds.add(comment.id);
 
           // Record Analytics
