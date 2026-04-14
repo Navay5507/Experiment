@@ -423,6 +423,7 @@ export async function POST(req: Request) {
               // ---- STORY AUTOMATION TRIGGER (Keyword Matching) ----
               const isStoryReply = !!messageEvent.message?.reply_to?.story;
               
+              if (isStoryReply) {
                 if (user.plan === 'FREE') {
                   console.log(`[Webhook] Skipping story trigger: Pro feature restricted for Free user ${user.id}`);
                 } else {
@@ -463,6 +464,7 @@ export async function POST(req: Request) {
                     if (storyMatched) continue; // Skip legacy/AI checks if it hit a story trigger
                   }
                 }
+              } // end isStoryReply
 
               // ---- Email detection (legacy fallback for non-conversational capture) ----
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

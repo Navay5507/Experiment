@@ -270,28 +270,20 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     } else {
       // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers) =====
-      // Can use Button Templates directly since we're sending via IGSID
+      // Story replies open the 24-hour window, so Quick Replies work here.
       if (usesComplexFlow) {
-        result = await sendButtonTemplateDM(token, recipientId, dmText,
-          [{ type: 'postback', title: 'Send me the access', payload: 'GET_LINK' }]
+        result = await sendQuickReplyDM(token, recipientId, dmText,
+          [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
         );
         if (result.error) {
-          console.warn(`[Worker DM] Button template failed, trying quick reply:`, result.error);
-          result = await sendQuickReplyDM(token, recipientId, dmText,
-            [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
-          );
+          console.warn(`[Worker DM] Quick reply failed, sending text fallback:`, result.error);
+          result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get the link!`);
         }
       } else {
-        // Standard flow: send URL button template
+        // Standard flow: send URL as text
         if (automation.dm_link) {
           const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-          result = await sendButtonTemplateDM(token, recipientId, dmText,
-            [{ type: 'web_url', title: 'Open Link', url: redirectUrl }]
-          );
-          if (result.error) {
-            console.warn(`[Worker DM] Button template failed, sending as text:`, result.error);
-            result = await sendTextDM(token, recipientId, `${dmText}\n\n${redirectUrl}`);
-          }
+          result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`);
         } else {
           result = await sendTextDM(token, recipientId, dmText);
         }
