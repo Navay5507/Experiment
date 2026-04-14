@@ -39,7 +39,7 @@ export default async function ReferralPage() {
       <div className={styles.titleArea}>
         <div>
            <h1>🎁 Referral Program</h1>
-           <p>Invite friends and earn free Pro days when they upgrade.</p>
+           <p>Invite friends and earn 25% recurring commission for a year.</p>
         </div>
       </div>
 
@@ -50,7 +50,7 @@ export default async function ReferralPage() {
           <h3 style={{ margin: 0 }}>Your Referral Link</h3>
         </div>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-          Share this link with friends. When they sign up and <strong style={{ color: '#10b981' }}>purchase Pro</strong>, you get <strong style={{ color: '#10b981' }}>7 days of Pro free</strong>!
+          Share this link with friends. When they sign up and <strong style={{ color: '#10b981' }}>purchase Pro</strong>, you earn <strong style={{ color: '#10b981' }}>25% of their payment every month for 1 year</strong>!
         </p>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input
@@ -78,7 +78,7 @@ export default async function ReferralPage() {
         <div className={styles.card} style={{ textAlign: 'center' }}>
           <CheckCircle2 size={24} color="#10b981" style={{ marginBottom: '0.75rem' }} />
           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#10b981', lineHeight: 1 }}>{stats.completed}</div>
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Rewarded</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Earning</div>
         </div>
       </div>
 
@@ -103,8 +103,8 @@ export default async function ReferralPage() {
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
             <div style={{ minWidth: 36, height: 36, borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 700, color: '#10b981' }}>3</div>
             <div>
-              <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>They go Pro</div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>When they purchase Pro, you get 7 days of Pro free!</div>
+              <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>You earn 25%</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Earn 25% of every payment they make for up to 1 year — recurring!</div>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default async function ReferralPage() {
                   color: ref.status === 'completed' ? '#10b981' : '#eab308',
                   border: `1px solid ${ref.status === 'completed' ? 'rgba(16,185,129,0.3)' : 'rgba(234,179,8,0.3)'}`
                 }}>
-                  {ref.status === 'completed' ? '✅ Rewarded' : '⏳ Pending'}
+                  {ref.status === 'completed' ? '✅ Earning' : '⏳ Pending'}
                 </span>
               </div>
             ))}

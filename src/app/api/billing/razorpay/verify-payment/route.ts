@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     if (purchaser?.referred_by) {
-      // Mark the referral as completed and apply reward
+      // Mark the referral as completed — 25% commission tracked
       const { data: referral } = await supabase
         .from("referrals")
         .select("id, reward_applied")
@@ -58,31 +58,12 @@ export async function POST(req: Request) {
         .maybeSingle();
 
       if (referral) {
-        // Grant 7 days of Pro to the referrer
-        const { data: referrer } = await supabase
-          .from("users")
-          .select("id, plan")
-          .eq("id", purchaser.referred_by)
-          .maybeSingle();
+        await supabase
+          .from("referrals")
+          .update({ status: "completed", reward_applied: true, reward_type: "commission_25pct" })
+          .eq("id", referral.id);
 
-        if (referrer) {
-          // Upgrade referrer to PRO if they're on FREE
-          if (referrer.plan === 'FREE') {
-            await supabase
-              .from("users")
-              .update({ plan: "PRO" })
-              .eq("id", referrer.id);
-            console.log(`[Referral] Upgraded referrer ${referrer.id} to PRO (7-day reward)`);
-          }
-
-          // Mark referral as completed and reward applied
-          await supabase
-            .from("referrals")
-            .update({ status: "completed", reward_applied: true })
-            .eq("id", referral.id);
-
-          console.log(`[Referral] Reward applied for referral ${referral.id}`);
-        }
+        console.log(`[Referral] 25% commission activated for referral ${referral.id} (referrer: ${purchaser.referred_by})`);
       }
     }
 
