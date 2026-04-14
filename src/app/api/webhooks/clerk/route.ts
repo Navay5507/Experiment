@@ -6,6 +6,10 @@ import crypto from 'crypto';
 // Clerk sends user.created / user.updated / user.deleted events here.
 // Configure this endpoint in Clerk Dashboard → Webhooks.
 
+function generateReferralCode(): string {
+  return crypto.randomBytes(4).toString('hex').toUpperCase(); // 8-char hex
+}
+
 export async function POST(req: Request) {
   const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -45,11 +49,44 @@ export async function POST(req: Request) {
       .maybeSingle();
 
     if (!existing) {
+      const newUserId = crypto.randomUUID();
+      const referralCode = generateReferralCode();
+
+      // Check for referral code from unsafeMetadata (set by sign-up page)
+      const refCode = data.unsafe_metadata?.referral_code || null;
+      let referredBy: string | null = null;
+
+      if (refCode) {
+        // Look up the referrer by their referral_code
+        const { data: referrer } = await supabase
+          .from('users')
+          .select('id')
+          .eq('referral_code', refCode)
+          .maybeSingle();
+
+        if (referrer) {
+          referredBy = referrer.id;
+          console.log(`[Clerk Webhook] Referral found: new user referred by ${referrer.id} (code: ${refCode})`);
+
+          // Create a pending referral record
+          await supabase.from('referrals').insert({
+            referrer_id: referrer.id,
+            referred_user_id: newUserId,
+            status: 'pending',
+            reward_type: 'pro_days',
+            reward_days: 7,
+            reward_applied: false,
+          });
+        }
+      }
+
       const { error } = await supabase.from('users').insert({
-        id: crypto.randomUUID(),
+        id: newUserId,
         clerkId: clerkId,
         email: email,
         plan: 'FREE',
+        referral_code: referralCode,
+        referred_by: referredBy,
       });
 
       if (error) {
@@ -57,7 +94,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
 
-      console.log(`[Clerk Webhook] Created user: ${clerkId} / ${email}`);
+      console.log(`[Clerk Webhook] Created user: ${clerkId} / ${email} (referral_code: ${referralCode})`);
     }
   }
 
@@ -66,6 +103,7 @@ export async function POST(req: Request) {
     // Cascade delete: automations, leads, analytics, then user
     const { data: user } = await supabase.from('users').select('id').eq('clerkId', clerkId).maybeSingle();
     if (user) {
+      await supabase.from('referrals').delete().or(`referrer_id.eq.${user.id},referred_user_id.eq.${user.id}`);
       await supabase.from('dm_conversations').delete().eq('user_id', user.id);
       await supabase.from('analytics_events').delete().eq('user_id', user.id);
       await supabase.from('leads').delete().eq('user_id', user.id);

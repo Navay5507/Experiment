@@ -29,7 +29,6 @@ export async function POST(req: Request) {
     }
 
     // Update the user's plan in Supabase to PRO
-    // The user's clerkId is our link.
     const { error: updateError } = await supabase
       .from("users")
       .update({ plan: "PRO" })
@@ -38,6 +37,53 @@ export async function POST(req: Request) {
     if (updateError) {
       console.error("[RAZORPAY_VERIFY_PAYMENT_ERROR_DB]:", updateError.message);
       return new NextResponse("Database update failed", { status: 500 });
+    }
+
+    // ---- REFERRAL REWARD ----
+    // Check if the purchasing user was referred by someone
+    const { data: purchaser } = await supabase
+      .from("users")
+      .select("id, referred_by")
+      .eq("clerkId", clerkId)
+      .maybeSingle();
+
+    if (purchaser?.referred_by) {
+      // Mark the referral as completed and apply reward
+      const { data: referral } = await supabase
+        .from("referrals")
+        .select("id, reward_applied")
+        .eq("referrer_id", purchaser.referred_by)
+        .eq("referred_user_id", purchaser.id)
+        .eq("reward_applied", false)
+        .maybeSingle();
+
+      if (referral) {
+        // Grant 7 days of Pro to the referrer
+        const { data: referrer } = await supabase
+          .from("users")
+          .select("id, plan")
+          .eq("id", purchaser.referred_by)
+          .maybeSingle();
+
+        if (referrer) {
+          // Upgrade referrer to PRO if they're on FREE
+          if (referrer.plan === 'FREE') {
+            await supabase
+              .from("users")
+              .update({ plan: "PRO" })
+              .eq("id", referrer.id);
+            console.log(`[Referral] Upgraded referrer ${referrer.id} to PRO (7-day reward)`);
+          }
+
+          // Mark referral as completed and reward applied
+          await supabase
+            .from("referrals")
+            .update({ status: "completed", reward_applied: true })
+            .eq("id", referral.id);
+
+          console.log(`[Referral] Reward applied for referral ${referral.id}`);
+        }
+      }
     }
 
     return NextResponse.json({ success: true, message: "Plan upgraded successfully" });

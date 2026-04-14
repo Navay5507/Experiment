@@ -17,7 +17,23 @@ export default async function SettingsPage() {
   console.log("[SETTINGS PAGE] User Data:", user);
   console.log("[SETTINGS PAGE] Supabase Error:", error);
   const domain = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const referralLink = user ? `${domain}/sign-up?ref=${user.id}` : 'Syncing user...';
+  const referralLink = user ? `${domain}/sign-up?ref=${user.referral_code}` : 'Syncing user...';
+
+  // Fetch referral stats
+  let referralStats = { total: 0, pending: 0, completed: 0 };
+  if (user) {
+    const { data: refs } = await supabase
+      .from('referrals')
+      .select('status')
+      .eq('referrer_id', user.id);
+    if (refs) {
+      referralStats = {
+        total: refs.length,
+        pending: refs.filter(r => r.status === 'pending').length,
+        completed: refs.filter(r => r.status === 'completed').length,
+      };
+    }
+  }
 
   async function disconnectInstagram() {
     "use server";
@@ -114,17 +130,28 @@ export default async function SettingsPage() {
          {/* Referrals */}
          <div className={styles.card} style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-               <div className={styles.sectionTitle} style={{ marginBottom: 0 }}>Partner Referral</div>
-               <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 600 }}>
-                  Soon
-               </span>
+               <div className={styles.sectionTitle} style={{ marginBottom: 0 }}>🎁 Partner Referral</div>
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>
-               Our affiliate program is currently in development. Soon you&apos;ll be able to invite friends and earn recurring revenue.
+               Invite friends to Autodrop. When they purchase Pro, you get <strong style={{ color: '#10b981' }}>7 days of Pro free</strong>!
             </p>
-            <div style={{ display: 'flex', gap: '0.5rem', opacity: 0.5, pointerEvents: 'none' }}>
-               <input type="text" readOnly value={`https://autodrop.co/r/coming-soon`} style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.75rem', borderRadius: '8px', color: '#fff', fontSize: '0.9rem' }} />
-               <button className={styles.btnAction} style={{ padding: '0.75rem 1rem' }} disabled><Copy size={18} /></button>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
+               <input type="text" readOnly value={user?.referral_code ? `${domain}/sign-up?ref=${user.referral_code}` : 'Loading...'} style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.75rem', borderRadius: '8px', color: '#fff', fontSize: '0.85rem' }} />
+               <button className={styles.btnAction} style={{ padding: '0.75rem 1rem' }} onClick={undefined}><Copy size={18} /></button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+               <div style={{ textAlign: 'center', background: 'var(--bg-primary)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>{referralStats.total}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Total</div>
+               </div>
+               <div style={{ textAlign: 'center', background: 'var(--bg-primary)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#eab308' }}>{referralStats.pending}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Pending</div>
+               </div>
+               <div style={{ textAlign: 'center', background: 'var(--bg-primary)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#10b981' }}>{referralStats.completed}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Rewarded</div>
+               </div>
             </div>
          </div>
 
