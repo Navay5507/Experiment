@@ -114,7 +114,7 @@ export default function AffiliatesPage() {
                         <span style={{ fontSize: '1.5rem', fontWeight: 800 }}>3</span>
                      </div>
                      <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem' }}>Earn Cash</h3>
-                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Earn 25% of their subscription every month they stay active. Withdraw your earnings directly to your bank account via UPI or Google Pay.</p>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>Earn 25% of their subscription every month they stay active. Earnings are automatically calculated and ready for you.</p>
                   </div>
                </FadeIn>
             </div>
@@ -131,8 +131,8 @@ export default function AffiliatesPage() {
                      <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                         <CheckCircle2 size={24} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
                         <div>
-                           <strong style={{ display: 'block', fontSize: '1.2rem', marginBottom: '0.25rem' }}>Direct UPI Payouts</strong>
-                           <span style={{ color: 'var(--text-muted)' }}>Get your earnings deposited instantly via Google Pay, PhonePe, or any UPI ID directly from your dashboard.</span>
+                           <strong style={{ display: 'block', fontSize: '1.2rem', marginBottom: '0.25rem' }}>Automatic Tracking</strong>
+                           <span style={{ color: 'var(--text-muted)' }}>We track every sign-up automatically. Your dashboard updates in real-time as your referrals grow.</span>
                         </div>
                      </li>
                      <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
@@ -176,7 +176,6 @@ export default function AffiliatesPage() {
                               <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>1,804</div>
                            </div>
                         </div>
-                        <button style={{ width: '100%', background: '#fff', color: '#000', border: 'none', padding: '1rem', borderRadius: '12px', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>Withdraw to UPI</button>
                      </div>
                   </div>
                </FadeIn>
