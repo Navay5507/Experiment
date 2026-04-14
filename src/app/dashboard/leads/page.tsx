@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
 import { Download, Trash2 } from "lucide-react";
+import ConfirmForm from "../ConfirmForm";
 
 export const dynamic = 'force-dynamic';
 
@@ -138,12 +139,12 @@ export default async function LeadsPage() {
                       </div>
                     </td>
                     <td style={{ textAlign: 'right' }}>
-                      <form action={deleteLead}>
+                      <ConfirmForm message="Delete this lead permanently?" action={deleteLead}>
                         <input type="hidden" name="leadId" value={lead.id} />
                         <button type="submit" className={styles.btnAction} style={{ background: 'transparent', border: '1px outset rgba(239, 68, 68, 0.4)', color: '#ef4444', padding: '0.4rem 0.6rem', display: 'inline-flex' }} title="Delete Lead">
                           <Trash2 size={16} />
                         </button>
-                      </form>
+                      </ConfirmForm>
                     </td>
                   </tr>
                 );
