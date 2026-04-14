@@ -65,20 +65,17 @@ export default function AffiliatesPage() {
             </FadeIn>
             <FadeIn delay={0.1}>
                <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.04em', marginBottom: '1.5rem' }}>
-                  Earn <span style={{ color: '#10b981' }}>25% Recurring</span> Commission for Life.
+                  Earn <span style={{ color: '#10b981' }}>25% Recurring</span> Commission for 1 Year.
                </h1>
             </FadeIn>
             <FadeIn delay={0.2}>
                <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
                   Refer creators, agencies, and businesses to AutoDrop. <br className="hide-mobile" />
-                  Earn a 25% cut of their subscription every single month they stay active.
+                  Earn a 25% cut of their subscription every single month for their first year.
                </p>
                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
                   <Link href="/sign-up" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                      Join the Program <ArrowRight size={20} />
-                  </Link>
-                  <Link href="/sign-in" style={{ padding: '1.25rem 2rem', fontSize: '1.1rem', color: '#fff', border: '1px solid var(--border)', borderRadius: '100px', fontWeight: 600, textDecoration: 'none' }}>
-                     Log into Dashboard
                   </Link>
                </div>
             </FadeIn>
@@ -141,8 +138,8 @@ export default function AffiliatesPage() {
                      <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
                         <RefreshCcw size={24} color="#3b82f6" style={{ flexShrink: 0, marginTop: '2px' }} />
                         <div>
-                           <strong style={{ display: 'block', fontSize: '1.2rem', marginBottom: '0.25rem' }}>Lifetime Recurring</strong>
-                           <span style={{ color: 'var(--text-muted)' }}>You aren't just paid once. You get 25% every single month your referral remains subscribed.</span>
+                           <strong style={{ display: 'block', fontSize: '1.2rem', marginBottom: '0.25rem' }}>1-Year Recurring</strong>
+                           <span style={{ color: 'var(--text-muted)' }}>You aren't just paid once. You get 25% every single month for their first year active.</span>
                         </div>
                      </li>
                      <li style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
