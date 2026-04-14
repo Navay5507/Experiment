@@ -40,22 +40,11 @@ export async function POST(
 
     const token = user.instagramAccessToken;
 
-    // ---- STORY / NON-POST AUTOMATIONS: Send test DM to self ----
+    // ---- STORY / NON-POST AUTOMATIONS ----
     if (automation.target_type !== 'post') {
-      try {
-        await dmQueue.add('send', {
-          userId: user.id,
-          automationId: automation.id,
-          recipientId: user.instagramUserId, // Send to self
-          commenterUsername: 'test_retrigger',
-        });
-
-        console.log(`[Retrigger] Test DM queued for ${automation.target_type} automation ${automation.id}`);
-        return NextResponse.json({ success: true, queuedCount: 1, type: 'test_dm' });
-      } catch (e) {
-        console.error('[Retrigger] Test DM queue error:', e);
-        return NextResponse.json({ error: 'Failed to queue test DM' }, { status: 500 });
-      }
+      return NextResponse.json({ 
+        error: 'Retrigger is only available for post automations. To test story automations, reply to your story from a personal account.' 
+      }, { status: 400 });
     }
 
     // ---- POST AUTOMATIONS: Scan past comments ----

@@ -14,11 +14,12 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
       return;
     }
 
-    const confirmMsg = targetType === 'post'
-      ? "This will scan your selected posts for past comments and dispatch DMs to those who matched but haven't received one yet. Proceed?"
-      : "This will send a test DM to yourself to verify the automation works. Proceed?";
+    if (targetType !== 'post') {
+      alert("To test this automation, use your personal Instagram account to reply to your page's story with the trigger keyword. The Instagram API does not allow pages to send test DMs to themselves.");
+      return;
+    }
 
-    if (!confirm(confirmMsg)) return;
+    if (!confirm("This will scan your selected posts for past comments and dispatch DMs to those who matched but haven't received one yet. Proceed?")) return;
 
     setLoading(true);
     try {
@@ -31,11 +32,7 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
         throw new Error(data.error || "Failed to retrigger");
       }
 
-      if (targetType === 'post') {
-        alert(`Success! Queued DMs for ${data.queuedCount} past comments.`);
-      } else {
-        alert(`Success! Test DM sent to your account.`);
-      }
+      alert(`Success! Queued DMs for ${data.queuedCount} past comments.`);
     } catch (err: any) {
       alert(`Error: ${err.message}`);
     } finally {
