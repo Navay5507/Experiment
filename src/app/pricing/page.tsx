@@ -411,7 +411,7 @@ export default function PricingPage() {
           <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link href="/" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Home</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Pricing</Link>
-            <a href="https://forms.gle/nu3PBCRRNQDs1DoT6" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Contact Us</a>
+            <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Contact Us</a>
             <span style={{ opacity: 0.5 }}>Terms &amp; Privacy</span>
           </div>
 

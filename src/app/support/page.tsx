@@ -38,7 +38,7 @@ export default function SupportPage() {
              <div className={styles.feature} style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
                <h3 style={{ color: '#60a5fa' }}>✉️ Just need a quick answer?</h3>
                <p style={{ marginTop: '0.5rem' }}>If you don&apos;t have time for a full video call, you can drop us a line via our priority support form.</p>
-               <a href="https://forms.gle/nu3PBCRRNQDs1DoT6" target="_blank" rel="noopener noreferrer" className="premium-btn" style={{ display: 'inline-block', marginTop: '1.25rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
+               <a href="mailto:support@autodrop.in" className="premium-btn" style={{ display: 'inline-block', marginTop: '1.25rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
                  Open Support Form ↗
                </a>
              </div>

@@ -213,7 +213,7 @@ export default function AffiliatesPage() {
             <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
             <Link href="/affiliates" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600 }}>Affiliates</Link>
-            <a href="https://forms.gle/nu3PBCRRNQDs1DoT6" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
+            <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
             <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
             <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
           </div>

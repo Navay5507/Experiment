@@ -90,7 +90,7 @@ export default async function SettingsPage() {
                </h3>
                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>You currently have access to {user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'Unlimited' : '1'} active automation campaigns.</p>
             </div>
-            <a href="https://forms.gle/nu3PBCRRNQDs1DoT6" target="_blank" rel="noopener noreferrer" className={styles.btnAction} style={{ width: '100%', textAlign: 'center', display: 'block', textDecoration: 'none' }}>Contact Support</a>
+            <a href="mailto:support@autodrop.in" className={styles.btnAction} style={{ width: '100%', textAlign: 'center', display: 'block', textDecoration: 'none' }}>Contact Support</a>
          </div>
 
          {/* Meta Integration */}

@@ -74,7 +74,7 @@ export default function PrivacyPolicy() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>Contact Us</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-            If you have questions or comments, email us at support@autodrop.co.
+            If you have questions or comments, email us at support@autodrop.in.
           </p>
         </section>
       </main>

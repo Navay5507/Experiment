@@ -44,7 +44,7 @@ export default function RefundPolicy() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>Contacting Support</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-             If you believe you meet the criteria for a refund, please contact us at support@autodrop.co within 7 days of the charge occurring.
+             If you believe you meet the criteria for a refund, please contact us at support@autodrop.in within 7 days of the charge occurring.
           </p>
         </section>
 
