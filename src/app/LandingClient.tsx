@@ -281,8 +281,8 @@ const UI_Step3 = () => {
       <div ref={ref} style={{width:'100%', maxWidth:'400px', display:'flex', flexDirection:'column', gap:'1.5rem'}}>
          <div style={{background:'#16181D', border:'1px solid #2A2D35', borderRadius:'16px', padding:'1.5rem', display:'flex', alignItems:'center', justifyContent:'space-between'}}>
             <div>
-               <div style={{fontSize:'0.85rem', color:'#888', marginBottom:'0.25rem'}}>Captured Revenue</div>
-               <div style={{fontSize:'2.5rem', fontWeight:800, color: step >= 1 ? '#10b981' : '#444', transition: 'color 0.5s'}}>${step >= 1 ? <CountUpMetric target={6420} /> : "0"}</div>
+               <div style={{fontSize:'0.85rem', color:'#888', marginBottom:'0.25rem'}}>Captured Engagement</div>
+               <div style={{fontSize:'2.5rem', fontWeight:800, color: step >= 1 ? '#10b981' : '#444', transition: 'color 0.5s'}}>{step >= 1 ? <CountUpMetric target={24500} prefix="+" /> : "0"}</div>
             </div>
             <div style={{width:60, height:45, display:'flex', alignItems:'flex-end', gap:'4px'}}>
                <motion.div animate={{ height: step >= 1 ? '40%' : '10%' }} transition={{ duration: 0.5 }} style={{width:12, background:'#10b981', borderRadius:'4px', opacity:0.3}} />
@@ -350,8 +350,8 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn delay={0.2}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 3</div>
-                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Capture revenue</h3>
-                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>AutoDrop routes inbound requests 24/7 capturing core analytics live in your CRM.</p>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Drive engagement & sales</h3>
+                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>AutoDrop routes inbound requests 24/7 capturing core analytics and interactions live in your dashboard.</p>
                   </FadeIn>
                </div>
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
