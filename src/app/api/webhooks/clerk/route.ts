@@ -98,6 +98,30 @@ export async function POST(req: Request) {
     }
   }
 
+  if (eventType === 'user.updated') {
+    const clerkId = data.id;
+    const email = data.email_addresses?.[0]?.email_address || null;
+    const firstName = data.first_name || null;
+    const lastName = data.last_name || null;
+
+    if (email) {
+      const updateData: Record<string, string | null> = { email };
+      if (firstName) updateData.firstName = firstName;
+      if (lastName) updateData.lastName = lastName;
+
+      const { error } = await supabase
+        .from('users')
+        .update(updateData)
+        .eq('clerkId', clerkId);
+
+      if (error) {
+        console.error('[Clerk Webhook] User update error:', error);
+      } else {
+        console.log(`[Clerk Webhook] Updated user ${clerkId} email to: ${email}`);
+      }
+    }
+  }
+
   if (eventType === 'user.deleted') {
     const clerkId = data.id;
     // Cascade delete: automations, leads, analytics, then user
