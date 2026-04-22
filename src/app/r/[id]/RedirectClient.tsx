@@ -10,7 +10,7 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
         finalUrl = 'https://' + finalUrl;
       }
       window.location.href = finalUrl;
-    }, 2800);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [targetUrl]);
 
@@ -75,7 +75,7 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
         .rd-fill {
           height: 100%; border-radius: 4px;
           background: linear-gradient(90deg, #6B7CFF, #8B9AFF);
-          animation: fillBar 2.8s ease-in-out forwards;
+          animation: fillBar 2s ease-in-out forwards;
         }
       `}</style>
       <div className="rd-page">
