@@ -352,20 +352,19 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       return { success: true, stage: 'lead_capture_started' };
     }
 
-    // STANDARD — Send message and/or links
+    // STANDARD — Send message and/or links as text first
     const hasLinksS = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
     const hasMessageS = !!automation.dm_message;
+    const links = hasLinksS
+      ? (Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link])
+      : [];
 
     if (hasMessageS && hasLinksS) {
-      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-        ? automation.dm_links : [automation.dm_link];
       const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
       await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
     } else if (hasMessageS) {
       await sendTextDM(token, recipientId, automation.dm_message);
     } else if (hasLinksS) {
-      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-        ? automation.dm_links : [automation.dm_link];
       if (links.length === 1) {
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
         await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
@@ -376,6 +375,50 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     } else {
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
+
+    // FOLLOW-UP: Send clickable buttons (Generic Template) — wrapped in try-catch for safety
+    try {
+      const buttons: { type: 'web_url' | 'postback'; title: string; url?: string; payload?: string }[] = [];
+
+      // Add link buttons (max 3 per Instagram Generic Template)
+      if (links.length > 0) {
+        const linkButtons = links.slice(0, 2).map((l: string, i: number) => {
+          let url = l.trim();
+          if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+          return {
+            type: 'web_url' as const,
+            title: links.length > 1 ? `🔗 Link ${i + 1}` : '🔗 Open Link',
+            url,
+          };
+        });
+        buttons.push(...linkButtons);
+      }
+
+      // Add Visit Profile button
+      if (user.instagramHandle) {
+        buttons.push({
+          type: 'web_url' as const,
+          title: '👤 Visit Profile',
+          url: `https://instagram.com/${user.instagramHandle}`,
+        });
+      }
+
+      // Instagram Generic Template allows max 3 buttons
+      if (buttons.length > 0) {
+        const templateTitle = automation.dm_message
+          ? (automation.dm_message.length > 80 ? automation.dm_message.substring(0, 77) + '...' : automation.dm_message)
+          : 'Thanks for reaching out! 🙌';
+        const btnResult = await sendButtonTemplateDM(token, recipientId, templateTitle, buttons.slice(0, 3));
+        if (btnResult.error) {
+          console.warn(`[Worker DM] Button template failed (non-fatal):`, btnResult.error);
+          // Buttons failed — that's okay, the text content was already delivered above
+        }
+      }
+    } catch (btnErr) {
+      console.warn(`[Worker DM] Button follow-up failed (non-fatal):`, btnErr);
+      // Silently ignore — text content was already delivered successfully
+    }
+
     await upsertConversation(userId, automationId, recipientId, 'completed');
 
     await supabase.from('analytics_events').insert({
