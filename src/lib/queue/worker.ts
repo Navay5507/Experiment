@@ -117,8 +117,9 @@ async function sendButtonTemplateDM(
 
 /**
  * Send follow-up clickable buttons after content delivery.
- * Uses Generic Template with web_url buttons for links + visit profile.
- * Wrapped in try-catch — if buttons fail, text content was already delivered.
+ * Strategy: Try Generic Template with web_url buttons.
+ * If that fails, send each link as a separate text DM (Instagram auto-renders URLs as tappable).
+ * Wrapped in try-catch — if everything fails, text content was already delivered.
  */
 async function sendFollowUpButtons(
   token: string,
@@ -159,18 +160,29 @@ async function sendFollowUpButtons(
       });
     }
 
-    // Instagram Generic Template allows max 3 buttons
-    if (buttons.length > 0) {
-      const templateTitle = automation.dm_message
-        ? (automation.dm_message.length > 80 ? automation.dm_message.substring(0, 77) + '...' : automation.dm_message)
-        : 'Thanks for reaching out! 🙌';
-      const btnResult = await sendButtonTemplateDM(token, recipientId, templateTitle, buttons.slice(0, 3));
-      if (btnResult.error) {
-        console.warn(`[Worker DM] Button template failed (non-fatal):`, btnResult.error);
-      }
+    if (buttons.length === 0) return;
+
+    // Attempt 1: Generic Template with buttons
+    const templateTitle = automation.dm_message
+      ? (automation.dm_message.length > 80 ? automation.dm_message.substring(0, 77) + '...' : automation.dm_message)
+      : 'Thanks for reaching out! 🙌';
+    const btnResult = await sendButtonTemplateDM(token, recipientId, templateTitle, buttons.slice(0, 3));
+    
+    console.log(`[Worker DM] Button template response:`, JSON.stringify(btnResult));
+
+    if (!btnResult.error) {
+      console.log(`[Worker DM] ✅ Buttons sent successfully via Generic Template`);
+      return; // Success!
+    }
+
+    // Attempt 2: Fallback — send profile link as a separate tappable message
+    console.warn(`[Worker DM] Generic Template failed:`, JSON.stringify(btnResult.error), `— falling back to text links`);
+    
+    if (user.instagramHandle) {
+      await sendTextDM(token, recipientId, `👤 Visit my profile: https://instagram.com/${user.instagramHandle}`);
     }
   } catch (btnErr) {
-    console.warn(`[Worker DM] Follow-up buttons failed (non-fatal):`, btnErr);
+    console.error(`[Worker DM] Follow-up buttons completely failed:`, btnErr);
   }
 }
 
