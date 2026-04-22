@@ -10,7 +10,7 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
         finalUrl = 'https://' + finalUrl;
       }
       window.location.href = finalUrl;
-    }, 2800); // 2.8 second brand display
+    }, 2800);
     return () => clearTimeout(timer);
   }, [targetUrl]);
 
@@ -18,100 +18,86 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
     <>
       <style>{`
         @keyframes floatLogo {
-          0%, 100% { transform: translateY(-6px); }
-          50% { transform: translateY(6px); }
+          0%, 100% { transform: translateY(-8px); }
+          50% { transform: translateY(8px); }
         }
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(24px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes pulseDots {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 1; }
         }
-        @keyframes shimmer {
-          0% { background-position: -200% center; }
-          100% { background-position: 200% center; }
+        @keyframes fillBar {
+          from { width: 0%; }
+          to { width: 100%; }
         }
-        .redirect-container {
+        .rd-page {
           display: flex; flex-direction: column;
           justify-content: center; align-items: center;
           min-height: 100svh; background: #FAFAFA;
           font-family: system-ui, -apple-system, sans-serif;
           padding: 2rem;
         }
-        .redirect-content {
+        .rd-wrap {
           display: flex; flex-direction: column;
-          align-items: center; gap: 2rem;
-          animation: fadeInUp 0.6s ease-out both;
+          align-items: center; gap: 1.5rem;
+          animation: fadeInUp 0.5s ease-out both;
         }
-        .redirect-logo-wrap {
+        .rd-icon {
           animation: floatLogo 2.5s ease-in-out infinite;
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.35);
         }
-        .redirect-logo {
-          width: 100px; height: 100px;
+        .rd-icon img {
+          width: 140px; height: 140px;
           object-fit: contain; display: block;
+          filter: drop-shadow(0 8px 24px rgba(107, 124, 255, 0.3));
         }
-        .redirect-title {
-          margin: 0; font-size: 2rem; font-weight: 800;
+        .rd-title {
+          margin: 0; font-size: 1.9rem; font-weight: 800;
           color: #1E293B; text-align: center;
-          display: flex; align-items: center; gap: 0.3rem;
         }
-        .redirect-dots {
+        .rd-dots {
           animation: pulseDots 1.2s ease-in-out infinite;
           letter-spacing: 2px;
         }
-        .redirect-subtitle {
-          margin: 0; color: #94A3B8; font-size: 0.95rem;
-          font-weight: 500; text-align: center;
+        .rd-sub {
+          margin: 0.25rem 0 0; color: #94A3B8;
+          font-size: 0.95rem; font-weight: 500; text-align: center;
         }
-        .redirect-brand {
-          background: linear-gradient(90deg, #6366f1, #8b5cf6, #6366f1);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          font-weight: 800;
-          animation: shimmer 2s linear infinite;
+        .rd-brand {
+          color: #6B7CFF; font-weight: 800;
         }
-        .redirect-bar-track {
-          width: 180px; height: 4px; border-radius: 4px;
-          background: #E2E8F0; overflow: hidden; margin-top: 0.5rem;
+        .rd-bar {
+          width: 160px; height: 4px; border-radius: 4px;
+          background: #E2E8F0; overflow: hidden; margin-top: 0.25rem;
         }
-        .redirect-bar-fill {
+        .rd-fill {
           height: 100%; border-radius: 4px;
-          background: linear-gradient(90deg, #6366f1, #8b5cf6);
+          background: linear-gradient(90deg, #6B7CFF, #8B9AFF);
           animation: fillBar 2.8s ease-in-out forwards;
         }
-        @keyframes fillBar {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
       `}</style>
-      <div className="redirect-container">
-        <div className="redirect-content">
-          <div className="redirect-logo-wrap">
+      <div className="rd-page">
+        <div className="rd-wrap">
+          <div className="rd-icon">
             <img
-              src="/autodrop_logo_transparent.png"
+              src="/autodrop_icon_transparent.png"
               alt="AutoDrop"
-              className="redirect-logo"
-              width={100}
-              height={100}
+              width={140}
+              height={140}
             />
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <h1 className="redirect-title">
-              Redirecting<span className="redirect-dots">...</span>
+          <div>
+            <h1 className="rd-title">
+              Redirecting<span className="rd-dots"> ...</span>
             </h1>
-            <p className="redirect-subtitle">
-              This conversation is automated by <span className="redirect-brand">Autodrop</span>
+            <p className="rd-sub">
+              Automated by <span className="rd-brand">AutoDrop</span>
             </p>
           </div>
-          <div className="redirect-bar-track">
-            <div className="redirect-bar-fill" />
+          <div className="rd-bar">
+            <div className="rd-fill" />
           </div>
         </div>
       </div>
