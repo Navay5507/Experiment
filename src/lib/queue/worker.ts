@@ -244,40 +244,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       // ===== PRIVATE REPLY PATH =====
       // Instagram only allows ONE text message via Private Reply (comment_id recipient).
       // The 24-hour IGSID messaging window does NOT open until the user replies.
-      // So we MUST include everything (CTA, URL) in this single message.
-      let finalText = dmText;
-
-      // Build link content: prefer dm_links array, fall back to dm_link
-      const hasLinks = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
-      const hasMessage = !!automation.dm_message;
-
-      if (usesComplexFlow) {
-        // Pro Flow: ask user to reply to open the 24-hr messaging window
-        finalText = `${dmText}\n\n👇 Reply "YES" to get the link!`;
-      } else if (hasMessage && hasLinks) {
-        // Both message + links
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-          ? automation.dm_links
-          : [automation.dm_link];
-        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
-        finalText = `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`;
-      } else if (hasMessage) {
-        // Message only
-        finalText = automation.dm_message;
-      } else if (hasLinks) {
-        // Links only (backward compatible)
-        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-          ? automation.dm_links
-          : [automation.dm_link];
-        if (links.length === 1) {
-          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-          finalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
-        } else {
-          const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
-          finalText = `${dmText}\n\n🔗 Links:\n${linksText}`;
-        }
-      }
+      // ALL automations now require user interaction (Reply YES) before delivering content.
+      const finalText = `${dmText}\n\n👇 Reply "YES" to get ${automation.dm_message ? 'the message' : 'the link'}!`;
 
       result = await sendPrivateReply(token, commentId, finalText);
       console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
@@ -294,42 +262,13 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     } else {
       // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers) =====
       // Story replies open the 24-hour window, so Quick Replies work here.
-      if (usesComplexFlow) {
-        result = await sendQuickReplyDM(token, recipientId, dmText,
-          [{ content_type: 'text', title: 'Send me the access', payload: 'GET_LINK' }]
-        );
-        if (result.error) {
-          console.warn(`[Worker DM] Quick reply failed, sending text fallback:`, result.error);
-          result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get the link!`);
-        }
-      } else {
-        // Standard flow: build text from message + links
-        const hasLinksD = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
-        const hasMessageD = !!automation.dm_message;
-        let dmFinalText = dmText;
-
-        if (hasMessageD && hasLinksD) {
-          const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-            ? automation.dm_links
-            : [automation.dm_link];
-          const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
-          dmFinalText = `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`;
-        } else if (hasMessageD) {
-          dmFinalText = automation.dm_message;
-        } else if (hasLinksD) {
-          const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
-            ? automation.dm_links
-            : [automation.dm_link];
-          if (links.length === 1) {
-            const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-            dmFinalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
-          } else {
-            const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
-            dmFinalText = `${dmText}\n\n🔗 Links:\n${linksText}`;
-          }
-        }
-
-        result = await sendTextDM(token, recipientId, dmFinalText);
+      const buttonTitle = automation.dm_message ? 'Send me the message' : 'Send me the link';
+      result = await sendQuickReplyDM(token, recipientId, dmText,
+        [{ content_type: 'text', title: buttonTitle, payload: 'GET_LINK' }]
+      );
+      if (result.error) {
+        console.warn(`[Worker DM] Quick reply failed, sending text fallback:`, result.error);
+        result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get ${automation.dm_message ? 'the message' : 'the link'}!`);
       }
 
       console.log(`[Worker DM] Send result:`, JSON.stringify(result));
@@ -344,15 +283,11 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       }
     }
 
-    // Determine state tracking based on flow
-    if (usesComplexFlow) {
-      const igUsername = job.data.commenterUsername || '';
-      await upsertConversation(userId, automationId, recipientId, 'awaiting_link_tap', {
-        collected_data: { ig_username: igUsername }
-      });
-    } else {
-      await upsertConversation(userId, automationId, recipientId, 'completed');
-    }
+    // ALL automations track state as awaiting_link_tap — content is delivered after user replies
+    const igUsername = job.data.commenterUsername || '';
+    await upsertConversation(userId, automationId, recipientId, 'awaiting_link_tap', {
+      collected_data: { ig_username: igUsername }
+    });
 
     await supabase.from('analytics_events').insert({
       user_id: userId, event_type: 'dm_delivered',
