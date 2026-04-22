@@ -247,13 +247,36 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       // So we MUST include everything (CTA, URL) in this single message.
       let finalText = dmText;
 
+      // Build link content: prefer dm_links array, fall back to dm_link
+      const hasLinks = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+      const hasMessage = !!automation.dm_message;
+
       if (usesComplexFlow) {
         // Pro Flow: ask user to reply to open the 24-hr messaging window
         finalText = `${dmText}\n\n👇 Reply "YES" to get the link!`;
-      } else if (automation.dm_link) {
-        // Standard Flow: include URL directly in the text
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        finalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
+      } else if (hasMessage && hasLinks) {
+        // Both message + links
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+          ? automation.dm_links
+          : [automation.dm_link];
+        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+        finalText = `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`;
+      } else if (hasMessage) {
+        // Message only
+        finalText = automation.dm_message;
+      } else if (hasLinks) {
+        // Links only (backward compatible)
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+          ? automation.dm_links
+          : [automation.dm_link];
+        if (links.length === 1) {
+          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+          finalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
+        } else {
+          const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
+          finalText = `${dmText}\n\n🔗 Links:\n${linksText}`;
+        }
       }
 
       result = await sendPrivateReply(token, commentId, finalText);
@@ -280,13 +303,33 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
           result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get the link!`);
         }
       } else {
-        // Standard flow: send URL as text
-        if (automation.dm_link) {
-          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-          result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`);
-        } else {
-          result = await sendTextDM(token, recipientId, dmText);
+        // Standard flow: build text from message + links
+        const hasLinksD = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+        const hasMessageD = !!automation.dm_message;
+        let dmFinalText = dmText;
+
+        if (hasMessageD && hasLinksD) {
+          const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+            ? automation.dm_links
+            : [automation.dm_link];
+          const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+          dmFinalText = `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`;
+        } else if (hasMessageD) {
+          dmFinalText = automation.dm_message;
+        } else if (hasLinksD) {
+          const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+            ? automation.dm_links
+            : [automation.dm_link];
+          if (links.length === 1) {
+            const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+            dmFinalText = `${dmText}\n\n👇 Here's your link:\n${redirectUrl}`;
+          } else {
+            const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
+            dmFinalText = `${dmText}\n\n🔗 Links:\n${linksText}`;
+          }
         }
+
+        result = await sendTextDM(token, recipientId, dmFinalText);
       }
 
       console.log(`[Worker DM] Send result:`, JSON.stringify(result));
@@ -374,10 +417,27 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       return { success: true, stage: 'lead_capture_started' };
     }
 
-    // STANDARD — Send link directly
-    if (automation.dm_link) {
-      const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
+    // STANDARD — Send message and/or links
+    const hasLinksS = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+    const hasMessageS = !!automation.dm_message;
+
+    if (hasMessageS && hasLinksS) {
+      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+        ? automation.dm_links : [automation.dm_link];
+      const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+      await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
+    } else if (hasMessageS) {
+      await sendTextDM(token, recipientId, automation.dm_message);
+    } else if (hasLinksS) {
+      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0
+        ? automation.dm_links : [automation.dm_link];
+      if (links.length === 1) {
+        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
+      } else {
+        const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
+        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here are your links ⬇\n${linksText}`);
+      }
     } else {
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
@@ -411,9 +471,23 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     }
 
     if (isFollowing) {
-      if (automation.dm_link) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
+      const hasLinksF = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+      const hasMessageF = !!automation.dm_message;
+      if (hasMessageF && hasLinksF) {
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
+        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+        await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
+      } else if (hasMessageF) {
+        await sendTextDM(token, recipientId, automation.dm_message);
+      } else if (hasLinksF) {
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
+        if (links.length === 1) {
+          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+          await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
+        } else {
+          const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
+          await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here are your links ⬇\n${linksText}`);
+        }
       } else {
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
@@ -462,10 +536,18 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     const currentField = captureFields[currentIndex];
 
     if (!currentField) {
-      // All fields collected already — send the link
-      if (automation.dm_link) {
+      // All fields collected already — send content
+      const hasLinksLC = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+      if (automation.dm_message && hasLinksLC) {
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
+        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+        await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
+      } else if (automation.dm_message) {
+        await sendTextDM(token, recipientId, automation.dm_message);
+      } else if (hasLinksLC) {
+        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
         const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        await sendTextDM(token, recipientId, `🚀 Here's your link:\n${redirectUrl}`);
+        await sendTextDM(token, recipientId, links.length === 1 ? `🚀 Here's your link:\n${redirectUrl}` : `🚀 Here are your links:\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
       }
@@ -515,9 +597,17 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       metadata: { lead_data: updatedLeadData, recipient_id: recipientId, automation_id: automationId }
     });
 
-    if (automation.dm_link) {
+    const hasLinksEnd = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+    if (automation.dm_message && hasLinksEnd) {
+      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
+      const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+      await sendTextDM(token, recipientId, `🎉 ${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
+    } else if (automation.dm_message) {
+      await sendTextDM(token, recipientId, `🎉 ${automation.dm_message}`);
+    } else if (hasLinksEnd) {
+      const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-      await sendTextDM(token, recipientId, `🎉 Thank you! Here's your link ⬇\n${redirectUrl}`);
+      await sendTextDM(token, recipientId, links.length === 1 ? `🎉 Thank you! Here's your link ⬇\n${redirectUrl}` : `🎉 Thank you! Here are your links ⬇\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
     }
@@ -535,7 +625,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       knowledgeBase: user.knowledgeBase || '',
     }, automation.ai_prompt);
 
-    const finalText = generatedReply || `A team member will assist you shortly! Here is the link: ${automation.dm_link}`;
+    const aiLinks = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : (automation.dm_link ? [automation.dm_link] : []);
+    const aiFallback = automation.dm_message || (aiLinks.length > 0 ? `A team member will assist you shortly! Here are your links:\n${aiLinks.join('\n')}` : 'A team member will assist you shortly!');
+    const finalText = generatedReply || aiFallback;
     await sendTextDM(token, recipientId, finalText);
 
     await supabase.from('analytics_events').insert({
@@ -566,7 +658,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
 
   const { data: automation } = await supabase
     .from('automations')
-    .select('reply_template, dm_link')
+    .select('reply_template, dm_link, dm_message, dm_links')
     .eq('id', automationId)
     .single();
 

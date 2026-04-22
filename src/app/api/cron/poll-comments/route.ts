@@ -24,7 +24,7 @@ export async function GET() {
     // 1. Get all active automations with their user data
     const { data: automations, error: autoErr } = await supabase
       .from('automations')
-      .select('id, user_id, keywords, instagram_media_id, reply_template, dm_link, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
+      .select('id, user_id, keywords, instagram_media_id, reply_template, dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
       .eq('is_active', true);
 
     if (autoErr || !automations || automations.length === 0) {
