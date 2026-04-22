@@ -20,8 +20,7 @@ export default function CreateAutomation() {
   const [featureType, setFeatureType] = useState("standard");
   const [dmLink, setDmLink] = useState("");
   const [dmMessage, setDmMessage] = useState("");
-  const [dmLinks, setDmLinks] = useState<string[]>([]);
-  const [dmContentType, setDmContentType] = useState<'message' | 'links' | 'both'>('links');
+  const [dmLinks, setDmLinks] = useState<string[]>(['']);
   const [leadCaptureAsk, setLeadCaptureAsk] = useState("");
   const [initialDmText, setInitialDmText] = useState("Thanks for your interest! Tap below to get the link 👇");
   const [leadCaptureFields, setLeadCaptureFields] = useState<string[]>([]);
@@ -88,23 +87,18 @@ export default function CreateAutomation() {
       : manualMediaId.split(',').map(s => s.trim()).filter(Boolean);
 
     try {
-      const effectiveDmLink = dmContentType === 'links' || dmContentType === 'both'
-        ? (dmLinks.length > 0 ? dmLinks[0] : dmLink)
-        : '';
-      const effectiveDmLinks = dmContentType === 'links' || dmContentType === 'both'
-        ? dmLinks.filter(Boolean)
-        : [];
-      const effectiveDmMessage = dmContentType === 'message' || dmContentType === 'both'
-        ? dmMessage
-        : '';
+      const filteredLinks = dmLinks.filter(Boolean);
 
       const res = await fetch('/api/automations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           campaignName, targetType, featureType, selectedPosts: finalPosts, keywords,
-          replyTemplate, leadCaptureAsk, dmLink: effectiveDmLink, dmMessage: effectiveDmMessage,
-          dmLinks: effectiveDmLinks, aiEnabled,
+          replyTemplate, leadCaptureAsk,
+          dmLink: filteredLinks.length > 0 ? filteredLinks[0] : '',
+          dmMessage: dmMessage || '',
+          dmLinks: filteredLinks,
+          aiEnabled,
           initialDmText,
           leadCaptureFields: featureType === 'lead_capture' ? leadCaptureFields : [],
         })
@@ -426,68 +420,38 @@ export default function CreateAutomation() {
                 </div>
               )}
 
-              {/* DM Content Type Selector */}
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label className={styles.label} style={{ marginBottom: '0.75rem' }}>What should the DM contain?</label>
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  {[
-                    { key: 'message' as const, icon: <MessageSquare size={16} />, label: 'Message Only', desc: 'Send a text message' },
-                    { key: 'links' as const, icon: <LinkIcon size={16} />, label: 'Link(s) Only', desc: 'Send one or more links' },
-                    { key: 'both' as const, icon: <Sparkles size={16} />, label: 'Message + Links', desc: 'Send text with links' },
-                  ].map(opt => (
-                    <div
-                      key={opt.key}
-                      onClick={() => setDmContentType(opt.key)}
-                      style={{
-                        flex: '1 1 140px', padding: '1rem', borderRadius: '12px', cursor: 'pointer', textAlign: 'center',
-                        border: dmContentType === opt.key ? '2px solid var(--primary)' : '1px solid var(--border)',
-                        background: dmContentType === opt.key ? 'rgba(99,102,241,0.08)' : 'rgba(255,255,255,0.02)',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: dmContentType === opt.key ? '#fff' : 'var(--text-muted)', fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                        {opt.icon} {opt.label}
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{opt.desc}</div>
-                    </div>
-                  ))}
-                </div>
+              {/* Optional DM Message */}
+              <div className={styles.formGroup} style={{ marginBottom: '1.5rem' }}>
+                <label className={styles.label}>Custom DM Message <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(optional)</span></label>
+                <textarea
+                  className={styles.textarea}
+                  placeholder="Type a custom message to send in the DM... e.g. Hey! Thanks for reaching out. Here's everything you need to know about our product."
+                  value={dmMessage}
+                  onChange={(e) => setDmMessage(e.target.value)}
+                  rows={3}
+                />
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>This message will be delivered when the user taps the button. Leave empty to only send links.</p>
               </div>
 
-              {/* DM Message Textarea */}
-              {(dmContentType === 'message' || dmContentType === 'both') && (
-                <div className={styles.formGroup} style={{ marginBottom: '1.5rem' }}>
-                  <label className={styles.label}>DM Message</label>
-                  <textarea
-                    className={styles.textarea}
-                    placeholder="Type your message here... e.g. Hey! Thanks for reaching out. Here's everything you need to know about our product."
-                    value={dmMessage}
-                    onChange={(e) => setDmMessage(e.target.value)}
-                    rows={4}
-                  />
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>This text message will be sent directly in the DM.</p>
-                </div>
-              )}
-
-              {/* Multiple Links */}
-              {(dmContentType === 'links' || dmContentType === 'both') && (
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Destination Links</label>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {dmLinks.map((link, index) => (
-                      <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <input
-                          type="text"
-                          className={styles.input}
-                          placeholder={`https://example.com/link-${index + 1}`}
-                          value={link}
-                          onChange={(e) => {
-                            const updated = [...dmLinks];
-                            updated[index] = e.target.value;
-                            setDmLinks(updated);
-                          }}
-                          style={{ flex: 1, marginBottom: 0 }}
-                        />
+              {/* Destination Links */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Destination Link(s) <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(optional if message is set)</span></label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {dmLinks.map((link, index) => (
+                    <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <input
+                        type="text"
+                        className={styles.input}
+                        placeholder={index === 0 ? 'https://mywebsite.com/product' : `https://example.com/link-${index + 1}`}
+                        value={link}
+                        onChange={(e) => {
+                          const updated = [...dmLinks];
+                          updated[index] = e.target.value;
+                          setDmLinks(updated);
+                        }}
+                        style={{ flex: 1, marginBottom: 0 }}
+                      />
+                      {dmLinks.length > 1 && (
                         <button
                           type="button"
                           onClick={() => setDmLinks(dmLinks.filter((_, i) => i !== index))}
@@ -499,25 +463,25 @@ export default function CreateAutomation() {
                         >
                           <X size={16} />
                         </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => setDmLinks([...dmLinks, ''])}
-                      style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                        padding: '0.75rem', borderRadius: '12px', cursor: 'pointer',
-                        border: '1px dashed var(--border)', background: 'rgba(255,255,255,0.02)',
-                        color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 600,
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      <Plus size={16} /> Add Link
-                    </button>
-                  </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Each link will be sent as a separate clickable URL in the DM.</p>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setDmLinks([...dmLinks, ''])}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                      padding: '0.6rem', borderRadius: '10px', cursor: 'pointer',
+                      border: '1px dashed var(--border)', background: 'rgba(255,255,255,0.02)',
+                      color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600,
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <Plus size={14} /> Add Another Link
+                  </button>
                 </div>
-              )}
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Links are delivered after the user taps the button in the DM.</p>
+              </div>
             </motion.div>
           )}
 
@@ -540,7 +504,7 @@ export default function CreateAutomation() {
                  </div>
                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ color: 'var(--text-muted)' }}>DM Content:</span>
-                    <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{dmContentType === 'both' ? 'Message + Links' : dmContentType}</span>
+                    <span style={{ fontWeight: 600 }}>{dmMessage && dmLinks.filter(Boolean).length > 0 ? 'Message + Links' : dmMessage ? 'Message' : 'Links'}</span>
                  </div>
                  {dmMessage && (
                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
