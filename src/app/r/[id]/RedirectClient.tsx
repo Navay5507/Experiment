@@ -30,13 +30,13 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
         transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.75rem' }}
       >
-        {/* Floating Animated Logo */}
+        {/* AutoDrop Logo */}
         <motion.div
            animate={{ y: [-5, 5, -5] }}
            transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-           style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', padding: '1.2rem', borderRadius: '15px', color: '#fff', boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.4)' }}
+           style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.4)' }}
         >
-          <MessageCircle size={36} />
+          <img src="/autodrop_logo_transparent.png" alt="AutoDrop" style={{ width: 72, height: 72, objectFit: 'contain' }} />
         </motion.div>
         
         {/* Text Component exactly matching the requested vibe */}
