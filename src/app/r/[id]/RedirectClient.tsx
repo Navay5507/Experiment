@@ -1,60 +1,120 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion } from "framer-motion";
-import { MessageCircle } from "lucide-react";
 
 export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       let finalUrl = targetUrl.trim();
-      // Ensure absolute URL routing so 'google.com' doesn't become a relative path 
       if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^[a-z]+:\/\//i)) {
         finalUrl = 'https://' + finalUrl;
       }
       window.location.href = finalUrl;
-    }, 2200); // 2.2 second brand promotion delay
+    }, 2800); // 2.8 second brand display
     return () => clearTimeout(timer);
   }, [targetUrl]);
 
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column',
-      justifyContent: 'center', alignItems: 'center',
-      minHeight: '100svh', background: '#FAFAFA',
-      color: '#0F172A', fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
-      <motion.div 
-        initial={{ scale: 0.8, opacity: 0 }} 
-        animate={{ scale: 1, opacity: 1 }} 
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.75rem' }}
-      >
-        {/* AutoDrop Logo */}
-        <motion.div
-           animate={{ y: [-5, 5, -5] }}
-           transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
-           style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(99, 102, 241, 0.4)' }}
-        >
-          <img src="/autodrop_logo_transparent.png" alt="AutoDrop" style={{ width: 72, height: 72, objectFit: 'contain' }} />
-        </motion.div>
-        
-        {/* Text Component exactly matching the requested vibe */}
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>
-            Redirecting
-            <motion.span
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              ...
-            </motion.span>
-          </h1>
-          <p style={{ margin: '0.75rem 0 0', color: '#64748B', fontSize: '1rem', fontWeight: 500 }}>
-            This conversation is automated by <span style={{ color: '#6366f1', fontWeight: 700 }}>Autodrop</span>
-          </p>
+    <>
+      <style>{`
+        @keyframes floatLogo {
+          0%, 100% { transform: translateY(-6px); }
+          50% { transform: translateY(6px); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseDots {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        .redirect-container {
+          display: flex; flex-direction: column;
+          justify-content: center; align-items: center;
+          min-height: 100svh; background: #FAFAFA;
+          font-family: system-ui, -apple-system, sans-serif;
+          padding: 2rem;
+        }
+        .redirect-content {
+          display: flex; flex-direction: column;
+          align-items: center; gap: 2rem;
+          animation: fadeInUp 0.6s ease-out both;
+        }
+        .redirect-logo-wrap {
+          animation: floatLogo 2.5s ease-in-out infinite;
+          border-radius: 24px;
+          overflow: hidden;
+          box-shadow: 0 12px 30px -5px rgba(99, 102, 241, 0.35);
+        }
+        .redirect-logo {
+          width: 100px; height: 100px;
+          object-fit: contain; display: block;
+        }
+        .redirect-title {
+          margin: 0; font-size: 2rem; font-weight: 800;
+          color: #1E293B; text-align: center;
+          display: flex; align-items: center; gap: 0.3rem;
+        }
+        .redirect-dots {
+          animation: pulseDots 1.2s ease-in-out infinite;
+          letter-spacing: 2px;
+        }
+        .redirect-subtitle {
+          margin: 0; color: #94A3B8; font-size: 0.95rem;
+          font-weight: 500; text-align: center;
+        }
+        .redirect-brand {
+          background: linear-gradient(90deg, #6366f1, #8b5cf6, #6366f1);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          font-weight: 800;
+          animation: shimmer 2s linear infinite;
+        }
+        .redirect-bar-track {
+          width: 180px; height: 4px; border-radius: 4px;
+          background: #E2E8F0; overflow: hidden; margin-top: 0.5rem;
+        }
+        .redirect-bar-fill {
+          height: 100%; border-radius: 4px;
+          background: linear-gradient(90deg, #6366f1, #8b5cf6);
+          animation: fillBar 2.8s ease-in-out forwards;
+        }
+        @keyframes fillBar {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
+      <div className="redirect-container">
+        <div className="redirect-content">
+          <div className="redirect-logo-wrap">
+            <img
+              src="/autodrop_logo_transparent.png"
+              alt="AutoDrop"
+              className="redirect-logo"
+              width={100}
+              height={100}
+            />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <h1 className="redirect-title">
+              Redirecting<span className="redirect-dots">...</span>
+            </h1>
+            <p className="redirect-subtitle">
+              This conversation is automated by <span className="redirect-brand">Autodrop</span>
+            </p>
+          </div>
+          <div className="redirect-bar-track">
+            <div className="redirect-bar-fill" />
+          </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </>
   );
 }
