@@ -115,6 +115,65 @@ async function sendButtonTemplateDM(
   return res.json();
 }
 
+/**
+ * Send follow-up clickable buttons after content delivery.
+ * Uses Generic Template with web_url buttons for links + visit profile.
+ * Wrapped in try-catch — if buttons fail, text content was already delivered.
+ */
+async function sendFollowUpButtons(
+  token: string,
+  recipientId: string,
+  automation: any,
+  user: any
+) {
+  try {
+    const links: string[] = [];
+    if (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) {
+      links.push(...automation.dm_links);
+    } else if (automation.dm_link) {
+      links.push(automation.dm_link);
+    }
+
+    const buttons: { type: 'web_url' | 'postback'; title: string; url?: string; payload?: string }[] = [];
+
+    // Add link buttons (max 2 to leave room for profile)
+    if (links.length > 0) {
+      const linkButtons = links.slice(0, 2).map((l: string, i: number) => {
+        let url = l.trim();
+        if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        return {
+          type: 'web_url' as const,
+          title: links.length > 1 ? `🔗 Link ${i + 1}` : '🔗 Open Link',
+          url,
+        };
+      });
+      buttons.push(...linkButtons);
+    }
+
+    // Add Visit Profile button
+    if (user.instagramHandle) {
+      buttons.push({
+        type: 'web_url' as const,
+        title: '👤 Visit Profile',
+        url: `https://instagram.com/${user.instagramHandle}`,
+      });
+    }
+
+    // Instagram Generic Template allows max 3 buttons
+    if (buttons.length > 0) {
+      const templateTitle = automation.dm_message
+        ? (automation.dm_message.length > 80 ? automation.dm_message.substring(0, 77) + '...' : automation.dm_message)
+        : 'Thanks for reaching out! 🙌';
+      const btnResult = await sendButtonTemplateDM(token, recipientId, templateTitle, buttons.slice(0, 3));
+      if (btnResult.error) {
+        console.warn(`[Worker DM] Button template failed (non-fatal):`, btnResult.error);
+      }
+    }
+  } catch (btnErr) {
+    console.warn(`[Worker DM] Follow-up buttons failed (non-fatal):`, btnErr);
+  }
+}
+
 // =============================================
 // PLAN-BASED RATE LIMITING
 // =============================================
@@ -376,48 +435,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
 
-    // FOLLOW-UP: Send clickable buttons (Generic Template) — wrapped in try-catch for safety
-    try {
-      const buttons: { type: 'web_url' | 'postback'; title: string; url?: string; payload?: string }[] = [];
-
-      // Add link buttons (max 3 per Instagram Generic Template)
-      if (links.length > 0) {
-        const linkButtons = links.slice(0, 2).map((l: string, i: number) => {
-          let url = l.trim();
-          if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
-          return {
-            type: 'web_url' as const,
-            title: links.length > 1 ? `🔗 Link ${i + 1}` : '🔗 Open Link',
-            url,
-          };
-        });
-        buttons.push(...linkButtons);
-      }
-
-      // Add Visit Profile button
-      if (user.instagramHandle) {
-        buttons.push({
-          type: 'web_url' as const,
-          title: '👤 Visit Profile',
-          url: `https://instagram.com/${user.instagramHandle}`,
-        });
-      }
-
-      // Instagram Generic Template allows max 3 buttons
-      if (buttons.length > 0) {
-        const templateTitle = automation.dm_message
-          ? (automation.dm_message.length > 80 ? automation.dm_message.substring(0, 77) + '...' : automation.dm_message)
-          : 'Thanks for reaching out! 🙌';
-        const btnResult = await sendButtonTemplateDM(token, recipientId, templateTitle, buttons.slice(0, 3));
-        if (btnResult.error) {
-          console.warn(`[Worker DM] Button template failed (non-fatal):`, btnResult.error);
-          // Buttons failed — that's okay, the text content was already delivered above
-        }
-      }
-    } catch (btnErr) {
-      console.warn(`[Worker DM] Button follow-up failed (non-fatal):`, btnErr);
-      // Silently ignore — text content was already delivered successfully
-    }
+    // Send clickable buttons (Open Link, Visit Profile)
+    await sendFollowUpButtons(token, recipientId, automation, user);
 
     await upsertConversation(userId, automationId, recipientId, 'completed');
 
@@ -469,6 +488,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       } else {
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
+      // Send clickable buttons (Open Link, Visit Profile)
+      await sendFollowUpButtons(token, recipientId, automation, user);
       await upsertConversation(userId, automationId, recipientId, 'completed');
 
       await supabase.from('analytics_events').insert({
@@ -529,6 +550,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
       }
+      // Send clickable buttons (Open Link, Visit Profile)
+      await sendFollowUpButtons(token, recipientId, automation, user);
       await upsertConversation(userId, automationId, recipientId, 'completed');
       return { success: true, stage: 'completed' };
     }
@@ -589,6 +612,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
     }
+
+    // Send clickable buttons (Open Link, Visit Profile)
+    await sendFollowUpButtons(token, recipientId, automation, user);
 
     await upsertConversation(userId, automationId, recipientId, 'completed', { collected_data: updatedLeadData });
 
