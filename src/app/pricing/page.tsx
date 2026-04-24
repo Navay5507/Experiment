@@ -40,6 +40,7 @@ export default function PricingPage() {
   const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState<Currency>("INR");
+  const [loading, setLoading] = useState(false);
   const [userPlan, setUserPlan] = useState<string>("FREE");
   const [promoCodeInput, setPromoCodeInput] = useState("");
   const [activePromo, setActivePromo] = useState<{code: string, type: string, value: number} | null>(null);
