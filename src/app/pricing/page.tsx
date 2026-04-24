@@ -187,7 +187,7 @@ export default function PricingPage() {
             <div className={styles.toggleThumb} />
           </button>
           <span className={`${styles.toggleLabel} ${isAnnual ? styles.activeLabel : ''}`}>
-            Annually <span className={styles.discountBadge}>-{Math.round((1 - getPrice(currentRate.pro) / currentRate.pro) * 100)}%</span>
+            Annually <span className={styles.discountBadge}>-33%</span>
           </span>
         </div>
 
