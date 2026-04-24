@@ -456,7 +456,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         const redirectUrl = `${appUrl}/r/${automation.id}${links.length > 1 ? `?i=${i}` : ''}`;
         
         const buttonText = customName ? customName : '🔗 Open Link';
-        const cardTitle = customName ? customName : (links.length > 1 ? `🔗 Link ${i + 1}` : '🎁 Here\'s your link!');
+        const cardTitle = links.length > 1 ? `🔗 Link ${i + 1}` : '🎁 Here\'s your link!';
         
         const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
           { type: 'web_url', title: buttonText, url: redirectUrl }
@@ -523,7 +523,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         const redirectUrl = `${appUrlF}/r/${automation.id}${linksF.length > 1 ? `?i=${i}` : ''}`;
         
         const buttonText = customName ? customName : '🔗 Open Link';
-        const cardTitle = customName ? customName : (linksF.length > 1 ? `🔗 Link ${i + 1}` : `🎁 Here's your link!`);
+        const cardTitle = linksF.length > 1 ? `🔗 Link ${i + 1}` : `🎁 Here's your link!`;
         
         const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
           { type: 'web_url', title: buttonText, url: redirectUrl }
