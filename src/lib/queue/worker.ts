@@ -446,19 +446,20 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     }
 
     if (links.length > 0) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://autodrop.in';
       // Send one Generic Template card per link (up to 10)
       for (let i = 0; i < Math.min(links.length, 10); i++) {
-        let url = links[i].trim();
-        if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        // Route through branded redirect page instead of direct URL
+        const redirectUrl = `${appUrl}/r/${automation.id}${links.length > 1 ? `?i=${i}` : ''}`;
         const cardTitle = links.length > 1 ? `🔗 Link ${i + 1}` : '🎁 Here\'s your link!';
         const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
-          { type: 'web_url', title: '🔗 Open Link', url }
+          { type: 'web_url', title: '🔗 Open Link', url: redirectUrl }
         ]);
         console.log(`[Worker] Link card ${i + 1} result:`, JSON.stringify(cardResult));
         // Fallback to text if card fails
         if (cardResult.error) {
           console.warn(`[Worker] Link card failed, sending text:`, cardResult.error);
-          await sendTextDM(token, recipientId, url);
+          await sendTextDM(token, recipientId, redirectUrl);
         }
       }
     } else if (!hasMessageS) {
@@ -507,17 +508,17 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
 
-      // Send one card per link
+      // Send one card per link — routed through branded redirect page
+      const appUrlF = process.env.NEXT_PUBLIC_APP_URL || 'https://autodrop.in';
       for (let i = 0; i < Math.min(linksF.length, 10); i++) {
-        let url = linksF[i].trim();
-        if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        const redirectUrl = `${appUrlF}/r/${automation.id}${linksF.length > 1 ? `?i=${i}` : ''}`;
         const cardTitle = linksF.length > 1 ? `🔗 Link ${i + 1}` : `🎁 Here's your link!`;
         const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
-          { type: 'web_url', title: '🔗 Open Link', url }
+          { type: 'web_url', title: '🔗 Open Link', url: redirectUrl }
         ]);
         console.log(`[Worker] Follow-gate link card ${i + 1}:`, JSON.stringify(cardResult));
         if (cardResult.error) {
-          await sendTextDM(token, recipientId, url);
+          await sendTextDM(token, recipientId, redirectUrl);
         }
       }
 
