@@ -646,7 +646,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                       <p style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
                    </div>
                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', whiteSpace: 'nowrap' }}>
-                      <InfinityIcon size={32} color="#3b82f6" strokeWidth={2.5} />
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink: 0}}>
+                        <path d="M29.5841 12.2749C26.5494 12.2749 23.9482 13.9168 22.4208 16.3768C21.0505 13.9213 18.4418 12.2749 15.4005 12.2749C10.2078 12.2749 6 16.4827 6 21.6754C6 26.868 10.2078 31.0758 15.4005 31.0758C18.4686 31.0758 21.0967 29.4002 22.4633 26.9066C23.9782 29.4087 26.5866 31.0758 29.5841 31.0758C34.7768 31.0758 38.9846 26.868 38.9846 21.6754C38.9846 16.4827 34.7768 12.2749 29.5841 12.2749ZM15.4005 27.8398C11.9959 27.8398 9.23594 25.0798 9.23594 21.6754C9.23594 18.2709 11.9959 15.5109 15.4005 15.5109C18.8051 15.5109 21.565 18.2709 21.565 21.6754C21.565 25.0798 18.8051 27.8398 15.4005 27.8398ZM29.5841 27.8398C26.1795 27.8398 23.4196 25.0798 23.4196 21.6754C23.4196 18.2709 26.1795 15.5109 29.5841 15.5109C32.9886 15.5109 35.7486 18.2709 35.7486 21.6754C35.7486 25.0798 32.9886 27.8398 29.5841 27.8398Z" fill="#3b82f6"/>
+                      </svg>
                       <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>Meta Business<span style={{fontWeight: 400}}>Partners</span></span>
                    </div>
                 </div>
