@@ -20,7 +20,7 @@ export default function CreateAutomation() {
   const [featureType, setFeatureType] = useState("standard");
   const [dmLink, setDmLink] = useState("");
   const [dmMessage, setDmMessage] = useState("");
-  const [dmLinks, setDmLinks] = useState<string[]>(['']);
+  const [dmLinks, setDmLinks] = useState<{title: string, url: string}[]>([{ title: '', url: '' }]);
   const [leadCaptureAsk, setLeadCaptureAsk] = useState("");
   const [initialDmText, setInitialDmText] = useState("Thanks for your interest! Tap below to get the link 👇");
   const [leadCaptureFields, setLeadCaptureFields] = useState<string[]>([]);
@@ -87,7 +87,8 @@ export default function CreateAutomation() {
       : manualMediaId.split(',').map(s => s.trim()).filter(Boolean);
 
     try {
-      const filteredLinks = dmLinks.filter(Boolean);
+      const filteredLinks = dmLinks.filter(l => l.url.trim() !== '');
+      const encodedLinks = filteredLinks.map(l => l.title.trim() ? `${l.title.trim()}|||${l.url.trim()}` : l.url.trim());
 
       const res = await fetch('/api/automations', {
         method: 'POST',
@@ -95,9 +96,9 @@ export default function CreateAutomation() {
         body: JSON.stringify({
           campaignName, targetType, featureType, selectedPosts: finalPosts, keywords,
           replyTemplate, leadCaptureAsk,
-          dmLink: filteredLinks.length > 0 ? filteredLinks[0] : '',
+          dmLink: encodedLinks.length > 0 ? encodedLinks[0] : '',
           dmMessage: dmMessage || '',
-          dmLinks: filteredLinks,
+          dmLinks: encodedLinks,
           aiEnabled,
           initialDmText,
           leadCaptureFields: featureType === 'lead_capture' ? leadCaptureFields : [],
@@ -435,22 +436,34 @@ export default function CreateAutomation() {
 
               {/* Destination Links */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Destination Link(s) <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(optional if message is set)</span></label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <label className={styles.label}>Destination Link(s) & Button Names <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: '0.8rem' }}>(optional if message is set)</span></label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {dmLinks.map((link, index) => (
-                    <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      <input
-                        type="text"
-                        className={styles.input}
-                        placeholder={index === 0 ? 'https://mywebsite.com/product' : `https://example.com/link-${index + 1}`}
-                        value={link}
-                        onChange={(e) => {
-                          const updated = [...dmLinks];
-                          updated[index] = e.target.value;
-                          setDmLinks(updated);
-                        }}
-                        style={{ flex: 1, marginBottom: 0 }}
-                      />
+                    <div key={index} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+                        <input
+                          type="text"
+                          className={styles.input}
+                          placeholder="Button Name (e.g. 🔗 Buy Now)"
+                          value={link.title}
+                          onChange={(e) => {
+                            const updated = [...dmLinks];
+                            updated[index].title = e.target.value;
+                            setDmLinks(updated);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className={styles.input}
+                          placeholder={index === 0 ? 'URL (e.g. https://mywebsite.com/product)' : `https://example.com/link-${index + 1}`}
+                          value={link.url}
+                          onChange={(e) => {
+                            const updated = [...dmLinks];
+                            updated[index].url = e.target.value;
+                            setDmLinks(updated);
+                          }}
+                        />
+                      </div>
                       {dmLinks.length > 1 && (
                         <button
                           type="button"
@@ -468,7 +481,7 @@ export default function CreateAutomation() {
                   ))}
                   <button
                     type="button"
-                    onClick={() => setDmLinks([...dmLinks, ''])}
+                    onClick={() => setDmLinks([...dmLinks, { title: '', url: '' }])}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                       padding: '0.6rem', borderRadius: '10px', cursor: 'pointer',

@@ -33,9 +33,9 @@ export default async function RedirectPage({
     ? automation.dm_links
     : automation.dm_link ? [automation.dm_link] : [];
 
-  const targetUrl = links[linkIndex] ?? links[0];
+  const rawTarget = links[linkIndex] ?? links[0];
 
-  if (!targetUrl) {
+  if (!rawTarget) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100svh', background: '#FAFAFA', color: '#64748B', fontFamily: 'system-ui, sans-serif' }}>
         <h2 style={{ color: '#0F172A' }}>Link Unavailable</h2>
@@ -43,6 +43,8 @@ export default async function RedirectPage({
       </div>
     );
   }
+
+  const targetUrl = rawTarget.includes('|||') ? rawTarget.split('|||')[1] : rawTarget;
 
   return <RedirectClient targetUrl={targetUrl} />;
 }
