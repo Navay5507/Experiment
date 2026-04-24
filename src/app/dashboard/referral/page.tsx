@@ -12,8 +12,13 @@ export default async function ReferralPage() {
   if (!clerkId) redirect("/sign-in");
 
   const { data: user } = await supabase.from('users').select('*').eq('clerkId', clerkId).maybeSingle();
+  let userRefCode = user?.referral_code;
+  if (user && !userRefCode) {
+    userRefCode = Math.random().toString(16).slice(2, 10).toUpperCase();
+    await supabase.from('users').update({ referral_code: userRefCode }).eq('id', user.id);
+  }
   const domain = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const referralLink = user?.referral_code ? `${domain}/sign-up?ref=${user.referral_code}` : '';
+  const referralLink = userRefCode ? `${domain}/sign-up?ref=${userRefCode}` : '';
 
   // Fetch referral data
   let referrals: any[] = [];
