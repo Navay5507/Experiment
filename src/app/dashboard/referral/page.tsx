@@ -17,19 +17,36 @@ export default async function ReferralPage() {
 
   // Fetch referral data
   let referrals: any[] = [];
-  let stats = { total: 0, pending: 0, completed: 0 };
+  let withdrawals: any[] = [];
+  let stats = { total: 0, pending: 0, completed: 0, earned: 0, withdrawn: 0, available: 0 };
+  
   if (user) {
     const { data: refs } = await supabase
       .from('referrals')
       .select('*, referred_user:referred_user_id(email, name, plan)')
       .eq('referrer_id', user.id)
       .order('created_at', { ascending: false });
+
+    const { data: wds } = await supabase
+      .from('withdrawals')
+      .select('*')
+      .eq('affiliate_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (wds) withdrawals = wds;
+
     if (refs) {
       referrals = refs;
+      const totalEarned = refs.filter(r => r.status === 'completed').reduce((sum, r) => sum + Number(r.earned_amount || 0), 0);
+      const totalWithdrawn = withdrawals.filter(w => w.status !== 'rejected').reduce((sum, w) => sum + Number(w.amount || 0), 0);
+
       stats = {
         total: refs.length,
         pending: refs.filter(r => r.status === 'pending').length,
         completed: refs.filter(r => r.status === 'completed').length,
+        earned: totalEarned,
+        withdrawn: totalWithdrawn,
+        available: totalEarned - totalWithdrawn
       };
     }
   }
@@ -40,6 +57,21 @@ export default async function ReferralPage() {
     if (!userId) return;
     const upiId = formData.get('upi_id') as string;
     await supabase.from('users').update({ upi_id: upiId.trim() }).eq('clerkId', userId);
+    redirect('/dashboard/referral');
+  }
+
+  async function requestWithdrawal() {
+    "use server";
+    const { userId } = await auth();
+    if (!userId || !user?.upi_id || stats.available <= 0) return;
+    
+    await supabase.from('withdrawals').insert({
+      affiliate_id: user.id,
+      amount: stats.available,
+      status: 'pending',
+      payout_method: 'upi',
+      payout_details: user.upi_id
+    });
     redirect('/dashboard/referral');
   }
 
@@ -81,7 +113,7 @@ export default async function ReferralPage() {
       </div>
 
       {/* Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
         <div className={styles.card} style={{ textAlign: 'center' }}>
           <Users size={24} color="var(--primary)" style={{ marginBottom: '0.75rem' }} />
           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', lineHeight: 1 }}>{stats.total}</div>
@@ -92,10 +124,15 @@ export default async function ReferralPage() {
           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#eab308', lineHeight: 1 }}>{stats.pending}</div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Pending</div>
         </div>
-        <div className={styles.card} style={{ textAlign: 'center' }}>
+        <div className={styles.card} style={{ textAlign: 'center', background: 'linear-gradient(to bottom, rgba(16,185,129,0.1), transparent)' }}>
           <CheckCircle2 size={24} color="#10b981" style={{ marginBottom: '0.75rem' }} />
-          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#10b981', lineHeight: 1 }}>{stats.completed}</div>
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Earning</div>
+          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#10b981', lineHeight: 1 }}>₹{stats.earned}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Total Earned</div>
+        </div>
+        <div className={styles.card} style={{ textAlign: 'center', background: 'linear-gradient(to bottom, rgba(59,130,246,0.1), transparent)', border: '1px solid rgba(59,130,246,0.2)' }}>
+          <Wallet size={24} color="#3b82f6" style={{ marginBottom: '0.75rem' }} />
+          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#3b82f6', lineHeight: 1 }}>₹{stats.available}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Available to Withdraw</div>
         </div>
       </div>
 
@@ -123,13 +160,60 @@ export default async function ReferralPage() {
             </button>
           </div>
         </form>
-        {user?.upi_id && (
-          <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <CheckCircle2 size={14} color="#10b981" />
-            <span style={{ fontSize: '0.8rem', color: '#10b981' }}>Saved: {user.upi_id}</span>
+        {user?.upi_id ? (
+          <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(16,185,129,0.05)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <CheckCircle2 size={18} color="#10b981" />
+              <span style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 500 }}>Saved: {user.upi_id}</span>
+            </div>
+            {stats.available > 0 ? (
+              <form action={requestWithdrawal}>
+                <button type="submit" className={styles.btnAction} style={{ padding: '0.5rem 1rem', background: '#3b82f6', borderColor: '#3b82f6', fontSize: '0.85rem' }}>
+                  Withdraw ₹{stats.available}
+                </button>
+              </form>
+            ) : (
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>No funds available</span>
+            )}
+          </div>
+        ) : (
+          <div style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: '#ef4444' }}>
+            Please save your UPI ID before withdrawing funds.
           </div>
         )}
       </div>
+
+      {/* Withdrawal History */}
+      {withdrawals.length > 0 && (
+        <div className={styles.card} style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ marginBottom: '1rem' }}>Withdrawal History</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {withdrawals.map((wd: any) => (
+              <div key={wd.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg-primary)', borderRadius: '10px', border: '1px solid var(--border)' }}>
+                <div>
+                  <div style={{ fontWeight: 600, marginBottom: '0.25rem', color: '#fff' }}>
+                    Withdrawal to {wd.payout_details}
+                  </div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    {new Date(wd.created_at).toLocaleDateString()}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>₹{wd.amount}</span>
+                  <span style={{
+                    padding: '0.3rem 0.75rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600,
+                    background: wd.status === 'paid' ? 'rgba(16,185,129,0.1)' : 'rgba(234,179,8,0.1)',
+                    color: wd.status === 'paid' ? '#10b981' : '#eab308',
+                    border: `1px solid ${wd.status === 'paid' ? 'rgba(16,185,129,0.3)' : 'rgba(234,179,8,0.3)'}`
+                  }}>
+                    {wd.status === 'paid' ? '✅ Paid' : '⏳ Processing'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* How it works */}
       <div className={styles.card} style={{ marginBottom: '1.5rem' }}>

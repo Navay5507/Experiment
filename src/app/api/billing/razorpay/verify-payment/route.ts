@@ -40,10 +40,18 @@ export async function POST(req: Request) {
       return new NextResponse("Database update failed", { status: 500 });
     }
 
+    // Fetch the order to get the final amount and promo notes
+    let order: any = null;
+    try {
+      order = await razorpay.orders.fetch(razorpay_order_id);
+    } catch (e) {
+      console.error("[RAZORPAY_FETCH_ORDER_ERROR]:", e);
+    }
+
     // ---- PROMO CODE USAGE TRACKING ----
     try {
-      const order = await razorpay.orders.fetch(razorpay_order_id);
-      const promoCode = order.notes?.promo_code;
+      if (order) {
+        const promoCode = order.notes?.promo_code;
       
       if (promoCode) {
         // Increment the used_count for this coupon
@@ -53,6 +61,7 @@ export async function POST(req: Request) {
         const { data: coupon } = await supabase.from('coupons').select('used_count').eq('code', promoCode).single();
         if (coupon) {
            await supabase.from('coupons').update({ used_count: (coupon.used_count || 0) + 1 }).eq('code', promoCode);
+        }
         }
       }
     } catch (e) {
@@ -79,9 +88,18 @@ export async function POST(req: Request) {
         .maybeSingle();
 
       if (referral) {
+        // Calculate 25% of the total amount paid (order.amount is in paise, so divide by 100, then * 0.25)
+        const totalAmountPaid = order ? (order.amount / 100) : 0;
+        const earnedAmount = totalAmountPaid > 0 ? (totalAmountPaid * 0.25) : 0;
+
         await supabase
           .from("referrals")
-          .update({ status: "completed", reward_applied: true, reward_type: "commission_25pct" })
+          .update({ 
+            status: "completed", 
+            reward_applied: true, 
+            reward_type: "commission_25pct",
+            earned_amount: earnedAmount 
+          })
           .eq("id", referral.id);
 
         console.log(`[Referral] 25% commission activated for referral ${referral.id} (referrer: ${purchaser.referred_by})`);
