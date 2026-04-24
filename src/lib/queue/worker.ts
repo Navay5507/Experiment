@@ -316,7 +316,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       // Instagram only allows ONE text message via Private Reply (comment_id recipient).
       // The 24-hour IGSID messaging window does NOT open until the user replies.
       // ALL automations now require user interaction (Reply YES) before delivering content.
-      const finalText = `${dmText}\n\n👇 Reply "YES" to get ${automation.dm_message ? 'the message' : 'the link'}!`;
+      const finalText = `${dmText}\n\n👇 Reply "YES" to get the link/message!`;
 
       result = await sendPrivateReply(token, commentId, finalText);
       console.log(`[Worker DM] Private Reply result:`, JSON.stringify(result));
@@ -339,7 +339,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       );
       if (result.error) {
         console.warn(`[Worker DM] Quick reply failed, sending text fallback:`, result.error);
-        result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get ${automation.dm_message ? 'the message' : 'the link'}!`);
+        result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get the link/message!`);
       }
 
       console.log(`[Worker DM] Send result:`, JSON.stringify(result));
