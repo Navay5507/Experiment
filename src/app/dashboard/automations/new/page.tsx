@@ -22,7 +22,7 @@ export default function CreateAutomation() {
   const [dmMessage, setDmMessage] = useState("");
   const [dmLinks, setDmLinks] = useState<{title: string, url: string}[]>([{ title: '', url: '' }]);
   const [leadCaptureAsk, setLeadCaptureAsk] = useState("");
-  const [initialDmText, setInitialDmText] = useState("Thanks for your interest! Tap below to get the link 👇");
+  const [initialDmText, setInitialDmText] = useState("Thanks for your interest! 👇");
   const [leadCaptureFields, setLeadCaptureFields] = useState<string[]>([]);
 
   const AVAILABLE_LEAD_FIELDS = [
@@ -325,8 +325,8 @@ export default function CreateAutomation() {
 
               {/* Initial DM Text */}
               <div className={styles.formGroup} style={{ marginBottom: '1.5rem' }}>
-                <label className={styles.label}>Initial DM Message (shown with "Send me the link" button)</label>
-                <input type="text" className={styles.input} placeholder="Thanks for your interest! Tap below to get the link 👇" value={initialDmText} onChange={(e) => setInitialDmText(e.target.value)} />
+                <label className={styles.label}>Initial DM Message (prompts the user to reply "YES")</label>
+                <input type="text" className={styles.input} placeholder="Thanks for your interest! 👇" value={initialDmText} onChange={(e) => setInitialDmText(e.target.value)} />
               </div>
 
               {/* Feature Type Selection */}
