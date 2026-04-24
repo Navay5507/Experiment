@@ -368,36 +368,46 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     return { success: true, metaId: result?.message_id };
   }
 
-  // ---- JOB TYPE: BUTTON-RESPONSE (User tapped "Send me the link") ----
+  // ---- JOB TYPE: BUTTON-RESPONSE (User replied YES → deliver content or show follow gate) ----
   if (job.name === 'button-response') {
     const isPro = user.plan === 'PRO' || user.plan === 'ELITE';
 
-    // FOLLOW-GATE (Pro/Elite)
+    // FOLLOW-GATE (Pro/Elite) — send card with Visit Profile + I'm Following buttons
     if (isPro && automation.follow_gate_enabled) {
-      // Send follow gate with Quick Replies and profile link in text
       const profileUrl = `https://instagram.com/${user.instagramHandle || ''}`;
-      const followGateResult = await sendQuickReplyDM(token, recipientId,
-        `Oops! Looks like you haven't followed me yet 👀\nVisit my profile: ${profileUrl}\nFollow me and tap \"I'm following\" below! 😁`,
+
+      // Try Generic Template first (gives real clickable buttons)
+      const followCardResult = await sendButtonTemplateDM(token, recipientId,
+        `👀 Follow me first to get the link!`,
         [
-          { content_type: 'text', title: "✅ I'm following", payload: 'FOLLOWING' }
+          { type: 'web_url', title: '👤 Visit Profile', url: profileUrl },
+          { type: 'postback', title: "✅ I'm Following", payload: 'FOLLOWING' },
         ]
       );
+      console.log(`[Worker] Follow gate card result:`, JSON.stringify(followCardResult));
 
-      if (followGateResult.error) {
-        console.error(`[Worker DM] Follow-gate quick reply failed:`, followGateResult.error);
-        await sendTextDM(token, recipientId,
-          `Oops! Looks like you haven't followed me yet 👀\nFollow @${user.instagramHandle || 'us'} and reply \"following\" to continue!`
+      // Fallback to Quick Reply if Generic Template fails
+      if (followCardResult.error) {
+        console.warn(`[Worker] Generic Template failed for follow gate, using Quick Reply fallback`);
+        const qrResult = await sendQuickReplyDM(token, recipientId,
+          `👀 Follow me first!\nVisit my profile: ${profileUrl}\nThen tap the button below 👇`,
+          [{ content_type: 'text', title: "✅ I'm Following", payload: 'FOLLOWING' }]
         );
+        if (qrResult.error) {
+          await sendTextDM(token, recipientId,
+            `👀 Follow me first!\nVisit: ${profileUrl}\nThen reply "following" to continue!`
+          );
+        }
       }
 
       await upsertConversation(userId, automationId, recipientId, 'awaiting_follow');
-
       await supabase.from('analytics_events').insert({
         user_id: userId, event_type: 'follow_gate_sent',
         metadata: { recipient_id: recipientId, automation_id: automationId }
       });
       return { success: true, stage: 'follow_gate_sent' };
     }
+
 
     // LEAD CAPTURE (Pro/Elite)
     const captureFields: string[] = Array.isArray(automation.lead_capture_fields)
@@ -423,35 +433,39 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       return { success: true, stage: 'lead_capture_started' };
     }
 
-    // STANDARD — Send message and/or links as text first
+    // STANDARD DELIVERY — Send message then one card per link
     const hasLinksS = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
     const hasMessageS = !!automation.dm_message;
-    const links = hasLinksS
+    const links: string[] = hasLinksS
       ? (Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link])
       : [];
 
-    if (hasMessageS && hasLinksS) {
-      const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
-      await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
-    } else if (hasMessageS) {
+    // Send text message first if present
+    if (hasMessageS) {
       await sendTextDM(token, recipientId, automation.dm_message);
-    } else if (hasLinksS) {
-      if (links.length === 1) {
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
-      } else {
-        const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
-        await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here are your links ⬇\n${linksText}`);
+    }
+
+    if (links.length > 0) {
+      // Send one Generic Template card per link (up to 10)
+      for (let i = 0; i < Math.min(links.length, 10); i++) {
+        let url = links[i].trim();
+        if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        const cardTitle = links.length > 1 ? `🔗 Link ${i + 1}` : '🎁 Here\'s your link!';
+        const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
+          { type: 'web_url', title: '🔗 Open Link', url }
+        ]);
+        console.log(`[Worker] Link card ${i + 1} result:`, JSON.stringify(cardResult));
+        // Fallback to text if card fails
+        if (cardResult.error) {
+          console.warn(`[Worker] Link card failed, sending text:`, cardResult.error);
+          await sendTextDM(token, recipientId, url);
+        }
       }
-    } else {
+    } else if (!hasMessageS) {
       await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
     }
 
-    // Send clickable buttons (Open Link, Visit Profile)
-    await sendFollowUpButtons(token, recipientId, automation, user);
-
     await upsertConversation(userId, automationId, recipientId, 'completed');
-
     await supabase.from('analytics_events').insert({
       user_id: userId, event_type: 'dm_delivered',
       metadata: { type: 'link_delivered', recipient_id: recipientId, automation_id: automationId }
@@ -482,43 +496,57 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     if (isFollowing) {
       const hasLinksF = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
       const hasMessageF = !!automation.dm_message;
-      if (hasMessageF && hasLinksF) {
-        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
-        await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
-      } else if (hasMessageF) {
-        await sendTextDM(token, recipientId, automation.dm_message);
-      } else if (hasLinksF) {
-        const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-        if (links.length === 1) {
-          const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
-          await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here's the promised link ⬇\n${redirectUrl}`);
-        } else {
-          const linksText = links.map((l: string, i: number) => `${i + 1}. ${l}`).join('\n');
-          await sendTextDM(token, recipientId, `Hi!\nGlad you commented 🙌 Here are your links ⬇\n${linksText}`);
-        }
-      } else {
+      const linksF: string[] = hasLinksF
+        ? (Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link])
+        : [];
+
+      // Send message text first if present
+      if (hasMessageF) {
+        await sendTextDM(token, recipientId, `✅ Thanks for following!\n\n${automation.dm_message}`);
+      } else if (linksF.length === 0) {
         await sendTextDM(token, recipientId, `✅ Thanks for following!`);
       }
-      // Send clickable buttons (Open Link, Visit Profile)
-      await sendFollowUpButtons(token, recipientId, automation, user);
-      await upsertConversation(userId, automationId, recipientId, 'completed');
 
+      // Send one card per link
+      for (let i = 0; i < Math.min(linksF.length, 10); i++) {
+        let url = linksF[i].trim();
+        if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        const cardTitle = linksF.length > 1 ? `🔗 Link ${i + 1}` : `🎁 Here's your link!`;
+        const cardResult = await sendButtonTemplateDM(token, recipientId, cardTitle, [
+          { type: 'web_url', title: '🔗 Open Link', url }
+        ]);
+        console.log(`[Worker] Follow-gate link card ${i + 1}:`, JSON.stringify(cardResult));
+        if (cardResult.error) {
+          await sendTextDM(token, recipientId, url);
+        }
+      }
+
+      await upsertConversation(userId, automationId, recipientId, 'completed');
       await supabase.from('analytics_events').insert({
         user_id: userId, event_type: 'dm_delivered',
         metadata: { type: 'link_after_follow', recipient_id: recipientId }
       });
     } else {
-      // Not following — send Quick Reply to retry
+      // Not following — resend the follow gate card (loops until they follow)
       const profileUrl = `https://instagram.com/${user.instagramHandle || ''}`;
-      const retryResult = await sendQuickReplyDM(token, recipientId,
-        `❌ It seems like you haven't followed us yet.\nVisit my profile: ${profileUrl}\nFollow and tap below to try again!`,
-        [{ content_type: 'text', title: "✅ I'm following", payload: 'FOLLOWING' }]
+      const retryCard = await sendButtonTemplateDM(token, recipientId,
+        `❌ You haven't followed yet! Follow me first to get the link 👇`,
+        [
+          { type: 'web_url', title: '👤 Visit Profile', url: profileUrl },
+          { type: 'postback', title: "✅ I'm Following", payload: 'FOLLOWING' },
+        ]
       );
-      if (retryResult.error) {
-        await sendTextDM(token, recipientId,
-          `❌ You haven't followed us yet. Follow @${user.instagramHandle || 'us'} and reply "following" to get the link!`
+      if (retryCard.error) {
+        // Fallback to quick reply
+        const qr = await sendQuickReplyDM(token, recipientId,
+          `❌ Not following yet!\nVisit: ${profileUrl}\nFollow and tap below 👇`,
+          [{ content_type: 'text', title: "✅ I'm Following", payload: 'FOLLOWING' }]
         );
+        if (qr.error) {
+          await sendTextDM(token, recipientId,
+            `❌ You haven't followed yet. Visit ${profileUrl} → Follow → reply "following"`
+          );
+        }
       }
     }
     return { success: true };
