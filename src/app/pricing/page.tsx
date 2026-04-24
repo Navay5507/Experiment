@@ -40,8 +40,11 @@ export default function PricingPage() {
   const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState<Currency>("INR");
-  const [loading, setLoading] = useState(false);
   const [userPlan, setUserPlan] = useState<string>("FREE");
+  const [promoCodeInput, setPromoCodeInput] = useState("");
+  const [activePromo, setActivePromo] = useState<{code: string, type: string, value: number} | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoMessage, setPromoMessage] = useState({ text: "", type: "" });
 
   // Sync the plan status if possible
   useEffect(() => {
@@ -67,15 +70,17 @@ export default function PricingPage() {
 
     setLoading(true);
     try {
-      const amount = getPrice(rates[currency].pro);
+      // Don't calculate final amount here, backend does it, just pass base amount and promo
+      const baseAmount = getPrice(rates[currency].pro, false); // pass false so we don't apply discount twice in the fetch payload
       
       const response = await fetch("/api/billing/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount,
+          amount: baseAmount,
           currency,
           receipt: `rcpt_${Date.now()}`,
+          promoCode: activePromo ? activePromo.code : undefined
         }),
       });
 
@@ -156,9 +161,43 @@ export default function PricingPage() {
     }).format(price);
   };
 
-  const getPrice = (baseTierPrice: number) => {
+  const handleApplyPromo = async () => {
+    if (!promoCodeInput.trim()) return;
+    setPromoLoading(true);
+    setPromoMessage({ text: "", type: "" });
+    try {
+      const res = await fetch("/api/billing/verify-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: promoCodeInput }),
+      });
+      const data = await res.json();
+      if (res.ok && data.valid) {
+        setActivePromo({ code: data.code, type: data.discount_type, value: data.discount_value });
+        setPromoMessage({ text: "Promo code applied!", type: "success" });
+      } else {
+        setActivePromo(null);
+        setPromoMessage({ text: data.error || "Invalid code", type: "error" });
+      }
+    } catch (e) {
+      setPromoMessage({ text: "Failed to verify code", type: "error" });
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const getPrice = (baseTierPrice: number, applyPromo = true) => {
     // Universal identical pricing parity based strictly on the India 599 -> 399 model (~33.39% discount)
-    return isAnnual ? Math.round(baseTierPrice * (399 / 599)) : baseTierPrice;
+    let price = isAnnual ? Math.round(baseTierPrice * (399 / 599)) : baseTierPrice;
+    
+    if (applyPromo && activePromo) {
+      if (activePromo.type === 'percentage') {
+        price = Math.max(0, Math.round(price - (price * (activePromo.value / 100))));
+      } else if (activePromo.type === 'fixed') {
+        price = Math.max(0, price - activePromo.value);
+      }
+    }
+    return price;
   };
 
   const currentRate = rates[currency];
@@ -233,6 +272,11 @@ export default function PricingPage() {
           <div className={styles.badge}>Most Popular</div>
           <h3 className={styles.planName}>Growth Pro</h3>
           <div className={styles.price}>
+            {activePromo && (
+              <span style={{ textDecoration: 'line-through', fontSize: '1.2rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
+                {formatPrice(getPrice(currentRate.pro, false))}
+              </span>
+            )}
             {formatPrice(getPrice(currentRate.pro))}
             <span className={styles.period}>/mo</span>
           </div>
@@ -248,15 +292,38 @@ export default function PricingPage() {
           {userPlan === 'PRO' || userPlan === 'ELITE' ? (
              <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
           ) : (
-             <button 
-                onClick={handleRazorpayCheckout}
-                disabled={loading}
-                className={styles.upgradeBtn} 
-                style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%' }}
-             >
-                {loading ? <Loader2 className="animate-spin" size={18} /> : null}
-                {loading ? 'Processing...' : 'Upgrade Now'}
-             </button>
+             <div style={{ marginTop: '1.5rem', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+               <div style={{ display: 'flex', gap: '0.5rem' }}>
+                 <input 
+                   type="text" 
+                   placeholder="Promo Code" 
+                   value={promoCodeInput}
+                   onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
+                   style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', background: 'rgba(0,0,0,0.2)', color: 'white', textTransform: 'uppercase' }}
+                 />
+                 <button 
+                   onClick={handleApplyPromo} 
+                   disabled={promoLoading || !promoCodeInput.trim()}
+                   style={{ padding: '0 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 600, cursor: promoCodeInput.trim() ? 'pointer' : 'not-allowed' }}
+                 >
+                   {promoLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                 </button>
+               </div>
+               {promoMessage.text && (
+                 <div style={{ fontSize: '0.85rem', color: promoMessage.type === 'error' ? '#ef4444' : '#10b981', textAlign: 'left' }}>
+                   {promoMessage.text}
+                 </div>
+               )}
+               <button 
+                  onClick={handleRazorpayCheckout}
+                  disabled={loading}
+                  className={styles.upgradeBtn} 
+                  style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', marginTop: '0.5rem' }}
+               >
+                  {loading ? <Loader2 className="animate-spin" size={18} /> : null}
+                  {loading ? 'Processing...' : 'Upgrade Now'}
+               </button>
+             </div>
           )}
         </div>
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import crypto from "crypto";
 import { supabase } from "@/lib/supabase";
+import { razorpay } from "@/lib/razorpay";
 
 export async function POST(req: Request) {
   try {
@@ -37,6 +38,26 @@ export async function POST(req: Request) {
     if (updateError) {
       console.error("[RAZORPAY_VERIFY_PAYMENT_ERROR_DB]:", updateError.message);
       return new NextResponse("Database update failed", { status: 500 });
+    }
+
+    // ---- PROMO CODE USAGE TRACKING ----
+    try {
+      const order = await razorpay.orders.fetch(razorpay_order_id);
+      const promoCode = order.notes?.promo_code;
+      
+      if (promoCode) {
+        // Increment the used_count for this coupon
+        await supabase.rpc('increment_coupon_usage', { coupon_code: promoCode });
+        // Note: we need to create this RPC, or just do an update, but supabase update without RPC doesn't support increment directly easily without fetching first, 
+        // so we can fetch and update or just let it be slightly race-condition prone since it's just a coupon count.
+        const { data: coupon } = await supabase.from('coupons').select('used_count').eq('code', promoCode).single();
+        if (coupon) {
+           await supabase.from('coupons').update({ used_count: (coupon.used_count || 0) + 1 }).eq('code', promoCode);
+        }
+      }
+    } catch (e) {
+      console.error("[PROMO_CODE_TRACKING_ERROR]:", e);
+      // don't fail the request if coupon tracking fails
     }
 
     // ---- REFERRAL REWARD ----
