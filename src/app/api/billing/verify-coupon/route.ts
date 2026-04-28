@@ -4,10 +4,7 @@ import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
-    const { userId: clerkId } = await auth();
-    if (!clerkId) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    // No auth check required here so anonymous users on /pricing can verify codes.
 
     const { code } = await req.json();
     if (!code || typeof code !== 'string') {
