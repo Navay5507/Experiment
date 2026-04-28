@@ -546,20 +546,6 @@ const testimonials = [
     text: "AutoDrop has completely changed how I sell my craft templates. Now when followers ask for project details, the exact links are sent directly to their DMs instantly. I've saved hours of manual replying.",
     avatar: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=150&q=80",
     metrics: "3x More Link Clicks"
-  },
-  {
-    name: "Rahul Verma",
-    handle: "@rahul.fitness",
-    text: "The setup took exactly 45 seconds. I posted a reel, told people to comment 'WORKOUT', and woke up to 300 new leads in my email list. Unbelievable tool.",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
-    metrics: "+300 Leads/Day"
-  },
-  {
-    name: "Sarah Jenkins",
-    handle: "@stylebysarah",
-    text: "I used to lose so many sales because people wouldn't click the link in my bio. With AutoDrop, the conversion rate from comment to sale is insane.",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-    metrics: "40% Higher Conversion"
   }
 ];
 
