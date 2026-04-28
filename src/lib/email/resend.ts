@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const getResend = () => new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL = 'AutoDrop <noreply@autodrop.in>';
 
@@ -11,7 +11,7 @@ export async function sendPlanExpiryWarning(to: string, name: string, daysLeft: 
 
   const renewUrl = 'https://autodrop.in/pricing';
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject,
@@ -50,7 +50,7 @@ export async function sendPlanExpiryWarning(to: string, name: string, daysLeft: 
 export async function sendPlanExpiredEmail(to: string, name: string) {
   const renewUrl = 'https://autodrop.in/pricing';
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to,
     subject: '🔴 Your AutoDrop Pro plan has expired — automations paused',

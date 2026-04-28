@@ -5,8 +5,6 @@ import { supabase } from "@/lib/supabase";
 import { razorpay } from "@/lib/razorpay";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: Request) {
   try {
     const { userId: clerkId } = await auth();
@@ -115,6 +113,7 @@ export async function POST(req: Request) {
       const userEmail = purchaser?.email;
       const userName = purchaser?.name || '';
       if (userEmail) {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const planLabel = billingCycle === 'annual' ? 'Annual (1 Year)' : 'Monthly (30 Days)';
         const expiryFormatted = expiresAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
         await resend.emails.send({
