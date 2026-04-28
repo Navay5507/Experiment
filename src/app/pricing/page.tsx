@@ -111,7 +111,7 @@ export default function PricingPage() {
 
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
-            router.push("/dashboard?success=pro_activated");
+            router.push("/payment-success");
           } else {
             alert("Payment verification failed. Please contact support.");
           }
