@@ -71,14 +71,15 @@ export default function PricingPage() {
 
     setLoading(true);
     try {
-      // Don't calculate final amount here, backend does it, just pass base amount and promo
-      const baseAmount = getPrice(rates[currency].pro, false); // pass false so we don't apply discount twice in the fetch payload
+      // Don't calculate final discount here, backend does it, just pass base amount and promo
+      const monthlyAmount = getPrice(rates[currency].pro, false); // pass false so we don't apply discount twice in the fetch payload
+      const checkoutBaseAmount = isAnnual ? (monthlyAmount * 12) : monthlyAmount;
       
       const response = await fetch("/api/billing/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: baseAmount,
+          amount: checkoutBaseAmount,
           currency,
           receipt: `rcpt_${Date.now()}`,
           promoCode: activePromo ? activePromo.code : undefined
