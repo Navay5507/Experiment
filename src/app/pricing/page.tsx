@@ -443,7 +443,6 @@ export default function PricingPage() {
         <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
-             { q: 'Can I cancel or change my plan later?', a: 'Yes! AutoDrop is fully self-serve. You can upgrade, downgrade, or cancel your subscription at any time directly from your dashboard. No questions asked.' },
              { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
              { q: 'What happens if I hit my limit on the Free plan?', a: 'If you exceed your 100 DM monthly limit on the Free plan, we will simply pause sending new DMs. We’ll notify you by email so you can upgrade to Pro to continue processing comments automatically.' },
              { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations.' },
