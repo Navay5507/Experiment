@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Razorpay keys not configured on server." }, { status: 500 });
     }
 
-    const { amount, currency = "INR", receipt, promoCode } = await req.json();
+    const { amount, currency = "INR", receipt, promoCode, billingCycle } = await req.json();
 
     if (!amount) {
       return NextResponse.json({ error: "Invalid payment amount." }, { status: 400 });
@@ -46,7 +46,8 @@ export async function POST(req: Request) {
       amount: Math.round(finalAmount * 100),
       currency,
       notes: {
-        promo_code: promoCode ? promoCode.trim().toUpperCase() : null
+        promo_code: promoCode ? promoCode.trim().toUpperCase() : null,
+        billing_cycle: billingCycle || 'monthly',
       },
       receipt: (receipt || `rcpt_${Date.now()}`).substring(0, 40),
     });

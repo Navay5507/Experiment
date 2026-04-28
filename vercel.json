@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/poll-comments",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/check-expirations",
+      "schedule": "0 0 * * *"
     }
   ]
 }

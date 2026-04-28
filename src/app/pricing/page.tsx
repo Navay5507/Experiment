@@ -82,7 +82,8 @@ export default function PricingPage() {
           amount: checkoutBaseAmount,
           currency,
           receipt: `rcpt_${Date.now()}`,
-          promoCode: activePromo ? activePromo.code : undefined
+          promoCode: activePromo ? activePromo.code : undefined,
+          billingCycle: isAnnual ? 'annual' : 'monthly',
         }),
       });
 
