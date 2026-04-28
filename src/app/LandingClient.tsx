@@ -539,6 +539,84 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
   );
 };
 
+const testimonials = [
+  {
+    name: "Priya Sharma",
+    handle: "@priyacreates",
+    text: "AutoDrop saved me literally 15 hours a week. Before this, I was copy-pasting the same link 500 times a day. Now my sales run on autopilot while I sleep.",
+    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
+    metrics: "2.4x Engagement"
+  },
+  {
+    name: "Rahul Verma",
+    handle: "@rahul.fitness",
+    text: "The setup took exactly 45 seconds. I posted a reel, told people to comment 'WORKOUT', and woke up to 300 new leads in my email list. Unbelievable tool.",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+    metrics: "+300 Leads/Day"
+  },
+  {
+    name: "Sarah Jenkins",
+    handle: "@stylebysarah",
+    text: "I used to lose so many sales because people wouldn't click the link in my bio. With AutoDrop, the conversion rate from comment to sale is insane.",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+    metrics: "40% Higher Conversion"
+  }
+];
+
+const TestimonialsSection = () => {
+  return (
+    <section style={{ padding: '8rem 0', background: 'var(--background)', position: 'relative', overflow: 'hidden' }}>
+      {/* Background Glows */}
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 60%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+      
+      <div className={styles.container}>
+        <FadeIn>
+           <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Loved by Top Creators</h2>
+           <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '4rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto 4rem auto' }}>Join thousands of creators who have automated their Instagram growth and reclaimed their time.</p>
+        </FadeIn>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+          {testimonials.map((t, idx) => (
+             <FadeIn delay={idx * 0.15} key={idx}>
+                <div style={{ background: '#111318', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                   
+                   {/* Star Rating */}
+                   <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1.5rem' }}>
+                      {[1,2,3,4,5].map(star => (
+                         <svg key={star} width="20" height="20" viewBox="0 0 24 24" fill="#facc15" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                         </svg>
+                      ))}
+                   </div>
+
+                   {/* Review Text */}
+                   <p style={{ color: '#F8FAFC', fontSize: '1.05rem', lineHeight: 1.6, flex: 1, marginBottom: '2rem', fontStyle: 'italic' }}>
+                      "{t.text}"
+                   </p>
+
+                   {/* User Info & Metric Badge */}
+                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', marginTop: 'auto' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                         <img src={t.avatar} alt={t.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
+                         <div>
+                            <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>{t.name}</div>
+                            <div style={{ color: '#818cf8', fontSize: '0.85rem' }}>{t.handle}</div>
+                         </div>
+                      </div>
+                      
+                      <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.4rem 0.8rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 700, border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                         {t.metrics}
+                      </div>
+                   </div>
+                </div>
+             </FadeIn>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export default function LandingClient({ userId }: { userId: string | null }) {
   // Cursor tracking & Mobile state
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -885,6 +963,8 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <section id="how-it-works" style={{ padding: '8rem 0', position: 'relative', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
          <HowItWorksInteractive />
       </section>
+
+      <TestimonialsSection />
 
       {/* FAQ SECTION */}
       <section style={{ padding: '8rem 0', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
