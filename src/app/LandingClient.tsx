@@ -541,11 +541,11 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 
 const testimonials = [
   {
-    name: "Priya Sharma",
-    handle: "@priyacreates",
-    text: "AutoDrop saved me literally 15 hours a week. Before this, I was copy-pasting the same link 500 times a day. Now my sales run on autopilot while I sleep.",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-    metrics: "2.4x Engagement"
+    name: "Handmade Crafts",
+    handle: "@handmade_craftsandprojects",
+    text: "AutoDrop has completely changed how I sell my craft templates. Now when followers ask for project details, the exact links are sent directly to their DMs instantly. I've saved hours of manual replying.",
+    avatar: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=150&q=80",
+    metrics: "3x More Link Clicks"
   },
   {
     name: "Rahul Verma",
