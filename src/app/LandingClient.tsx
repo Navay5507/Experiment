@@ -557,8 +557,8 @@ const TestimonialsSection = () => {
       
       <div className={styles.container}>
         <FadeIn>
-           <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Loved by Top Creators</h2>
-           <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '4rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto 4rem auto' }}>Join thousands of creators who have automated their Instagram growth and reclaimed their time.</p>
+           <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Creator Success</h2>
+           <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '4rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto 4rem auto' }}>See how creators are using AutoDrop to automate their growth and reclaim their time.</p>
         </FadeIn>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
