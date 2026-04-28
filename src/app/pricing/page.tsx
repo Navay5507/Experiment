@@ -197,7 +197,8 @@ export default function PricingPage() {
       if (activePromo.type === 'percentage') {
         price = Math.max(0, Math.round(price - (price * (activePromo.value / 100))));
       } else if (activePromo.type === 'fixed') {
-        price = Math.max(0, price - activePromo.value);
+        const effectiveDiscount = isAnnual ? (activePromo.value / 12) : activePromo.value;
+        price = Math.max(0, price - effectiveDiscount);
       }
     }
     return price;
