@@ -3,7 +3,7 @@ import { redis } from './redis';
 import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
-
+import { InstagramAPI } from '../instagram/api';
 // =============================================
 // JOB INTERFACES
 // =============================================
@@ -21,40 +21,16 @@ interface AutomationJob {
 // INSTAGRAM MESSAGE HELPERS
 // =============================================
 async function sendTextDM(token: string, recipientId: string, text: string) {
-  const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: { text },
-    }),
-  });
-  return res.json();
+  return InstagramAPI.sendDM(recipientId, text, token);
 }
 
 /**
  * Send a Private Reply to a commenter. Uses comment_id in recipient.
- * 
- * IMPORTANT (Meta Docs): Private Reply ONLY supports plain TEXT messages.
- * Button Templates, Generic Templates, and Quick Replies are NOT supported
- * on the Private Reply endpoint (recipient: { comment_id }).
- * Any template sent here will corrupt the chat and crash the Instagram app.
- * Templates can only be sent via IGSID (recipient: { id }) after the
- * conversation has been opened by the Private Reply.
+ * Private Reply ONLY supports plain TEXT messages.
  */
 async function sendPrivateReply(token: string, commentId: string, text: string) {
   console.log(`[Worker] Sending Private Reply (text-only) to comment ${commentId}`);
-  const payload = {
-    recipient: { comment_id: commentId },
-    message: { text },
-  };
-
-  const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify(payload),
-  });
-  return res.json();
+  return InstagramAPI.sendPrivateReply(commentId, text, token);
 }
 
 async function sendQuickReplyDM(
@@ -63,26 +39,11 @@ async function sendQuickReplyDM(
   text: string,
   quickReplies: { content_type: string; title: string; payload: string }[]
 ) {
-  const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: {
-        text,
-        quick_replies: quickReplies,
-      },
-    }),
-  });
-  return res.json();
+  return InstagramAPI.sendQuickReplyDM(recipientId, text, quickReplies, token);
 }
 
 /**
  * Send a DM with clickable buttons using Instagram's Generic Template.
- * 
- * IMPORTANT: Instagram does NOT support template_type: 'button' — that is
- * a Facebook Messenger feature. Sending it crashes the Instagram mobile app.
- * Instagram only supports template_type: 'generic' for structured messages.
  */
 async function sendButtonTemplateDM(
   token: string,
@@ -90,29 +51,7 @@ async function sendButtonTemplateDM(
   text: string,
   buttons: { type: 'web_url' | 'postback'; title: string; url?: string; payload?: string }[]
 ) {
-  const res = await fetch(`https://graph.instagram.com/v21.0/me/messages`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-    body: JSON.stringify({
-      recipient: { id: recipientId },
-      message: {
-        attachment: {
-          type: 'template',
-          payload: {
-            template_type: 'generic',
-            elements: [
-              {
-                title: text.length > 80 ? text.substring(0, 77) + '...' : text,
-                subtitle: text.length > 80 ? text : undefined,
-                buttons,
-              }
-            ],
-          }
-        }
-      }
-    }),
-  });
-  return res.json();
+  return InstagramAPI.sendButtonTemplateDM(recipientId, text, buttons, token);
 }
 
 /**
@@ -485,10 +424,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     // Use the Instagram Messaging API to accurately verify follower status via IGSID
     let isFollowing = true; // Default fallback to honor-system in case of Meta API limits
     try {
-      const followCheckRes = await fetch(
-        `https://graph.instagram.com/v21.0/${recipientId}?fields=is_user_follow_business&access_token=${token}`
-      );
-      const followData = await followCheckRes.json();
+      const isUserFollows = await InstagramAPI.isUserFollowingBusiness(recipientId, token);
+      const followData = { error: null, is_user_follow_business: isUserFollows };
       
       if (!followData.error && typeof followData.is_user_follow_business === 'boolean') {
         isFollowing = followData.is_user_follow_business;
@@ -697,7 +634,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-}, { connection: redis });
+}, { connection: redis as any });
 
 
 // =============================================
@@ -733,18 +670,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   // Use reply template as configured by the user
   const replyText = automation.reply_template || 'Check your DM! 👀';
 
-  // Instagram Graph API comment reply endpoint requires parameters as query strings or form data, not JSON.
-  const params = new URLSearchParams();
-  params.append('message', replyText);
-  params.append('access_token', user.instagramAccessToken);
-
-  const res = await fetch(`https://graph.instagram.com/v21.0/${commentId}/replies`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString(),
-  });
-
-  const raw = await res.json();
+  const raw = await InstagramAPI.replyToComment(commentId, replyText, user.instagramAccessToken);
   if (raw.error) {
     console.error(`[Worker Comment] FAILED: ${raw.error.message}`);
     await supabase.from('analytics_events').insert({
@@ -760,7 +686,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   });
 
   return { success: true, replyId: raw.id };
-}, { connection: redis });
+}, { connection: redis as any });
 
 // Error Logging
 dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));
