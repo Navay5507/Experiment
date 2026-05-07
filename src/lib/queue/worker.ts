@@ -573,7 +573,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     }
 
     // All fields collected! Save lead and send link
-    const actualUsername = (convo.collected_data as any)?.ig_username || recipientId;
+    const actualUsername = (convo.collected_data as {ig_username?: string})?.ig_username || recipientId;
     await supabase.from('leads').insert({
       user_id: userId,
       automation_id: automationId,
@@ -634,7 +634,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-}, { connection: redis as any });
+// @ts-expect-error type mismatch between bullmq and global ioredis
+}, { connection: redis });
 
 
 // =============================================
@@ -656,7 +657,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
     .eq('id', automationId)
     .single();
 
-  if (!user?.instagramAccessToken || !automation) throw new Error('Missing Data');
+  if (!user?.instagramAccessToken || !automation || !commentId) throw new Error('Missing Data');
 
   const rateCheck = await checkRateLimit(userId, user.plan);
   if (!rateCheck.allowed) {
@@ -686,7 +687,8 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   });
 
   return { success: true, replyId: raw.id };
-}, { connection: redis as any });
+// @ts-expect-error type mismatch between bullmq and global ioredis
+}, { connection: redis });
 
 // Error Logging
 dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));
