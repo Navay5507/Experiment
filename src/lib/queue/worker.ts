@@ -733,10 +733,15 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   // Use reply template as configured by the user
   const replyText = automation.reply_template || 'Check your DM! 👀';
 
+  // Instagram Graph API comment reply endpoint requires parameters as query strings or form data, not JSON.
+  const params = new URLSearchParams();
+  params.append('message', replyText);
+  params.append('access_token', user.instagramAccessToken);
+
   const res = await fetch(`https://graph.instagram.com/v21.0/${commentId}/replies`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user.instagramAccessToken}` },
-    body: JSON.stringify({ message: replyText }),
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
   });
 
   const raw = await res.json();
