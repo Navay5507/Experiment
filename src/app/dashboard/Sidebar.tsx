@@ -95,7 +95,12 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} onNavigate={onClose} />
         <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} onNavigate={onClose} />
         <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} onNavigate={onClose} />
-        <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={isActive('/dashboard/store')} onNavigate={onClose} />
+        <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={pathname === '/dashboard/store'} onNavigate={onClose} />
+        <div style={{ marginLeft: '1.5rem', marginTop: '-0.1rem', marginBottom: '0.25rem', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '0.5rem' }}>
+          <Link href="/dashboard/store/payout" onClick={onClose} style={{ textDecoration: 'none', color: pathname === '/dashboard/store/payout' ? '#fff' : 'var(--text-muted)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.75rem', borderRadius: '8px', background: pathname === '/dashboard/store/payout' ? 'rgba(255,255,255,0.05)' : 'transparent', fontWeight: pathname === '/dashboard/store/payout' ? 600 : 500 }}>
+            Payouts & Fees
+          </Link>
+        </div>
         <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
         <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={isActive('/dashboard/referral')} onNavigate={onClose} />
         <NavItem href="/dashboard/logs" icon={Activity} label="System Logs" isActive={isActive('/dashboard/logs')} onNavigate={onClose} />
