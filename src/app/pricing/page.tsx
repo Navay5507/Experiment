@@ -150,7 +150,7 @@ export default function PricingPage() {
     EUR: { pro: 7, elite: 89 },
     ZAR: { pro: 139, elite: 1880 },
     SGD: { pro: 10, elite: 133 },
-    INR: { pro: 599, elite: 8200 },
+    INR: { pro: 499, elite: 8200 },
     NGN: { pro: 9900, elite: 148500 },
   };
 
@@ -190,8 +190,8 @@ export default function PricingPage() {
   };
 
   const getPrice = (baseTierPrice: number, applyPromo = true) => {
-    // Universal identical pricing parity based strictly on the India 599 -> 399 model (~33.39% discount)
-    let price = isAnnual ? Math.round(baseTierPrice * (399 / 599)) : baseTierPrice;
+    // Universal identical pricing parity based strictly on the India 499 -> 299 model (~40.08% discount)
+    let price = isAnnual ? Math.round(baseTierPrice * (299 / 499)) : baseTierPrice;
     
     if (applyPromo && activePromo) {
       if (activePromo.type === 'percentage') {
@@ -230,7 +230,7 @@ export default function PricingPage() {
             <div className={styles.toggleThumb} />
           </button>
           <span className={`${styles.toggleLabel} ${isAnnual ? styles.activeLabel : ''}`}>
-            Annually <span className={styles.discountBadge}>-33%</span>
+            Annually <span className={styles.discountBadge}>-40%</span>
           </span>
         </div>
 
