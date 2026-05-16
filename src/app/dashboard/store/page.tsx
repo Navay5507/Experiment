@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Package, DollarSign, ShoppingCart, TrendingUp,
-  Copy, Pencil, Trash2, ExternalLink, X, Check, Link2, FileText, MessageSquare
+  Copy, Pencil, Trash2, ExternalLink, X, Check, Link2, FileText, MessageSquare, UploadCloud, Loader2
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import styles from "./store.module.css";
 
 interface Product {
@@ -29,7 +30,7 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 };
 
 const DELIVERY_ICONS: Record<string, typeof Link2> = {
-  link: Link2, file: FileText, dm_message: MessageSquare,
+  link: Link2, file: FileText, file_upload: UploadCloud, dm_message: MessageSquare,
 };
 
 export default function StorePage() {
@@ -44,7 +45,9 @@ export default function StorePage() {
     name: "", description: "", price: "0", currency: "INR",
     product_type: "digital", delivery_type: "link", delivery_content: "",
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -63,6 +66,7 @@ export default function StorePage() {
   const openCreateModal = () => {
     setEditProduct(null);
     setForm({ name: "", description: "", price: "0", currency: "INR", product_type: "digital", delivery_type: "link", delivery_content: "" });
+    setSelectedFile(null);
     setShowModal(true);
   };
 
@@ -77,17 +81,49 @@ export default function StorePage() {
       delivery_type: product.delivery_type || "link",
       delivery_content: product.delivery_content || "",
     });
+    setSelectedFile(null);
     setShowModal(true);
   };
 
   const handleSave = async () => {
     if (!form.name.trim()) return;
+    
+    // Validate file upload if selected
+    if (form.delivery_type === "file_upload" && !selectedFile && !editProduct?.delivery_content) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
     setSaving(true);
     try {
-      const payload = {
+      const payload: any = {
         ...form,
         price: parseFloat(form.price) || 0,
       };
+
+      // Handle native file upload to Supabase Storage
+      if (form.delivery_type === "file_upload" && selectedFile) {
+        setUploading(true);
+        const fileName = `${Date.now()}_${selectedFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+        
+        const { data, error } = await supabase.storage
+          .from('products')
+          .upload(`uploads/${fileName}`, selectedFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+        
+        if (error) {
+          alert(`File upload failed: ${error.message}. Please ensure you have created a public bucket named 'products' in Supabase Storage.`);
+          setSaving(false);
+          setUploading(false);
+          return;
+        }
+        
+        const { data: urlData } = supabase.storage.from('products').getPublicUrl(data.path);
+        payload.delivery_content = urlData.publicUrl;
+        setUploading(false);
+      }
 
       const url = editProduct
         ? `/api/store/products/${editProduct.id}`
@@ -382,16 +418,18 @@ export default function StorePage() {
                   value={form.delivery_type}
                   onChange={(e) => setForm({ ...form, delivery_type: e.target.value })}
                 >
-                  <option value="link">🔗 Link (URL)</option>
-                  <option value="file">📁 File (Google Drive / Dropbox link)</option>
-                  <option value="dm_message">💬 DM Message (custom text)</option>
+                  <option value="link">🔗 Link (External URL)</option>
+                  <option value="file_upload">⬆️ Upload Media / File (Native)</option>
+                  <option value="file">📁 Link to File (Google Drive / Dropbox)</option>
+                  <option value="dm_message">💬 DM Message (Custom Text)</option>
                 </select>
               </div>
 
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>
                   {form.delivery_type === "link" ? "Product URL" :
-                   form.delivery_type === "file" ? "File Download Link" : "DM Message Content"}
+                   form.delivery_type === "file" ? "File Download Link" : 
+                   form.delivery_type === "file_upload" ? "Upload Product File" : "DM Message Content"}
                 </label>
                 {form.delivery_type === "dm_message" ? (
                   <textarea
@@ -401,6 +439,34 @@ export default function StorePage() {
                     value={form.delivery_content}
                     onChange={(e) => setForm({ ...form, delivery_content: e.target.value })}
                   />
+                ) : form.delivery_type === "file_upload" ? (
+                  <div style={{ padding: '1.5rem', border: '1px dashed var(--border)', borderRadius: '12px', textAlign: 'center', background: 'rgba(255,255,255,0.02)' }}>
+                    <input 
+                      type="file" 
+                      id="product-file-upload" 
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setSelectedFile(e.target.files[0]);
+                          // Clear the text content so it gets overwritten by the new URL later
+                          setForm({ ...form, delivery_content: "Will be generated upon upload" });
+                        }
+                      }}
+                    />
+                    <label htmlFor="product-file-upload" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                      <UploadCloud size={32} color="var(--primary)" />
+                      {selectedFile ? (
+                        <div style={{ color: '#fff', fontWeight: 600 }}>{selectedFile.name}</div>
+                      ) : editProduct && editProduct.delivery_content && editProduct.delivery_type === "file_upload" ? (
+                        <div style={{ color: '#fff', fontWeight: 600 }}>Current File Uploaded (Click to replace)</div>
+                      ) : (
+                        <div style={{ color: '#fff', fontWeight: 600 }}>Click to select a file</div>
+                      )}
+                      <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                        Supports PDFs, ZIPs, Videos, Images, etc.
+                      </div>
+                    </label>
+                  </div>
                 ) : (
                   <input
                     className={styles.formInput}
@@ -412,11 +478,12 @@ export default function StorePage() {
               </div>
 
               <div className={styles.modalActions}>
-                <button className={styles.cancelBtn} onClick={() => setShowModal(false)}>
+                <button className={styles.cancelBtn} onClick={() => setShowModal(false)} disabled={saving}>
                   Cancel
                 </button>
                 <button className={styles.submitBtn} onClick={handleSave} disabled={saving || !form.name.trim()}>
-                  {saving ? "Saving..." : editProduct ? "Update Product" : "Create Product"}
+                  {uploading ? <><Loader2 size={16} className="animate-spin" style={{ display: 'inline', marginRight: 6 }} /> Uploading File...</> : 
+                   saving ? "Saving..." : editProduct ? "Update Product" : "Create Product"}
                 </button>
               </div>
             </motion.div>

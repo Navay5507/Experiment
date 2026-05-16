@@ -148,6 +148,10 @@ export default async function AutomationsList() {
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.25rem' }}>
                     Target: <span style={{ color: '#fff' }}>{postTargetText}</span>
                   </p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ display: 'inline-block', width: 8, height: 8, background: '#a855f7', borderRadius: '50%' }}></span>
+                    Anti-Ban Engine: <span style={{ color: '#a855f7', fontWeight: 600 }}>Active (Spintax Replies)</span>
+                  </p>
                   {matchedMedia.length > 0 && (
                     <div style={{ display: 'flex', gap: '8px', marginTop: '12px', flexWrap: 'wrap' }}>
                       {matchedMedia.slice(0, 5).map((m: any) => (

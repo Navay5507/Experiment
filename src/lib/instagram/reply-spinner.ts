@@ -68,6 +68,17 @@ export function spinCommentReply(template?: string | null): string {
 }
 
 /**
+ * Exposes the internal variation engine to the frontend UI
+ * so users can preview exactly how their text will be spun.
+ */
+export function getPreviewVariations(template?: string | null): string[] {
+  if (!template || template.trim() === '') {
+    return COMMENT_REPLY_VARIATIONS.slice(0, 5);
+  }
+  return generateTemplateVariations(template);
+}
+
+/**
  * Spins the initial DM greeting text.
  * 
  * @param template The user's initial_dm_text (or null for defaults)

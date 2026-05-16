@@ -41,6 +41,9 @@ export default function CreateAutomation() {
   const [errorMsg, setErrorMsg] = useState("");
   const [aiEnabled, setAiEnabled] = useState(false);
 
+  const [spinPreviews, setSpinPreviews] = useState<string[]>([]);
+  const [isLoadingPreviews, setIsLoadingPreviews] = useState(false);
+
   const [realPosts, setRealPosts] = useState<{ id: string; caption?: string; media_type?: string; media_url?: string; thumbnail_url?: string; timestamp?: string }[]>([]);
   const [postsLoading, setPostsLoading] = useState(true);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
@@ -72,6 +75,28 @@ export default function CreateAutomation() {
     
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchPreviews = async () => {
+      setIsLoadingPreviews(true);
+      try {
+        const res = await fetch('/api/automations/spin-preview', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ template: replyTemplate })
+        });
+        const data = await res.json();
+        setSpinPreviews(data.variations || []);
+      } catch (err) {
+        console.error("Failed to fetch spin previews");
+      } finally {
+        setIsLoadingPreviews(false);
+      }
+    };
+    
+    const timeout = setTimeout(fetchPreviews, 500);
+    return () => clearTimeout(timeout);
+  }, [replyTemplate]);
 
   const togglePost = (id: string) => {
     setSelectedPosts(prev => prev.includes(id) ? prev.filter(p => p !== id) : [...prev, id]);
@@ -301,6 +326,23 @@ export default function CreateAutomation() {
               <div className={styles.formGroup}>
                 <label className={styles.label}>What should we publicly reply to their comment?</label>
                 <textarea className={styles.textarea} placeholder="Check your DM {{name}} 👀" value={replyTemplate} onChange={(e) => setReplyTemplate(e.target.value)} autoFocus />
+              </div>
+              
+              <div className={styles.formGroup} style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                   <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>👀 Anti-Ban Reply Preview</div>
+                   {isLoadingPreviews && <Loader2 size={16} className="animate-spin" style={{ color: 'var(--text-muted)' }} />}
+                </div>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
+                  Meta flags accounts that send the exact same reply repeatedly. We automatically <strong style={{color: '#a855f7'}}>spin</strong> your template to keep your account safe. Here are some examples of what we'll send:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                  {spinPreviews.map((preview, i) => (
+                    <div key={i} style={{ padding: '0.75rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '12px', fontSize: '0.9rem', color: '#fff', display: 'inline-block', alignSelf: 'flex-start' }}>
+                      {preview}
+                    </div>
+                  ))}
+                </div>
               </div>
               
               <div className={styles.formGroup} style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '16px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
