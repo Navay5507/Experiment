@@ -266,7 +266,7 @@ export default function PricingPage() {
           <ul className={styles.features}>
             <li>1 Active Automation</li>
             <li>Unlimited DMs & Comments</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>FREE</span></li>
+            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
             <li>Basic Analytics</li>
           </ul>
           <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
@@ -290,7 +290,7 @@ export default function PricingPage() {
           <ul className={styles.features}>
             <li>Unlimited Automations</li>
             <li>Unlimited DMs</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>FREE</span></li>
+            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
             <li>Follow-Gate Links</li>
             <li>Lead Capture (Email/Phone)</li>
           </ul>
@@ -344,7 +344,7 @@ export default function PricingPage() {
           <ul className={styles.features}>
             <li>Everything in Pro</li>
             <li>Unlimited DMs</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>FREE</span></li>
+            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
             <li>Intelligent AI Responses</li>
             <li>Custom Knowledge Base</li>
             <li>Human-Review Fallback</li>
@@ -399,7 +399,7 @@ export default function PricingPage() {
               </tr>
               <tr>
                 <td>Creator Marketplace</td>
-                <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>FREE</span></td>
+                <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
                 <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
                 <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
               </tr>
