@@ -2,27 +2,17 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { CreditCard, ArrowRight, ShieldCheck, Banknote, AlertCircle } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default function PayoutPage() {
   const [userPlan, setUserPlan] = useState<string>("FREE");
   const [loading, setLoading] = useState(true);
-  const supabase = createClientComponentClient();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { data: profile } = await supabase
-            .from('users')
-            .select('plan')
-            .eq('id', user.id)
-            .single();
-          if (profile) {
-            setUserPlan(profile.plan || 'FREE');
-          }
-        }
+        const res = await fetch("/api/user/profile");
+        const data = await res.json();
+        setUserPlan(data.profile?.plan || 'FREE');
       } catch (err) {
         console.error("Error fetching user plan:", err);
       } finally {
