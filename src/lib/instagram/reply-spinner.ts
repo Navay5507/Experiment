@@ -94,40 +94,42 @@ export function spinDMGreeting(template?: string | null): string {
 }
 
 /**
- * Takes a user's custom template and generates 5-8 natural variations.
+ * Takes a user's custom template and generates 5-8 natural, structurally different variations.
  * 
  * Strategy:
  * 1. Keep the core message intact
- * 2. Swap emojis if present
- * 3. Add/remove trailing emojis
- * 4. Minor punctuation variations
+ * 2. Wrap the core message in completely different sentence structures
+ * 3. Use varied emojis and conversational tones
  */
 function generateTemplateVariations(template: string): string[] {
   const variations: string[] = [template]; // Original always included
 
-  // Strip trailing emojis for base text
+  // Strip trailing emojis to get the raw core message
   const emojiRegex = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu;
-  const baseText = template.replace(emojiRegex, '').trim();
-
-  // Variation: original text + different emoji
-  variations.push(`${baseText} ${pickRandom(EMOJI_POOL)}`);
-  variations.push(`${baseText} ${pickRandom(EMOJI_POOL)}`);
-
-  // Variation: add exclamation or remove it
-  if (baseText.endsWith('!')) {
-    variations.push(baseText.slice(0, -1));
-    variations.push(`${baseText.slice(0, -1)} ${pickRandom(EMOJI_POOL)}`);
-  } else {
-    variations.push(`${baseText}!`);
-    variations.push(`${baseText}! ${pickRandom(EMOJI_POOL)}`);
+  let baseText = template.replace(emojiRegex, '').trim();
+  
+  // Ensure baseText has some punctuation if it doesn't
+  if (baseText && !baseText.match(/[.!?]$/)) {
+    baseText += '.';
   }
 
-  // Variation: prepend a casual word
-  const prefixes = ['Hey! ', 'Yo! ', '', ''];
-  const prefix = pickRandom(prefixes);
-  if (prefix) {
-    variations.push(`${prefix}${baseText} ${pickRandom(EMOJI_POOL)}`);
-  }
+  // Variation 1: Casual confirmation
+  variations.push(`Just sent that over to you! ${baseText} ✨`);
+
+  // Variation 2: Friendly greeting + fallback instruction
+  variations.push(`Hey there! ${baseText} Check your message requests if you don't see it right away.`);
+
+  // Variation 3: Enthusiastic + check
+  variations.push(`Awesome! ${baseText} Let me know if you got it! 🙌`);
+
+  // Variation 4: Direct delivery
+  variations.push(`All done! ${baseText} 🚀`);
+
+  // Variation 5: Alternate emoji + trailing thought
+  variations.push(`${baseText} Hope you find it helpful! 💬`);
+
+  // Variation 6: Quick ping
+  variations.push(`Pinged you! ${baseText} 📬`);
 
   return variations;
 }
