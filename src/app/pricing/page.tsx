@@ -264,8 +264,8 @@ export default function PricingPage() {
           <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
           <p className={styles.description}>Test the waters with basic comment replies.</p>
           <ul className={styles.features}>
-            <li>1 Active Automation</li>
-            <li>100 DMs / month</li>
+            <li>Unlimited Automations</li>
+            <li>Unlimited DMs & Comments</li>
             <li>Basic Analytics</li>
           </ul>
           <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
