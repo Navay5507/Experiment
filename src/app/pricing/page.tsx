@@ -373,8 +373,8 @@ export default function PricingPage() {
                 <td>Unlimited</td>
               </tr>
               <tr>
-                <td>Monthly DMs</td>
-                <td>100</td>
+                <td>Monthly DMs & Comments</td>
+                <td>Unlimited</td>
                 <td>Unlimited</td>
                 <td>Unlimited</td>
               </tr>
@@ -406,13 +406,6 @@ export default function PricingPage() {
                 <td><span className={styles.iconCheck}><Check size={20} /></span></td>
                 <td><span className={styles.iconCheck}><Check size={20} /></span></td>
               </tr>
-              <tr>
-                <td>Custom Rate Limits</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-              
               <tr className={styles.featureRow}>
                 <td colSpan={4} className={styles.featureCategory}>AI Capabilities</td>
               </tr>
@@ -445,8 +438,7 @@ export default function PricingPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
              { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
-             { q: 'What happens if I hit my limit on the Free plan?', a: 'If you exceed your 100 DM monthly limit on the Free plan, we will simply pause sending new DMs. We’ll notify you by email so you can upgrade to Pro to continue processing comments automatically.' },
-             { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations.' },
+             { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations and use Lead Capture / Follow-Gate features.' },
              { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed AutoDrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
           ].map((faq, idx) => (
              <details key={idx} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
