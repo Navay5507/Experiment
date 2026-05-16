@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView } from "framer-motion";
-import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown } from "lucide-react";
+import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown, ShoppingBag } from "lucide-react";
 import styles from "./page.module.css";
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
@@ -936,6 +936,26 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                  <div style={{ padding: '1.5rem', flex: 1 }}>
                     <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Custom Trained AI <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span></h3>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Train an AI model on your store data to contextually answer queries and close sales.</p>
+                 </div>
+               </motion.div>
+             </FadeIn>
+
+             {/* 9. Creator Marketplace */}
+             <FadeIn delay={0.9}>
+               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                 <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    
+                    {/* Glowing dynamic background */}
+                    <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(34,211,238,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+
+                    <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                       <ShoppingBag size={48} color="#22D3EE" />
+                       <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Digital <span style={{ color: '#22D3EE' }}>Store</span></span>
+                    </div>
+                 </div>
+                 <div style={{ padding: '1.5rem', flex: 1 }}>
+                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Creator Marketplace <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span></h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Host and sell your digital products directly to your audience without leaving the ecosystem.</p>
                  </div>
                </motion.div>
              </FadeIn>
