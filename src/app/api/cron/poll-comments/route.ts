@@ -134,7 +134,7 @@ export async function GET() {
               recipientId: comment.from?.id,
               commenterUsername: comment.username,
               replyText: automation.reply_template || 'Check your DM! 👀',
-            }, { delay: getRandomDelay(5000, 45000) });
+            }, { delay: getRandomDelay(5000, 7200000) });
             console.log(`[Poll] ✅ Comment reply job queued with delay for comment ${comment.id}`);
 
             // 8. Queue DM job (only if we have from.id for DM targeting)

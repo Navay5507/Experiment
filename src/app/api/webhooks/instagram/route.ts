@@ -231,7 +231,7 @@ export async function POST(req: Request) {
                         commentId: commentId,
                         recipientId: commenterId,
                         commenterUsername,
-                      }, { delay: getRandomDelay(5000, 45000) });
+                      }, { delay: getRandomDelay(5000, 7200000) });
                       console.log('[Webhook] ✅ Comment reply job queued with random delay (DM will chain after success)');
                     } catch (e) { console.error('[Webhook] Comment queue error:', e); }
                   } else {
@@ -243,7 +243,7 @@ export async function POST(req: Request) {
                         recipientId: commenterId,
                         commenterUsername,
                         commentId: commentId,
-                      }, { delay: getRandomDelay(10000, 60000) });
+                      }, { delay: getRandomDelay(5000, 7200000) });
                       console.log('[Webhook] ✅ Live comment DM job queued with delay');
                     } catch (e) { console.error('[Webhook] Live DM queue error:', e); }
                   }
@@ -311,7 +311,7 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'follower',
-                        }, { delay: getRandomDelay(5000, 30000) });
+                        }, { delay: getRandomDelay(5000, 7200000) });
                         console.log('[Webhook] ✅ Story DM job queued with delay');
                       } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
                       break;
