@@ -12,15 +12,16 @@ export default async function DashboardOverview() {
   const { data: user } = await supabase.from('users').select('id, instagramTokenExpiresAt').eq('clerkId', userId).maybeSingle();
   
   if (!user) {
-     return <DashboardClient metrics={{ activeAutomations: 0, commentsMatched: 0, dmsSent: 0, leadsCaptured: 0 }} feed={[]} expiresAt={null} />;
+     return <DashboardClient metrics={{ activeAutomations: 0, commentsMatched: 0, dmsSent: 0, leadsCaptured: 0, storeRevenue: 0, productsSold: 0 }} feed={[]} expiresAt={null} />;
   }
 
   // Pure Promise.all for high performance zero-fake DB agg sweeps
-  const [automationsRes, leadsRes, eventsRes, recentLogsRes] = await Promise.all([
+  const [automationsRes, leadsRes, eventsRes, recentLogsRes, productsRes] = await Promise.all([
     supabase.from('automations').select('id', { count: 'exact' }).eq('user_id', user.id),
     supabase.from('leads').select('id', { count: 'exact' }).eq('user_id', user.id),
     supabase.from('analytics_events').select('event_type').eq('user_id', user.id),
-    supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5)
+    supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
+    supabase.from('products').select('total_sales, total_revenue').eq('user_id', user.id)
   ]);
 
   let commentsMatched = 0;
@@ -33,11 +34,23 @@ export default async function DashboardOverview() {
      });
   }
 
+  // Store revenue aggregation
+  let storeRevenue = 0;
+  let productsSold = 0;
+  if (productsRes.data) {
+    productsRes.data.forEach(p => {
+      storeRevenue += Number(p.total_revenue) || 0;
+      productsSold += Number(p.total_sales) || 0;
+    });
+  }
+
   const metrics = {
     activeAutomations: automationsRes.count || 0,
     commentsMatched,
     dmsSent,
-    leadsCaptured: leadsRes.count || 0
+    leadsCaptured: leadsRes.count || 0,
+    storeRevenue,
+    productsSold,
   };
 
   // Convert raw DB logs rigidly to the feed map without ANY synthetic intervals

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle } from "lucide-react";
+import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle, DollarSign, ShoppingBag } from "lucide-react";
 import styles from "./dashboard.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ const Sparkline = ({ color }: { color: string }) => (
   </svg>
 );
 
-interface Metrics { activeAutomations: number; commentsMatched: number; dmsSent: number; leadsCaptured: number; }
+interface Metrics { activeAutomations: number; commentsMatched: number; dmsSent: number; leadsCaptured: number; storeRevenue: number; productsSold: number; }
 interface FeedItem { id: string; text: string; time: string; }
 
 interface DashboardProps {
@@ -141,6 +141,36 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
              ) : <span style={{ color: "var(--text-muted)" }}>Pending Lead-Capture flows</span>}
           </div>
           {metrics.leadsCaptured > 0 && <Sparkline color="#a855f7" />}
+        </motion.div>
+
+        {/* Store Revenue */}
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+          <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
+             <span className={styles.metricTitle}>Store Revenue</span>
+             <DollarSign color="#10b981" size={18} />
+          </div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}>₹<CountUpReal end={metrics.storeRevenue} /></div>
+          <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
+             {metrics.storeRevenue > 0 ? (
+               <span style={{ color: '#10b981' }}>Sales revenue earned</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>Create products to start earning</span>}
+          </div>
+          {metrics.storeRevenue > 0 && <Sparkline color="#10b981" />}
+        </motion.div>
+
+        {/* Products Sold */}
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(234,179,8,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+          <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
+             <span className={styles.metricTitle}>Products Sold</span>
+             <ShoppingBag color="#eab308" size={18} />
+          </div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.productsSold} /></div>
+          <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
+             {metrics.productsSold > 0 ? (
+               <span style={{ color: '#eab308' }}>Digital products delivered</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No sales yet</span>}
+          </div>
+          {metrics.productsSold > 0 && <Sparkline color="#eab308" />}
         </motion.div>
       </div>
 
