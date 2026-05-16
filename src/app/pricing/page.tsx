@@ -264,7 +264,7 @@ export default function PricingPage() {
           <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
           <p className={styles.description}>Test the waters with basic comment replies.</p>
           <ul className={styles.features}>
-            <li>Unlimited Automations</li>
+            <li>1 Active Automation</li>
             <li>Unlimited DMs & Comments</li>
             <li>Basic Analytics</li>
           </ul>
@@ -291,7 +291,6 @@ export default function PricingPage() {
             <li>Unlimited DMs</li>
             <li>Follow-Gate Links</li>
             <li>Lead Capture (Email/Phone)</li>
-            <li>Custom Rate Limits</li>
           </ul>
           {userPlan === 'PRO' || userPlan === 'ELITE' ? (
              <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
@@ -343,7 +342,7 @@ export default function PricingPage() {
           <ul className={styles.features}>
             <li>Everything in Pro</li>
             <li>Unlimited DMs</li>
-            <li>Gemini 3 AI Responses</li>
+            <li>Intelligent AI Responses</li>
             <li>Custom Knowledge Base</li>
             <li>Human-Review Fallback</li>
           </ul>

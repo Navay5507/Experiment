@@ -73,8 +73,8 @@ export default async function AutomationsList() {
   }
 
   const activeAutomations = automations.filter(a => a.is_active);
-  const automationLimit = Infinity;
-  const canCreate = true;
+  const automationLimit = user?.plan === 'FREE' ? 1 : Infinity;
+  const canCreate = user?.plan === 'PRO' || user?.plan === 'ELITE' || activeAutomations.length < automationLimit;
 
   return (
     <div className={styles.content}>

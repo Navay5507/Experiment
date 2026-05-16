@@ -38,8 +38,21 @@ export async function POST(req: Request) {
         userPlan = newUser.plan;
     }
 
-    // Free users can now have unlimited automations.
-    
+    // PLAN ENFORCEMENT: Free users can only have 1 active automation
+    if (userPlan === 'FREE') {
+      const { count } = await supabase
+        .from('automations')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', internalUserId)
+        .eq('is_active', true);
+
+      if ((count || 0) >= 1) {
+        return NextResponse.json(
+          { error: 'Free tier limit reached. You can only have 1 active automation at a time. Please upgrade to Pro for unlimited automations.' },
+          { status: 403 }
+        );
+      }
+    }
 
     const payload = await req.json();
 
