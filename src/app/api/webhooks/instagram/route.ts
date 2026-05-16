@@ -2,7 +2,7 @@ import { NextResponse, after } from 'next/server';
 import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
-import { isCommentProcessed } from '@/lib/queue/dedup';
+import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
 const APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
@@ -221,6 +221,8 @@ export async function POST(req: Request) {
                   } catch (e) { console.error('[Webhook] Analytics insert error:', e); }
 
                   // Dispatch: Reply to comment publicly (Only for standard posts, not lives)
+                  // ANTI-BAN: Comment reply is enqueued with random delay (5-45s)
+                  // DM is NO LONGER dispatched here — it chains from the comment worker after success
                   if (change.field === 'comments') {
                     try {
                       await commentQueue.add('reply', {
@@ -228,30 +230,23 @@ export async function POST(req: Request) {
                         automationId: automation.id,
                         commentId: commentId,
                         recipientId: commenterId,
-                      });
-                      console.log('[Webhook] ✅ Comment reply job queued');
+                        commenterUsername,
+                      }, { delay: getRandomDelay(5000, 45000) });
+                      console.log('[Webhook] ✅ Comment reply job queued with random delay (DM will chain after success)');
                     } catch (e) { console.error('[Webhook] Comment queue error:', e); }
+                  } else {
+                    // Live comments don't get public replies — dispatch DM directly with delay
+                    try {
+                      await dmQueue.add('send', {
+                        userId: user.id,
+                        automationId: automation.id,
+                        recipientId: commenterId,
+                        commenterUsername,
+                        commentId: commentId,
+                      }, { delay: getRandomDelay(10000, 60000) });
+                      console.log('[Webhook] ✅ Live comment DM job queued with delay');
+                    } catch (e) { console.error('[Webhook] Live DM queue error:', e); }
                   }
-
-                  // Dispatch: Send initial DM via Private Reply
-                  try {
-                    await dmQueue.add('send', {
-                      userId: user.id,
-                      automationId: automation.id,
-                      recipientId: commenterId,
-                      commenterUsername,
-                      commentId: commentId,
-                    });
-                    console.log('[Webhook] ✅ DM send job queued (with commentId for Private Reply)');
-                  } catch (e) { console.error('[Webhook] DM queue error:', e); }
-
-                  try {
-                    await supabase.from('analytics_events').insert({
-                      user_id: user.id,
-                      event_type: 'dm_dispatched',
-                      metadata: { automation_id: automation.id, recipient_id: commenterId }
-                    });
-                  } catch (e) { console.error('[Webhook] Analytics insert error:', e); }
 
                   // IMPORTANT: Only trigger ONE automation per comment to prevent duplicate DMs
                   break;
@@ -316,8 +311,8 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'follower',
-                        });
-                        console.log('[Webhook] ✅ Story DM job queued');
+                        }, { delay: getRandomDelay(5000, 30000) });
+                        console.log('[Webhook] ✅ Story DM job queued with delay');
                       } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
                       break;
                     }

@@ -4,6 +4,9 @@ import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
 import { InstagramAPI } from '../instagram/api';
+import { spinCommentReply, spinDMGreeting } from '../instagram/reply-spinner';
+import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getRandomDelay } from './dedup';
+import { dmQueue } from './queues';
 // =============================================
 // JOB INTERFACES
 // =============================================
@@ -228,7 +231,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   const token = user.instagramAccessToken;
 
-  // RATE LIMIT
+  // RATE LIMIT (Plan-based monthly cap)
   const rateCheck = await checkRateLimit(userId, user.plan);
   if (!rateCheck.allowed) {
     console.log(`[Worker] Rate limited user ${userId}: ${rateCheck.reason}`);
@@ -239,11 +242,31 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     return { success: false, reason: rateCheck.reason };
   }
 
+  // ANTI-BAN: Hourly DM rate cap (Meta limit: 200/hr, we cap at 150)
+  const hourlyCheck = await checkHourlyDMLimit(userId);
+  if (!hourlyCheck.allowed) {
+    console.warn(`[Worker] ⚠️ Hourly DM cap reached for ${userId}: ${hourlyCheck.count}/${hourlyCheck.limit}`);
+    await supabase.from('analytics_events').insert({
+      user_id: userId, event_type: 'hourly_dm_cap_hit',
+      metadata: { count: hourlyCheck.count, limit: hourlyCheck.limit, automation_id: automationId }
+    });
+    return { success: false, reason: `Hourly DM cap reached (${hourlyCheck.count}/${hourlyCheck.limit})` };
+  }
+
+  // ANTI-BAN: Per-user 24h dedup (Meta 2026 rule: max 1 DM per user per 24h from triggers)
+  if (job.name === 'send') {
+    const alreadySent = await isDMSentToUser(userId, recipientId);
+    if (alreadySent) {
+      console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
+      return { success: false, reason: 'DM already sent to this user within 24h' };
+    }
+  }
+
   // ---- JOB TYPE: SEND (Initial trigger from comment match) ----
   if (job.name === 'send') {
     const commentId = job.data.commentId;
-    const initialText = automation.initial_dm_text || 'Thanks for your interest! Here is the link 🔗';
-    let dmText = initialText;
+    const initialText = spinDMGreeting(automation.initial_dm_text);
+    const dmText = initialText;
 
     const isPro = user.plan === 'PRO' || user.plan === 'ELITE';
     const usesComplexFlow = isPro && (automation.follow_gate_enabled || (Array.isArray(automation.lead_capture_fields) && automation.lead_capture_fields.length > 0));
@@ -634,16 +657,15 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-// @ts-expect-error type mismatch between bullmq and global ioredis
 }, { connection: redis });
 
 
 // =============================================
-// 2. COMMENT REPLY WORKER
+// 2. COMMENT REPLY WORKER (Anti-Ban Shield)
 // =============================================
 export const commentWorker = new Worker('comment-reply', async (job: Job<AutomationJob>) => {
   console.log(`[Worker] Processing Comment Reply: ${job.id}`);
-  const { userId, commentId, automationId } = job.data;
+  const { userId, commentId, automationId, recipientId, commenterUsername } = job.data;
 
   const { data: user } = await supabase
     .from('users')
@@ -653,11 +675,22 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
 
   const { data: automation } = await supabase
     .from('automations')
-    .select('reply_template, dm_link, dm_message, dm_links')
+    .select('reply_template, dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
     .eq('id', automationId)
     .single();
 
   if (!user?.instagramAccessToken || !automation || !commentId) throw new Error('Missing Data');
+
+  // ANTI-BAN: Hourly comment reply rate cap (Meta limit: 750/hr, we cap at 600)
+  const hourlyCommentCheck = await checkHourlyCommentLimit(userId);
+  if (!hourlyCommentCheck.allowed) {
+    console.warn(`[Worker Comment] ⚠️ Hourly comment cap reached for ${userId}: ${hourlyCommentCheck.count}/${hourlyCommentCheck.limit}`);
+    await supabase.from('analytics_events').insert({
+      user_id: userId, event_type: 'hourly_comment_cap_hit',
+      metadata: { count: hourlyCommentCheck.count, limit: hourlyCommentCheck.limit }
+    });
+    return { success: false, reason: `Hourly comment cap reached (${hourlyCommentCheck.count}/${hourlyCommentCheck.limit})` };
+  }
 
   const rateCheck = await checkRateLimit(userId, user.plan);
   if (!rateCheck.allowed) {
@@ -668,8 +701,8 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
     return { success: false, reason: rateCheck.reason };
   }
 
-  // Use reply template as configured by the user
-  const replyText = automation.reply_template || 'Check your DM! 👀';
+  // ANTI-BAN: Use reply spinner instead of identical text
+  const replyText = spinCommentReply(automation.reply_template);
 
   const raw = await InstagramAPI.replyToComment(commentId, replyText, user.instagramAccessToken);
   if (raw.error) {
@@ -678,6 +711,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
       user_id: userId, event_type: 'comment_reply_failed',
       metadata: { error: raw.error.message, comment_id: commentId }
     });
+    // Comment reply failed — DO NOT dispatch DM (Violation 7 fix)
     throw new Error(raw.error.message);
   }
 
@@ -686,8 +720,29 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
     metadata: { reply_id: raw.id, comment_id: commentId }
   });
 
+  // ANTI-BAN: Chain DM job ONLY after comment reply succeeds (Violation 7 fix)
+  // DM is dispatched with a random delay (10-60s) for natural timing
+  if (recipientId) {
+    try {
+      await dmQueue.add('send', {
+        userId,
+        automationId,
+        recipientId,
+        commenterUsername: commenterUsername || '',
+        commentId,
+      }, { delay: getRandomDelay(10000, 60000) });
+      console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
+
+      await supabase.from('analytics_events').insert({
+        user_id: userId, event_type: 'dm_dispatched',
+        metadata: { automation_id: automationId, recipient_id: recipientId, source: 'comment_chain' }
+      });
+    } catch (e) {
+      console.error(`[Worker Comment] Failed to chain DM job:`, e);
+    }
+  }
+
   return { success: true, replyId: raw.id };
-// @ts-expect-error type mismatch between bullmq and global ioredis
 }, { connection: redis });
 
 // Error Logging

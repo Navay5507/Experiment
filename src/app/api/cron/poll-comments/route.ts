@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
-import { isCommentProcessed } from '@/lib/queue/dedup';
+import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
 
 /**
  * GET /api/cron/poll-comments
@@ -131,19 +131,17 @@ export async function GET() {
               commentId: comment.id,
               userId: user.id,
               automationId: automation.id,
+              recipientId: comment.from?.id,
+              commenterUsername: comment.username,
               replyText: automation.reply_template || 'Check your DM! 👀',
-            });
-            console.log(`[Poll] ✅ Comment reply job queued for comment ${comment.id}`);
+            }, { delay: getRandomDelay(5000, 45000) });
+            console.log(`[Poll] ✅ Comment reply job queued with delay for comment ${comment.id}`);
 
             // 8. Queue DM job (only if we have from.id for DM targeting)
             if (comment.from?.id) {
-              await dmQueue.add('send', {
-                userId: user.id,
-                automationId: automation.id,
-                recipientId: comment.from.id,
-                commentId: comment.id,
-              });
-              console.log(`[Poll] ✅ DM send job queued for user ${comment.from.id}`);
+              // DM is now chained from the comment worker after success
+              // No standalone DM dispatch here for standard comments
+              console.log(`[Poll] ✅ DM will be chained from comment worker for user ${comment.from.id}`);
 
               await supabase.from('analytics_events').insert({
                 user_id: user.id,
@@ -151,7 +149,7 @@ export async function GET() {
                 metadata: {
                   recipient_id: comment.from.id,
                   automation_id: automation.id,
-                  source: 'poll',
+                  source: 'poll_comment_chain',
                 },
               });
             }
