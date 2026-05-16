@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X } from "lucide-react";
+import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag } from "lucide-react";
 import styles from "./dashboard.module.css";
 import { useState, useEffect } from "react";
 
@@ -95,6 +95,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} onNavigate={onClose} />
         <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} onNavigate={onClose} />
         <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} onNavigate={onClose} />
+        <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={isActive('/dashboard/store')} onNavigate={onClose} />
         <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
         <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={isActive('/dashboard/referral')} onNavigate={onClose} />
         <NavItem href="/dashboard/logs" icon={Activity} label="System Logs" isActive={isActive('/dashboard/logs')} onNavigate={onClose} />

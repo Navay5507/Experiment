@@ -1,0 +1,242 @@
+.checkoutPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse at top, rgba(99,102,241,0.08) 0%, #0a0a0a 60%);
+}
+
+.checkoutCard {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(22, 26, 35, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.coverImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.coverPlaceholder {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardBody {
+  padding: 2rem;
+}
+
+.sellerRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.productTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.productDescription {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.priceTag {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 1.25rem 0;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.formInput:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.buyBtn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.buyBtn:hover {
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+.buyBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.freeBtn {
+  composes: buyBtn;
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.freeBtn:hover {
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+}
+
+.secureNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+
+.successState {
+  text-align: center;
+  padding: 2rem;
+}
+
+.successIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.successTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.successText {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin-bottom: 1.5rem;
+}
+
+.deliveryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.deliveryLink:hover {
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+}
+
+.notFound {
+  text-align: center;
+  padding: 3rem;
+}
+
+.poweredBy {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.65rem;
+  color: #4b5563;
+}
+
+.poweredBy a {
+  color: #6366f1;
+  text-decoration: none;
+}
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #6366f1;
+}
+
+@media (max-width: 480px) {
+  .checkoutPage {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .cardBody {
+    padding: 1.5rem;
+  }
+
+  .productTitle {
+    font-size: 1.25rem;
+  }
+
+  .priceTag {
+    font-size: 1.5rem;
+  }
+}
