@@ -103,7 +103,7 @@
 }
 
 .toggled {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--primary);
 }
 
 .toggleThumb {
@@ -191,7 +191,7 @@
   top: -12px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--primary);
   color: white;
   padding: 0.25rem 1rem;
   border-radius: 9999px;
@@ -282,7 +282,7 @@
 
 .upgradeBtn {
   width: 100%;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--primary);
   color: #fff;
   border: none;
   padding: 1rem;

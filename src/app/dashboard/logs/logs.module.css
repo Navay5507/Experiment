@@ -84,7 +84,7 @@
 .avatar {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  background: var(--primary);
   border-radius: 50%;
   flex-shrink: 0;
 }

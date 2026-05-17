@@ -74,7 +74,7 @@
 
 .upgradeLink {
   margin-left: auto;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--primary);
   color: white;
   padding: 0.6rem 1.25rem;
   border-radius: 8px;

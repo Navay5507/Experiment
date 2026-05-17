@@ -58,7 +58,7 @@ body {
 }
 
 .premium-btn {
-  background: linear-gradient(135deg, #6366F1, #22D3EE);
+  background: var(--primary);
   border-radius: 999px;
   padding: 14px 28px;
   color: #fff;
