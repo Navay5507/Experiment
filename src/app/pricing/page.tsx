@@ -207,263 +207,266 @@ export default function PricingPage() {
   const currentRate = rates[currency];
 
   return (
-    <main className={styles.pricingContainer} style={{ position: 'relative' }}>
-      <button onClick={() => router.back()} style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', cursor: 'pointer', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '8px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, backdropFilter: 'blur(10px)' }}>
-        ← Go Back
-      </button>
-      <div className={styles.blob} />
-      <header className={styles.header}>
-        <h1 className={styles.title}>Simple, transparent pricing</h1>
-        <p className={styles.subtitle}>Unlock AutoDrop&apos;s full potential and convert your audience into revenue.</p>
-      </header>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1 }}>
+        <button onClick={() => router.back()} style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', cursor: 'pointer', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '8px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, backdropFilter: 'blur(10px)' }}>
+          ← Go Back
+        </button>
+        <div className={styles.blob} />
+        <header className={styles.header}>
+          <h1 className={styles.title}>Simple, transparent pricing</h1>
+          <p className={styles.subtitle}>Unlock AutoDrop&apos;s full potential and convert your audience into revenue.</p>
+        </header>
 
-      <div className={styles.controlsRow}>
-        
-        {/* Billing Toggle */}
-        <div className={styles.toggleWrapper}>
-          <span className={`${styles.toggleLabel} ${!isAnnual ? styles.activeLabel : ''}`}>Monthly</span>
-          <button 
-            type="button" 
-            className={`${styles.toggleBtn} ${isAnnual ? styles.toggled : ''}`}
-            onClick={() => setIsAnnual(!isAnnual)}
-          >
-            <div className={styles.toggleThumb} />
-          </button>
-          <span className={`${styles.toggleLabel} ${isAnnual ? styles.activeLabel : ''}`}>
-            Annually <span className={styles.discountBadge}>-40%</span>
-          </span>
-        </div>
-
-        {/* Currency Selector */}
-        <div className={styles.currencyWrapper}>
-          <label htmlFor="currency" className={styles.currencyLabel}>Currency:</label>
-          <select 
-            id="currency" 
-            className={styles.currencySelect}
-            value={currency} 
-            onChange={(e) => setCurrency(e.target.value as Currency)}
-          >
-            <option value="INR">INR (₹) - India</option>
-            <option value="USD">USD ($) - United States</option>
-            <option value="AUD">AUD (A$) - Australia</option>
-            <option value="CAD">CAD (C$) - Canada</option>
-            <option value="EUR">EUR (€) - Ireland & EU</option>
-            <option value="GBP">GBP (£) - United Kingdom</option>
-            <option value="NGN">NGN (₦) - Nigeria</option>
-            <option value="NZD">NZD (NZ$) - New Zealand</option>
-            <option value="SGD">SGD (S$) - Singapore</option>
-            <option value="ZAR">ZAR (R) - South Africa</option>
-          </select>
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        {/* Free Plan */}
-        <div className={styles.card}>
-          <h3 className={styles.planName}>Free Starter</h3>
-          <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
-          <p className={styles.description}>Test the waters with basic comment replies.</p>
-          <ul className={styles.features}>
-            <li>1 Active Automation</li>
-            <li>Unlimited DMs & Comments</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
-            <li>Basic Analytics</li>
-          </ul>
-          <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
-        </div>
-
-        {/* Pro Plan */}
-        <div className={`${styles.card} ${styles.proCard}`}>
-          <div className={styles.badge}>Most Popular</div>
-          <h3 className={styles.planName}>Growth Pro</h3>
-          <div className={styles.price}>
-            {activePromo && (
-              <span style={{ textDecoration: 'line-through', fontSize: '1.2rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
-                {formatPrice(getPrice(currentRate.pro, false))}
-              </span>
-            )}
-            {formatPrice(getPrice(currentRate.pro))}
-            <span className={styles.period}>/mo</span>
+        <div className={styles.controlsRow}>
+          
+          {/* Billing Toggle */}
+          <div className={styles.toggleWrapper}>
+            <span className={`${styles.toggleLabel} ${!isAnnual ? styles.activeLabel : ''}`}>Monthly</span>
+            <button 
+              type="button" 
+              className={`${styles.toggleBtn} ${isAnnual ? styles.toggled : ''}`}
+              onClick={() => setIsAnnual(!isAnnual)}
+            >
+              <div className={styles.toggleThumb} />
+            </button>
+            <span className={`${styles.toggleLabel} ${isAnnual ? styles.activeLabel : ''}`}>
+              Annually <span className={styles.discountBadge}>-40%</span>
+            </span>
           </div>
-          {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
-          <p className={styles.description}>Full funnel automation to capture leads and scale.</p>
-          <ul className={styles.features}>
-            <li>Unlimited Automations</li>
-            <li>Unlimited DMs</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
-            <li>Follow-Gate Links</li>
-            <li>Lead Capture (Email/Phone)</li>
-          </ul>
-          {userPlan === 'PRO' || userPlan === 'ELITE' ? (
-             <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
-          ) : (
-             <div style={{ marginTop: '1.5rem', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                 <input 
-                   type="text" 
-                   placeholder="Promo Code" 
-                   value={promoCodeInput}
-                   onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
-                   style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', background: 'rgba(0,0,0,0.2)', color: 'white', textTransform: 'uppercase' }}
-                 />
+
+          {/* Currency Selector */}
+          <div className={styles.currencyWrapper}>
+            <label htmlFor="currency" className={styles.currencyLabel}>Currency:</label>
+            <select 
+              id="currency" 
+              className={styles.currencySelect}
+              value={currency} 
+              onChange={(e) => setCurrency(e.target.value as Currency)}
+            >
+              <option value="INR">INR (₹) - India</option>
+              <option value="USD">USD ($) - United States</option>
+              <option value="AUD">AUD (A$) - Australia</option>
+              <option value="CAD">CAD (C$) - Canada</option>
+              <option value="EUR">EUR (€) - Ireland & EU</option>
+              <option value="GBP">GBP (£) - United Kingdom</option>
+              <option value="NGN">NGN (₦) - Nigeria</option>
+              <option value="NZD">NZD (NZ$) - New Zealand</option>
+              <option value="SGD">SGD (S$) - Singapore</option>
+              <option value="ZAR">ZAR (R) - South Africa</option>
+            </select>
+          </div>
+        </div>
+
+        <div className={styles.grid}>
+          {/* Free Plan */}
+          <div className={styles.card}>
+            <h3 className={styles.planName}>Free Starter</h3>
+            <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
+            <p className={styles.description}>Test the waters with basic comment replies.</p>
+            <ul className={styles.features}>
+              <li>1 Active Automation</li>
+              <li>Unlimited DMs & Comments</li>
+              <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
+              <li>Basic Analytics</li>
+            </ul>
+            <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
+          </div>
+
+          {/* Pro Plan */}
+          <div className={`${styles.card} ${styles.proCard}`}>
+            <div className={styles.badge}>Most Popular</div>
+            <h3 className={styles.planName}>Growth Pro</h3>
+            <div className={styles.price}>
+              {activePromo && (
+                <span style={{ textDecoration: 'line-through', fontSize: '1.2rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
+                  {formatPrice(getPrice(currentRate.pro, false))}
+                </span>
+              )}
+              {formatPrice(getPrice(currentRate.pro))}
+              <span className={styles.period}>/mo</span>
+            </div>
+            {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
+            <p className={styles.description}>Full funnel automation to capture leads and scale.</p>
+            <ul className={styles.features}>
+              <li>Unlimited Automations</li>
+              <li>Unlimited DMs</li>
+              <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
+              <li>Follow-Gate Links</li>
+              <li>Lead Capture (Email/Phone)</li>
+            </ul>
+            {userPlan === 'PRO' || userPlan === 'ELITE' ? (
+               <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
+            ) : (
+               <div style={{ marginTop: '1.5rem', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                 <div style={{ display: 'flex', gap: '0.5rem' }}>
+                   <input 
+                     type="text" 
+                     placeholder="Promo Code" 
+                     value={promoCodeInput}
+                     onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
+                     style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', background: 'rgba(0,0,0,0.2)', color: 'white', textTransform: 'uppercase' }}
+                   />
+                   <button 
+                     onClick={handleApplyPromo} 
+                     disabled={promoLoading || !promoCodeInput.trim()}
+                     style={{ padding: '0 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 600, cursor: promoCodeInput.trim() ? 'pointer' : 'not-allowed' }}
+                   >
+                     {promoLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                   </button>
+                 </div>
+                 {promoMessage.text && (
+                   <div style={{ fontSize: '0.85rem', color: promoMessage.type === 'error' ? '#ef4444' : '#10b981', textAlign: 'left' }}>
+                     {promoMessage.text}
+                   </div>
+                 )}
                  <button 
-                   onClick={handleApplyPromo} 
-                   disabled={promoLoading || !promoCodeInput.trim()}
-                   style={{ padding: '0 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 600, cursor: promoCodeInput.trim() ? 'pointer' : 'not-allowed' }}
+                    onClick={handleRazorpayCheckout}
+                    disabled={loading}
+                    className={styles.upgradeBtn} 
+                    style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', marginTop: '0.5rem' }}
                  >
-                   {promoLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
+                    {loading ? <Loader2 className="animate-spin" size={18} /> : null}
+                    {loading ? 'Processing...' : 'Upgrade Now'}
                  </button>
                </div>
-               {promoMessage.text && (
-                 <div style={{ fontSize: '0.85rem', color: promoMessage.type === 'error' ? '#ef4444' : '#10b981', textAlign: 'left' }}>
-                   {promoMessage.text}
-                 </div>
-               )}
-               <button 
-                  onClick={handleRazorpayCheckout}
-                  disabled={loading}
-                  className={styles.upgradeBtn} 
-                  style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', marginTop: '0.5rem' }}
-               >
-                  {loading ? <Loader2 className="animate-spin" size={18} /> : null}
-                  {loading ? 'Processing...' : 'Upgrade Now'}
-               </button>
-             </div>
-          )}
-        </div>
-
-        {/* Elite Plan */}
-        <div className={styles.card} style={{ opacity: 0.6, pointerEvents: 'none' }}>
-          <div style={{ position: 'absolute', top: 12, right: 12, fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 600 }}>Coming Soon</div>
-          <h3 className={styles.planName}>Elite AI</h3>
-          <div className={styles.price} style={{ fontSize: '2rem' }}>
-            (Upcoming)
+            )}
           </div>
-          <div className={styles.billedYearly} style={{ visibility: 'hidden' }}>Placeholder</div>
-          <p className={styles.description}>Replace manual replies with an intelligent AI clone.</p>
-          <ul className={styles.features}>
-            <li>Everything in Pro</li>
-            <li>Unlimited DMs</li>
-            <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
-            <li>Intelligent AI Responses</li>
-            <li>Custom Knowledge Base</li>
-            <li>Human-Review Fallback</li>
-          </ul>
-          <button className={styles.primaryBtn} disabled style={{ opacity: 0.6 }}>Coming Soon</button>
-        </div>
-      </div>
 
-      <section className={styles.comparisonSection}>
-        <h2 className={styles.comparisonTitle}>Compare Plans</h2>
-        <div className={styles.tableWrapper}>
-          <table className={styles.compareTable}>
-            <thead>
-              <tr>
-                <th>Features</th>
-                <th>Free Starter</th>
-                <th>Growth Pro</th>
-                <th>Elite AI</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className={styles.featureRow}>
-                <td colSpan={4} className={styles.featureCategory}>Core Automations</td>
-              </tr>
-              <tr>
-                <td>Active Automations</td>
-                <td>1</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-              </tr>
-              <tr>
-                <td>Monthly DMs & Comments</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-                <td>Unlimited</td>
-              </tr>
-              <tr>
-                <td>Post & Reel Comments</td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-              <tr>
-                <td>Story Replies</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-
-              <tr className={styles.featureRow}>
-                <td colSpan={4} className={styles.featureCategory}>Lead Generation & Features</td>
-              </tr>
-              <tr>
-                <td>Creator Marketplace</td>
-                <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
-                <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
-                <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
-              </tr>
-              <tr>
-                <td>Lead Capture (Email/Phone)</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-              <tr>
-                <td>Follow-Gate Verification</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-              <tr className={styles.featureRow}>
-                <td colSpan={4} className={styles.featureCategory}>AI Capabilities</td>
-              </tr>
-              <tr>
-                <td>Keyword Triggers</td>
-                <td>Exact Match</td>
-                <td>Exact & Fuzzy</td>
-                <td>Semantic AI Match</td>
-              </tr>
-              <tr>
-                <td>Auto AI Responses</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-              <tr>
-                <td>Knowledge Base integration</td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCross}><Minus size={20} /></span></td>
-                <td><span className={styles.iconCheck}><Check size={20} /></span></td>
-              </tr>
-            </tbody>
-          </table>
+          {/* Elite Plan */}
+          <div className={styles.card} style={{ opacity: 0.6, pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', top: 12, right: 12, fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 600 }}>Coming Soon</div>
+            <h3 className={styles.planName}>Elite AI</h3>
+            <div className={styles.price} style={{ fontSize: '2rem' }}>
+              (Upcoming)
+            </div>
+            <div className={styles.billedYearly} style={{ visibility: 'hidden' }}>Placeholder</div>
+            <p className={styles.description}>Replace manual replies with an intelligent AI clone.</p>
+            <ul className={styles.features}>
+              <li>Everything in Pro</li>
+              <li>Unlimited DMs</li>
+              <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
+              <li>Intelligent AI Responses</li>
+              <li>Custom Knowledge Base</li>
+              <li>Human-Review Fallback</li>
+            </ul>
+            <button className={styles.primaryBtn} disabled style={{ opacity: 0.6 }}>Coming Soon</button>
+          </div>
         </div>
-      </section>
+
+        <section className={styles.comparisonSection}>
+          <h2 className={styles.comparisonTitle}>Compare Plans</h2>
+          <div className={styles.tableWrapper}>
+            <table className={styles.compareTable}>
+              <thead>
+                <tr>
+                  <th>Features</th>
+                  <th>Free Starter</th>
+                  <th>Growth Pro</th>
+                  <th>Elite AI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className={styles.featureRow}>
+                  <td colSpan={4} className={styles.featureCategory}>Core Automations</td>
+                </tr>
+                <tr>
+                  <td>Active Automations</td>
+                  <td>1</td>
+                  <td>Unlimited</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td>Monthly DMs & Comments</td>
+                  <td>Unlimited</td>
+                  <td>Unlimited</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td>Post & Reel Comments</td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+                <tr>
+                  <td>Story Replies</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+
+                <tr className={styles.featureRow}>
+                  <td colSpan={4} className={styles.featureCategory}>Lead Generation & Features</td>
+                </tr>
+                <tr>
+                  <td>Creator Marketplace</td>
+                  <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
+                  <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
+                  <td><span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>INCLUDED</span></td>
+                </tr>
+                <tr>
+                  <td>Lead Capture (Email/Phone)</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+                <tr>
+                  <td>Follow-Gate Verification</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+                <tr className={styles.featureRow}>
+                  <td colSpan={4} className={styles.featureCategory}>AI Capabilities</td>
+                </tr>
+                <tr>
+                  <td>Keyword Triggers</td>
+                  <td>Exact Match</td>
+                  <td>Exact & Fuzzy</td>
+                  <td>Semantic AI Match</td>
+                </tr>
+                <tr>
+                  <td>Auto AI Responses</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+                <tr>
+                  <td>Knowledge Base integration</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
 
       {/* FAQ SECTION */}
-      <section className={styles.faqSection} style={{ maxWidth: '800px', margin: '4rem auto', padding: '0 2rem' }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem' }}>Frequently Asked Questions</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {[
-             { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
-             { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations and use Lead Capture / Follow-Gate features.' },
-             { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed AutoDrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
-          ].map((faq, idx) => (
-             <details key={idx} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
-                <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   {faq.q}
-                   <span style={{ opacity: 0.5 }}>▾</span>
-                </summary>
-                <p style={{ marginTop: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>{faq.a}</p>
-             </details>
-          ))}
+      <section style={{ width: '100%', background: '#000000', padding: '6rem 2rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', color: '#fff' }}>Frequently Asked Questions</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {[
+               { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
+               { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations and use Lead Capture / Follow-Gate features.' },
+               { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed AutoDrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
+            ].map((faq, idx) => (
+               <details key={idx} style={{ background: '#111318', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
+                  <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff' }}>
+                     {faq.q}
+                     <span style={{ opacity: 0.5 }}>▾</span>
+                  </summary>
+                  <p style={{ marginTop: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>{faq.a}</p>
+               </details>
+            ))}
+          </div>
         </div>
       </section>
 
-
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: 'var(--surface)', width: '100%', marginTop: 'auto' }}>
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: '#000000', width: '100%', marginTop: 'auto' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
@@ -508,6 +511,6 @@ export default function PricingPage() {
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
-    </main>
+    </div>
   );
 }

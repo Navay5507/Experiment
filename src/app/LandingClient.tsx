@@ -973,7 +973,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <TestimonialsSection />
 
       {/* FAQ SECTION */}
-      <section style={{ padding: '8rem 0', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+      <section style={{ padding: '8rem 0', background: '#000000', borderTop: '1px solid var(--border)' }}>
         <div className={styles.container} style={{ maxWidth: '800px' }}>
           <FadeIn>
              <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Frequently Asked Questions</h2>
