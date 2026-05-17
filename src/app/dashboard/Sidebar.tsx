@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag } from "lucide-react";
+import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag, GraduationCap } from "lucide-react";
 import styles from "./dashboard.module.css";
 import { useState, useEffect } from "react";
 
@@ -120,6 +120,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
           </AnimatePresence>
         </div>
         <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/learn" icon={GraduationCap} label="Learn" isActive={isActive('/dashboard/learn')} onNavigate={onClose} />
         <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={isActive('/dashboard/referral')} onNavigate={onClose} />
         <NavItem href="/dashboard/logs" icon={Activity} label="System Logs" isActive={isActive('/dashboard/logs')} onNavigate={onClose} />
         <NavItem href="/dashboard/settings" icon={Settings} label="Settings" isActive={isActive('/dashboard/settings')} onNavigate={onClose} />
