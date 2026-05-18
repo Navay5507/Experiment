@@ -3,6 +3,9 @@ import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
+// Boot workers in this process so queued jobs are actually consumed.
+// Vercel serverless: workers run during the after() window below.
+import '@/lib/queue/worker';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
 const APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
@@ -231,7 +234,7 @@ export async function POST(req: Request) {
                         commentId: commentId,
                         recipientId: commenterId,
                         commenterUsername,
-                      }, { delay: getRandomDelay(5000, 7200000) });
+                      }, { delay: getRandomDelay(5000, 25000) });
                       console.log('[Webhook] ✅ Comment reply job queued with random delay (DM will chain after success)');
                     } catch (e) { console.error('[Webhook] Comment queue error:', e); }
                   } else {
@@ -243,7 +246,7 @@ export async function POST(req: Request) {
                         recipientId: commenterId,
                         commenterUsername,
                         commentId: commentId,
-                      }, { delay: getRandomDelay(5000, 7200000) });
+                      }, { delay: getRandomDelay(5000, 25000) });
                       console.log('[Webhook] ✅ Live comment DM job queued with delay');
                     } catch (e) { console.error('[Webhook] Live DM queue error:', e); }
                   }
@@ -311,7 +314,7 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'follower',
-                        }, { delay: getRandomDelay(5000, 7200000) });
+                        }, { delay: getRandomDelay(5000, 25000) });
                         console.log('[Webhook] ✅ Story DM job queued with delay');
                       } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
                       break;
@@ -514,8 +517,10 @@ export async function POST(req: Request) {
       // Without this, Vercel freezes the process immediately after responding and
       // the worker never picks up the job.
       after(async () => {
+        // Keep alive long enough for all delayed jobs (max 25s delay) + processing time.
+        // Vercel Pro max function duration is 60s; we use 45s to stay within limits.
         console.log('[Webhook] after() → keeping alive for worker processing...');
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 45000));
         console.log('[Webhook] after() → done.');
       });
 

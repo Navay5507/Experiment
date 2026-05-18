@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
+// Boot workers so cron-triggered jobs are consumed in this same process
+import '@/lib/queue/worker';
 
 /**
  * GET /api/cron/poll-comments
@@ -85,15 +87,17 @@ export async function GET() {
                 continue;
             }
 
-            // Skip comments older than 2 hours — the webhook should have handled them already.
-            // This prevents the cron from re-processing old comments if Redis keys expire.
-            if (comment.timestamp) {
-              const commentAge = Date.now() - new Date(comment.timestamp).getTime();
-              const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
-              if (commentAge > TWO_HOURS_MS) {
-                continue;
+            // Skip comments older than 24 hours — Redis 7-day dedup handles idempotency.
+              // 2h cutoff was too aggressive: delayed jobs (up to 25s) would still mark comments
+              // as processed in Redis, but if the worker died the comment could never be re-tried
+              // since the cron would then reject it as "too old" on the next run.
+              if (comment.timestamp) {
+                const commentAge = Date.now() - new Date(comment.timestamp).getTime();
+                const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+                if (commentAge > TWENTY_FOUR_HOURS_MS) {
+                  continue;
+                }
               }
-            }
 
             const commentText = (comment.text || '').toLowerCase().trim();
             const matched = keywords.some((kw: string) =>
@@ -134,7 +138,7 @@ export async function GET() {
               recipientId: comment.from?.id,
               commenterUsername: comment.username,
               replyText: automation.reply_template || 'Check your DM! 👀',
-            }, { delay: getRandomDelay(5000, 7200000) });
+            }, { delay: getRandomDelay(5000, 25000) });
             console.log(`[Poll] ✅ Comment reply job queued with delay for comment ${comment.id}`);
 
             // 8. Queue DM job (only if we have from.id for DM targeting)
@@ -161,6 +165,8 @@ export async function GET() {
     }
 
     console.log(`[Poll] ✅ Poll complete. Checked ${totalPolled} comments, matched ${totalMatched}.`);
+    // Keep process alive so booted workers can consume queued jobs (max delay 25s + processing buffer)
+    await new Promise(resolve => setTimeout(resolve, 45000));
     return NextResponse.json({ polled: totalPolled, matched: totalMatched });
   } catch (err) {
     console.error('[Poll] Fatal error:', err);

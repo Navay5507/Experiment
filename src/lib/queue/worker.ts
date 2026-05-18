@@ -730,7 +730,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         recipientId,
         commenterUsername: commenterUsername || '',
         commentId,
-      }, { delay: getRandomDelay(5000, 7200000) });
+      }, { delay: getRandomDelay(5000, 25000) });
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
       await supabase.from('analytics_events').insert({
