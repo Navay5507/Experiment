@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
-import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
+import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
 // Boot workers so cron-triggered jobs are consumed in this same process
 import '@/lib/queue/worker';
 
@@ -134,6 +134,13 @@ export async function GET() {
               },
             });
 
+            // Get DM restriction TTL
+            const dmTTL = comment.from?.id ? await getDMRestrictionTTL(user.id, comment.from.id) : 0;
+            const baseDelay = dmTTL > 0 ? dmTTL * 1000 : 0;
+            if (dmTTL > 0) {
+              console.log(`[Poll] ⏳ DM limit active for ${comment.from?.id}. Delaying comment reply by ${dmTTL}s`);
+            }
+
             // 7. Queue comment reply job
             await commentQueue.add('comment-reply', {
               commentId: comment.id,
@@ -142,7 +149,7 @@ export async function GET() {
               recipientId: comment.from?.id,
               commenterUsername: comment.username,
               replyText: automation.reply_template || 'Check your DM! 👀',
-            }, { delay: getRandomDelay(5000, 25000) });
+            }, { delay: baseDelay + getRandomDelay(5000, 25000) });
             console.log(`[Poll] ✅ Comment reply job queued with delay for comment ${comment.id}`);
 
             // 8. Queue DM job (only if we have from.id for DM targeting)

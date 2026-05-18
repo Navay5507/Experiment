@@ -57,9 +57,12 @@ export async function isDMSentToUser(creatorUserId: string, recipientId: string)
 }
 
 /**
- * Gets the remaining time (in seconds) before the 24h DM limit expires for a user.
+ * Returns the remaining time (in seconds) that a user is restricted from receiving another DM.
+ * @param creatorUserId The AutoDrop user ID
+ * @param recipientId The Instagram IGSID
+ * @returns Seconds remaining (0 if no restriction)
  */
-export async function getDMSentTTL(creatorUserId: string, recipientId: string): Promise<number> {
+export async function getDMRestrictionTTL(creatorUserId: string, recipientId: string): Promise<number> {
   if (!creatorUserId || !recipientId) return 0;
   const key = `dm_sent:${creatorUserId}:${recipientId}`;
   const ttl = await redis.ttl(key);

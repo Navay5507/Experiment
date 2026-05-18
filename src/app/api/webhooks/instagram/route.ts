@@ -2,7 +2,7 @@ import { NextResponse, after } from 'next/server';
 import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
-import { isCommentProcessed, getRandomDelay } from '@/lib/queue/dedup';
+import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
 // Boot workers in this process so queued jobs are actually consumed.
 // Vercel serverless: workers run during the after() window below.
 import '@/lib/queue/worker';
@@ -223,6 +223,13 @@ export async function POST(req: Request) {
                     });
                   } catch (e) { console.error('[Webhook] Analytics insert error:', e); }
 
+                  // Get DM restriction TTL (if the user already got a DM in the last 24h, we delay this entire flow)
+                  const dmTTL = commenterId ? await getDMRestrictionTTL(user.id, commenterId) : 0;
+                  const baseDelay = dmTTL > 0 ? dmTTL * 1000 : 0;
+                  if (dmTTL > 0) {
+                    console.log(`[Webhook] ⏳ DM limit active for ${commenterId}. Delaying comment reply by ${dmTTL}s`);
+                  }
+
                   // Dispatch: Reply to comment publicly (Only for standard posts, not lives)
                   // ANTI-BAN: Comment reply is enqueued with random delay (5-45s)
                   // DM is NO LONGER dispatched here — it chains from the comment worker after success
@@ -234,8 +241,8 @@ export async function POST(req: Request) {
                         commentId: commentId,
                         recipientId: commenterId,
                         commenterUsername,
-                      }, { delay: getRandomDelay(5000, 25000) });
-                      console.log('[Webhook] ✅ Comment reply job queued with random delay (DM will chain after success)');
+                      }, { delay: baseDelay + getRandomDelay(5000, 25000) });
+                      console.log('[Webhook] ✅ Comment reply job queued with delay');
                     } catch (e) { console.error('[Webhook] Comment queue error:', e); }
                   } else {
                     // Live comments don't get public replies — dispatch DM directly with delay
@@ -246,7 +253,7 @@ export async function POST(req: Request) {
                         recipientId: commenterId,
                         commenterUsername,
                         commentId: commentId,
-                      }, { delay: getRandomDelay(5000, 25000) });
+                      }, { delay: baseDelay + getRandomDelay(5000, 25000) });
                       console.log('[Webhook] ✅ Live comment DM job queued with delay');
                     } catch (e) { console.error('[Webhook] Live DM queue error:', e); }
                   }
@@ -309,13 +316,15 @@ export async function POST(req: Request) {
                       storyMatched = true;
                       console.log(`[Webhook] 🎯 Story keyword match! automation: ${automation.id}`);
                       try {
+                        const dmTTL = await getDMRestrictionTTL(user.id, senderId);
+                        const baseDelay = dmTTL > 0 ? dmTTL * 1000 : 0;
                         await dmQueue.add('send', {
                           userId: user.id,
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'follower',
-                        }, { delay: getRandomDelay(5000, 25000) });
-                        console.log('[Webhook] ✅ Story DM job queued with delay');
+                        }, { delay: baseDelay + getRandomDelay(5000, 25000) });
+                        console.log(`[Webhook] ✅ Story DM job queued with delay (base: ${baseDelay}ms)`);
                       } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
                       break;
                     }

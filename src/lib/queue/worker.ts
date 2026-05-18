@@ -1,12 +1,12 @@
-import { Worker, Job, DelayedError } from 'bullmq';
+import { Worker, Job } from 'bullmq';
 import { redis } from './redis';
 import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
 import { InstagramAPI } from '../instagram/api';
 import { spinCommentReply, spinDMGreeting } from '../instagram/reply-spinner';
-import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getDMSentTTL, getRandomDelay } from './dedup';
-import { dmQueue } from './queues';
+import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getRandomDelay, getDMRestrictionTTL } from './dedup';
+import { dmQueue, commentQueue } from './queues';
 // =============================================
 // JOB INTERFACES
 // =============================================
@@ -18,6 +18,7 @@ interface AutomationJob {
   messageText?: string;
   quickReplyPayload?: string;
   commenterUsername?: string;
+  skipDedup?: boolean;
 }
 
 // =============================================
@@ -254,19 +255,19 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
   }
 
   // ANTI-BAN: Per-user 24h dedup (Meta 2026 rule: max 1 DM per user per 24h from triggers)
-  if (job.name === 'send') {
-      const dmTtl = await getDMSentTTL(userId, recipientId);
-      if (dmTtl > 0) {
-        const delayMs = (dmTtl * 1000) + getRandomDelay(5000, 25000);
-        console.log(`[Worker DM] ⏸️ Delaying DM to ${recipientId} by ${Math.round(delayMs / 1000)}s to respect 24h limit`);
-        throw new DelayedError(Date.now() + delayMs);
+  if (!job.data.skipDedup) {
+    const dmAlreadySent = await isDMSentToUser(userId, recipientId);
+    if (dmAlreadySent) {
+      console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
+      // If DM is triggered directly (e.g. story reply), requeue it for when the limit lifts
+      const ttl = await getDMRestrictionTTL(userId, recipientId);
+      if (ttl > 0) {
+        console.log(`[Worker] ⏳ Re-queueing DM job with ${ttl}s delay`);
+        await dmQueue.add(job.name, job.data, { delay: ttl * 1000 + getRandomDelay(5000, 25000) });
+        return { success: false, reason: `delayed for ${ttl}s due to 24h limit` };
       }
-      
-      const alreadySent = await isDMSentToUser(userId, recipientId);
-      if (alreadySent) {
-        console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
-        return { success: false, reason: 'DM already sent to this user within 24h' };
-      }
+      return { success: false, reason: 'dm limit hit, no ttl' };
+    }
   }
 
   // ---- JOB TYPE: SEND (Initial trigger from comment match) ----
@@ -708,13 +709,17 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
     return { success: false, reason: rateCheck.reason };
   }
 
-  // 24h DM Limit Check — Delay comment reply if recipient has already been DM'd in last 24h
+  // ANTI-BAN: 24-hour DM block check BEFORE posting comment reply.
   if (recipientId) {
-    const dmTtl = await getDMSentTTL(userId, recipientId);
-    if (dmTtl > 0) {
-      const delayMs = (dmTtl * 1000) + getRandomDelay(5000, 25000);
-      console.log(`[Worker Comment] ⏸️ Delaying comment reply for ${recipientId} by ${Math.round(delayMs / 1000)}s to respect 24h DM limit`);
-      throw new DelayedError(Date.now() + delayMs);
+    const dmAlreadySent = await isDMSentToUser(userId, recipientId);
+    if (dmAlreadySent) {
+      // User is currently blocked from receiving DMs. Re-queue this comment reply for later.
+      const ttl = await getDMRestrictionTTL(userId, recipientId);
+      if (ttl > 0) {
+        console.log(`[Worker Comment] ⏳ User blocked for ${ttl}s. Re-queueing comment reply for ${recipientId}.`);
+        await commentQueue.add(job.name, job.data, { delay: ttl * 1000 + getRandomDelay(5000, 25000) });
+        return { success: false, reason: `re-queued for ${ttl}s due to 24h DM limit` };
+      }
     }
   }
 
@@ -728,6 +733,9 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
       user_id: userId, event_type: 'comment_reply_failed',
       metadata: { error: raw.error.message, comment_id: commentId }
     });
+    // Release the lock so they aren't blocked from future tries due to API failure
+    if (recipientId) await redis.del(`dm_sent:${userId}:${recipientId}`);
+    
     // Comment reply failed — DO NOT dispatch DM (Violation 7 fix)
     throw new Error(raw.error.message);
   }
@@ -747,6 +755,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         recipientId,
         commenterUsername: commenterUsername || '',
         commentId,
+        skipDedup: true, // Bypass check because commentWorker already claimed the lock!
       }, { delay: getRandomDelay(5000, 25000) });
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
