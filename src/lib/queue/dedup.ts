@@ -56,6 +56,16 @@ export async function isDMSentToUser(creatorUserId: string, recipientId: string)
   return true; // Already sent within 24h — SKIP
 }
 
+/**
+ * Gets the remaining time (in seconds) before the 24h DM limit expires for a user.
+ */
+export async function getDMSentTTL(creatorUserId: string, recipientId: string): Promise<number> {
+  if (!creatorUserId || !recipientId) return 0;
+  const key = `dm_sent:${creatorUserId}:${recipientId}`;
+  const ttl = await redis.ttl(key);
+  return ttl > 0 ? ttl : 0;
+}
+
 // =============================================
 // HOURLY RATE CAPS
 // Meta 2026 Limits:

@@ -84,6 +84,7 @@ export async function GET() {
           for (const comment of comments) {
             // Deduplicate via Redis
             if (await isCommentProcessed(comment.id)) {
+                console.log(`[Poll] ⏩ Skipping already processed comment ${comment.id}`);
                 continue;
             }
 
@@ -95,6 +96,7 @@ export async function GET() {
                 const commentAge = Date.now() - new Date(comment.timestamp).getTime();
                 const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
                 if (commentAge > TWENTY_FOUR_HOURS_MS) {
+                  console.log(`[Poll] ⏩ Skipping comment ${comment.id} because it is older than 24h (${Math.round(commentAge/3600000)}h old). Text: "${comment.text}"`);
                   continue;
                 }
               }
@@ -103,6 +105,8 @@ export async function GET() {
             const matched = keywords.some((kw: string) =>
               commentText.includes(kw.toLowerCase())
             );
+
+            console.log(`[Poll] Comment ${comment.id} text: "${commentText}", keywords: [${keywords}], matched: ${matched}`);
 
             if (!matched) continue;
 

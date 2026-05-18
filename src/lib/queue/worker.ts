@@ -1,11 +1,11 @@
-import { Worker, Job } from 'bullmq';
+import { Worker, Job, DelayedError } from 'bullmq';
 import { redis } from './redis';
 import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
 import { InstagramAPI } from '../instagram/api';
 import { spinCommentReply, spinDMGreeting } from '../instagram/reply-spinner';
-import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getRandomDelay } from './dedup';
+import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getDMSentTTL, getRandomDelay } from './dedup';
 import { dmQueue } from './queues';
 // =============================================
 // JOB INTERFACES
@@ -255,11 +255,18 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   // ANTI-BAN: Per-user 24h dedup (Meta 2026 rule: max 1 DM per user per 24h from triggers)
   if (job.name === 'send') {
-    const alreadySent = await isDMSentToUser(userId, recipientId);
-    if (alreadySent) {
-      console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
-      return { success: false, reason: 'DM already sent to this user within 24h' };
-    }
+      const dmTtl = await getDMSentTTL(userId, recipientId);
+      if (dmTtl > 0) {
+        const delayMs = (dmTtl * 1000) + getRandomDelay(5000, 25000);
+        console.log(`[Worker DM] ⏸️ Delaying DM to ${recipientId} by ${Math.round(delayMs / 1000)}s to respect 24h limit`);
+        throw new DelayedError(Date.now() + delayMs);
+      }
+      
+      const alreadySent = await isDMSentToUser(userId, recipientId);
+      if (alreadySent) {
+        console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
+        return { success: false, reason: 'DM already sent to this user within 24h' };
+      }
   }
 
   // ---- JOB TYPE: SEND (Initial trigger from comment match) ----
@@ -699,6 +706,16 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
       metadata: { reason: rateCheck.reason }
     });
     return { success: false, reason: rateCheck.reason };
+  }
+
+  // 24h DM Limit Check — Delay comment reply if recipient has already been DM'd in last 24h
+  if (recipientId) {
+    const dmTtl = await getDMSentTTL(userId, recipientId);
+    if (dmTtl > 0) {
+      const delayMs = (dmTtl * 1000) + getRandomDelay(5000, 25000);
+      console.log(`[Worker Comment] ⏸️ Delaying comment reply for ${recipientId} by ${Math.round(delayMs / 1000)}s to respect 24h DM limit`);
+      throw new DelayedError(Date.now() + delayMs);
+    }
   }
 
   // ANTI-BAN: Use reply spinner instead of identical text
