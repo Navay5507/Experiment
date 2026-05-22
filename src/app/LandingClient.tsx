@@ -309,7 +309,7 @@ const HowItWorksInteractive = () => {
          <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem' }}>
             
             {/* Step 1 */}
-            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 1</div>
@@ -318,14 +318,14 @@ const HowItWorksInteractive = () => {
                   </FadeIn>
                </div>
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
-                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                  <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step1 />
                   </motion.div>
                </div>
-            </motion.div>
+            </div>
 
             {/* Step 2 */}
-            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row-reverse', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'row-reverse', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn delay={0.1}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 2</div>
@@ -334,14 +334,14 @@ const HowItWorksInteractive = () => {
                   </FadeIn>
                </div>
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
-                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                  <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step2 />
                   </motion.div>
                </div>
-            </motion.div>
+            </div>
 
             {/* Step 3 */}
-            <motion.div initial={{opacity:0, y:50}} whileInView={{opacity:1, y:0}} viewport={{once:true, margin:"-10%"}} transition={{duration:0.8}} style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn delay={0.2}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 3</div>
@@ -350,11 +350,11 @@ const HowItWorksInteractive = () => {
                   </FadeIn>
                </div>
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
-                  <motion.div initial={{opacity:0, scale:0.95}} whileInView={{opacity:1, scale:1}} viewport={{ margin: "-10%" }} transition={{duration:0.6}} style={{width:'100%', display:'flex', justifyContent:'center'}}>
+                  <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step3 />
                   </motion.div>
                </div>
-            </motion.div>
+            </div>
 
          </div>
       </div>
