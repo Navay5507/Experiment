@@ -168,7 +168,8 @@ export default async function SettingsPage() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
+      {/* SECTION 1: Plan & Connections Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
          
          {/* Plan & Billing */}
          <div className={styles.card}>
@@ -273,38 +274,73 @@ export default async function SettingsPage() {
               </a>
             )}
          </div>
+      </div>
 
-         {/* Danger Zone */}
-         <div className={styles.card} style={{ border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.02)' }}>
-            <div className={styles.sectionTitle} style={{ color: '#ef4444' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><AlertTriangle size={20}/> Danger Zone</span></div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-               Destructive actions that will halt all automation pipelines.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-               <ConfirmForm message="Clear all pending automation jobs? This will stop any scheduled DMs from being sent." action={clearQueue}>
+      {/* SECTION 2: System Maintenance / Queue & Telemetry */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Activity size={18} style={{ color: 'var(--primary)' }} /> System Maintenance & Diagnostics
+        </h2>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          {/* Diagnostics Card */}
+          <div className={styles.card}>
+             <div className={styles.sectionTitle} style={{ color: '#f59e0b' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Zap size={18}/> Queue & Telemetry</span></div>
+             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                Manage backend task queues and dashboard tracking statistics.
+             </p>
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <ConfirmForm message="Clear all pending automation jobs? This will stop any scheduled DMs from being sent." action={clearQueue}>
                   <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                      <Zap size={18} /> Clear Automation Queue
                   </button>
-               </ConfirmForm>
-               <ConfirmForm message="Disconnect all Instagram accounts? All automations will stop working." action={disconnectInstagram}>
-                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                     <Link2 size={18} /> Disconnect All Accounts
-                  </button>
-               </ConfirmForm>
-               <ConfirmForm message="Reset all dashboard stats to zero? This cannot be undone." action={resetStats}>
-                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                </ConfirmForm>
+                <ConfirmForm message="Reset all dashboard stats to zero? This cannot be undone." action={resetStats}>
+                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                      <Activity size={18} /> Reset Dashboard Stats
                   </button>
-               </ConfirmForm>
-               <ConfirmForm message="⚠️ DELETE YOUR ACCOUNT? This will permanently erase all data, automations, and leads. IRREVERSIBLE." action={deleteAccount}>
-                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                     <Trash size={18} /> Delete Account Permanently
-                  </button>
-               </ConfirmForm>
+                </ConfirmForm>
+             </div>
+          </div>
+
+          {/* Unlink Services Card */}
+          <div className={styles.card}>
+             <div className={styles.sectionTitle} style={{ color: '#ef4444' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Link2 size={18}/> Services Reset</span></div>
+             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                Instantly disconnect and revoke credentials for all unlinked Instagram accounts.
+             </p>
+             <ConfirmForm message="Disconnect all Instagram accounts? All automations will stop working." action={disconnectInstagram}>
+                <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                   <Link2 size={18} /> Disconnect All Accounts
+                </button>
+             </ConfirmForm>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 3: Account Deletion (Absolute Last) */}
+      <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '2.5rem' }}>
+         <div className={styles.card} style={{ border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.015)' }}>
+            <div className={styles.sectionTitle} style={{ color: '#ef4444', marginBottom: '0.5rem' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><AlertTriangle size={20}/> Danger Zone</span></div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div style={{ flex: '1 1 450px' }}>
+                <h4 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Delete AutoDrop Account</h4>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.4' }}>
+                   This action is highly destructive and completely irreversible. It will permanently delete your user profile, subscription parameters, all connected Instagram access tokens, existing automation campaigns, and every lead captured.
+                </p>
+              </div>
+              <div style={{ flexShrink: 0, width: '100%', maxWidth: '280px' }}>
+                 <ConfirmForm message="⚠️ DELETE YOUR ACCOUNT? This will permanently erase all data, automations, and leads. IRREVERSIBLE." action={deleteAccount}>
+                   <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                      <Trash size={18} /> Delete Account Permanently
+                   </button>
+                 </ConfirmForm>
+              </div>
             </div>
          </div>
-         
       </div>
+
     </div>
   );
 }
