@@ -679,7 +679,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                 <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', lineHeight: 1.15, letterSpacing: '-0.02em' }}>
                   {USE_NOOB_FRIENDLY_HERO ? (
                     <>
-                      Convert Instagram Comments Into <span className="text-gradient" style={{display: 'inline-block'}}>Leads & Sales</span> Automatically!
+                      Convert Instagram Comments Into <span className="text-gradient" style={{display: 'inline-block'}}>Followers, Leads & Sales</span> Automatically!
                     </>
                   ) : (
                     <>
