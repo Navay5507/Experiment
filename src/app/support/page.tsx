@@ -30,7 +30,7 @@ export default function SupportPage() {
            <div className={styles.featureBox}>
              <div className={styles.feature}>
                <h3>✨ Live Screen-Share</h3>
-               <p>We&apos;ll walk through your Supabase and Meta configurations directly over video.</p>
+               <p>Our team will help you configure your dashboard and test your workflows via live screen-share.</p>
              </div>
            </div>
 
