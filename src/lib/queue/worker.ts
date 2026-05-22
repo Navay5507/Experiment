@@ -294,8 +294,10 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       if (result.error) {
         console.error(`[Worker DM] Private Reply FAILED:`, result.error.message || JSON.stringify(result.error));
         await supabase.from('analytics_events').insert({
-          user_id: userId, event_type: 'dm_failed',
-          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
+          user_id: userId,
+          automation_id: automationId,
+          event_type: 'dm_failed',
+          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
         });
         return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
@@ -317,8 +319,10 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       if (result.error) {
         console.error(`[Worker DM] FAILED:`, result.error.message || JSON.stringify(result.error));
         await supabase.from('analytics_events').insert({
-          user_id: userId, event_type: 'dm_failed',
-          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId }
+          user_id: userId,
+          automation_id: automationId,
+          event_type: 'dm_failed',
+          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
         });
         return { success: false, reason: result.error.message || 'DM send failed' };
       }
@@ -331,7 +335,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     });
 
     await supabase.from('analytics_events').insert({
-      user_id: userId, event_type: 'dm_delivered',
+      user_id: userId,
+      automation_id: automationId,
+      event_type: 'dm_delivered',
       metadata: { type: commentId ? 'private_reply' : 'direct_dm', message_id: result?.message_id, recipient_id: recipientId, automation_id: automationId }
     });
 
@@ -372,7 +378,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
       await upsertConversation(userId, automationId, recipientId, 'awaiting_follow');
       await supabase.from('analytics_events').insert({
-        user_id: userId, event_type: 'follow_gate_sent',
+        user_id: userId,
+        automation_id: automationId,
+        event_type: 'follow_gate_sent',
         metadata: { recipient_id: recipientId, automation_id: automationId }
       });
       return { success: true, stage: 'follow_gate_sent' };
@@ -397,7 +405,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       });
 
       await supabase.from('analytics_events').insert({
-        user_id: userId, event_type: 'lead_capture_started',
+        user_id: userId,
+        automation_id: automationId,
+        event_type: 'lead_capture_started',
         metadata: { field: firstField, recipient_id: recipientId, automation_id: automationId }
       });
       return { success: true, stage: 'lead_capture_started' };
@@ -444,7 +454,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     await upsertConversation(userId, automationId, recipientId, 'completed');
     await supabase.from('analytics_events').insert({
-      user_id: userId, event_type: 'dm_delivered',
+      user_id: userId,
+      automation_id: automationId,
+      event_type: 'dm_delivered',
       metadata: { type: 'link_delivered', recipient_id: recipientId, automation_id: automationId }
     });
     return { success: true, stage: 'link_delivered' };
@@ -504,8 +516,10 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
       await upsertConversation(userId, automationId, recipientId, 'completed');
       await supabase.from('analytics_events').insert({
-        user_id: userId, event_type: 'dm_delivered',
-        metadata: { type: 'link_after_follow', recipient_id: recipientId }
+        user_id: userId,
+        automation_id: automationId,
+        event_type: 'dm_delivered',
+        metadata: { type: 'link_after_follow', recipient_id: recipientId, automation_id: automationId }
       });
     } else {
       // Not following — resend the follow gate card (loops until they follow)
@@ -615,7 +629,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     });
 
     await supabase.from('analytics_events').insert({
-      user_id: userId, event_type: 'lead_captured',
+      user_id: userId,
+      automation_id: automationId,
+      event_type: 'lead_captured',
       metadata: { lead_data: updatedLeadData, recipient_id: recipientId, automation_id: automationId }
     });
 
@@ -760,7 +776,9 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
       await supabase.from('analytics_events').insert({
-        user_id: userId, event_type: 'dm_dispatched',
+        user_id: userId,
+        automation_id: automationId,
+        event_type: 'dm_dispatched',
         metadata: { automation_id: automationId, recipient_id: recipientId, source: 'comment_chain' }
       });
     } catch (e) {

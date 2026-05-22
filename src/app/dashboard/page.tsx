@@ -19,20 +19,32 @@ export default async function DashboardOverview() {
   const [automationsRes, leadsRes, eventsRes, recentLogsRes, productsRes] = await Promise.all([
     supabase.from('automations').select('id', { count: 'exact' }).eq('user_id', user.id),
     supabase.from('leads').select('id', { count: 'exact' }).eq('user_id', user.id),
-    supabase.from('analytics_events').select('event_type').eq('user_id', user.id),
+    supabase.from('analytics_events').select('event_type, automation_id, metadata').eq('user_id', user.id),
     supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
     supabase.from('products').select('total_sales, total_revenue').eq('user_id', user.id)
   ]);
 
   let commentsMatched = 0;
-  let dmsSent = 0;
+  const uniqueDmFlows = new Set<string>();
 
   if (eventsRes.data) {
      eventsRes.data.forEach(e => {
         if (e.event_type.includes('comment')) commentsMatched++;
-        if (e.event_type.includes('dm')) dmsSent++;
+        if (e.event_type.includes('dm')) {
+           const meta = (typeof e.metadata === 'string' ? JSON.parse(e.metadata) : e.metadata) || {};
+           const recipientId = meta.recipient_id || meta.sender_id || meta.recipient_ig_id;
+           const autoId = e.automation_id || meta.automation_id || 'default';
+           
+           if (recipientId) {
+              uniqueDmFlows.add(`${autoId}_${recipientId}`);
+           } else {
+              uniqueDmFlows.add(`fallback_${Math.random()}_${e.event_type}`);
+           }
+        }
      });
   }
+
+  const dmsSent = uniqueDmFlows.size;
 
   // Store revenue aggregation
   let storeRevenue = 0;
