@@ -255,7 +255,8 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
   }
 
   // ANTI-BAN: Per-user 24h dedup (Meta 2026 rule: max 1 DM per user per 24h from triggers)
-  if (!job.data.skipDedup) {
+  // Only applies to the initial trigger ('send' job)
+  if (job.name === 'send' && !job.data.skipDedup) {
     const dmAlreadySent = await isDMSentToUser(userId, recipientId);
     if (dmAlreadySent) {
       console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
@@ -772,7 +773,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         commenterUsername: commenterUsername || '',
         commentId,
         skipDedup: true, // Bypass check because commentWorker already claimed the lock!
-      }, { delay: getRandomDelay(5000, 25000) });
+      }, { delay: getRandomDelay(5000, 7200000) });
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
       await supabase.from('analytics_events').insert({
