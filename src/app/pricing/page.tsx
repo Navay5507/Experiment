@@ -142,16 +142,16 @@ export default function PricingPage() {
   };
 
   const rates: Record<Currency, { pro: number, elite: number }> = {
-    USD: { pro: 9, elite: 100 },
-    GBP: { pro: 7, elite: 80 },
-    CAD: { pro: 12, elite: 137 },
-    AUD: { pro: 13, elite: 151 },
-    NZD: { pro: 14, elite: 166 },
-    EUR: { pro: 9, elite: 90 },
-    ZAR: { pro: 167, elite: 1900 },
-    SGD: { pro: 12, elite: 135 },
-    INR: { pro: 599, elite: 8300 },
-    NGN: { pro: 11900, elite: 150000 },
+    USD: { pro: 9, elite: 99 },
+    GBP: { pro: 7, elite: 79 },
+    CAD: { pro: 12, elite: 135 },
+    AUD: { pro: 13, elite: 149 },
+    NZD: { pro: 14, elite: 164 },
+    EUR: { pro: 9, elite: 89 },
+    ZAR: { pro: 167, elite: 1880 },
+    SGD: { pro: 12, elite: 133 },
+    INR: { pro: 599, elite: 8200 },
+    NGN: { pro: 11900, elite: 148500 },
   };
 
   const formatPrice = (price: number) => {
