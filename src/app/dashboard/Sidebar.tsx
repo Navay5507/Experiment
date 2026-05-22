@@ -13,11 +13,12 @@ interface NavItemProps {
   isBottom?: boolean;
   isActive: boolean;
   isComingSoon?: boolean;
+  badgeText?: string;
   target?: string;
   onNavigate?: () => void;
 }
 
-function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComingSoon = false, target, onNavigate }: NavItemProps) {
+function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComingSoon = false, badgeText, target, onNavigate }: NavItemProps) {
   const content = (
     <motion.div
         whileHover={!isComingSoon ? { x: 4, backgroundColor: "rgba(255,255,255,0.03)" } : {}}
@@ -42,8 +43,8 @@ function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComing
         )}
         
         {isComingSoon && (
-          <span style={{ marginLeft: 'auto', fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 600 }}>
-            Soon
+          <span style={{ marginLeft: 'auto', fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            {badgeText || 'Soon'}
           </span>
         )}
       </motion.div>
@@ -96,7 +97,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} onNavigate={onClose} />
         <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} onNavigate={onClose} />
         <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} onNavigate={onClose} />
-        <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={false} isComingSoon={true} />
+        <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={false} isComingSoon={true} badgeText="Under Maintenance" />
         <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
         <NavItem href="/dashboard/learn" icon={GraduationCap} label="Learn" isActive={isActive('/dashboard/learn')} onNavigate={onClose} />
         <NavItem href="/dashboard/referral" icon={Gift} label="Referral Program" isActive={isActive('/dashboard/referral')} onNavigate={onClose} />
