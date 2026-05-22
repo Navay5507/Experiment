@@ -4,11 +4,12 @@ import { ReactNode, useRef } from 'react';
 
 interface ConfirmFormProps {
   message: string;
+  promptText?: string;
   action: (formData: FormData) => void;
   children: ReactNode;
 }
 
-export default function ConfirmForm({ message, action, children }: ConfirmFormProps) {
+export default function ConfirmForm({ message, promptText, action, children }: ConfirmFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   
   return (
@@ -16,8 +17,16 @@ export default function ConfirmForm({ message, action, children }: ConfirmFormPr
       ref={formRef}
       action={action}
       onSubmit={(e) => {
-        if (!confirm(message)) {
-          e.preventDefault();
+        if (promptText) {
+          const input = prompt(message);
+          if (input !== promptText) {
+            alert(`Incorrect confirmation. You must type "${promptText}" in capitals only to confirm.`);
+            e.preventDefault();
+          }
+        } else {
+          if (!confirm(message)) {
+            e.preventDefault();
+          }
         }
       }}
     >

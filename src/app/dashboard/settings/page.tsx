@@ -192,7 +192,8 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         {[
           { id: 'connections', label: 'Connections', icon: Link2 },
           { id: 'subscription', label: 'Subscription', icon: CreditCard },
-          { id: 'maintenance', label: 'Maintenance & Security', icon: Activity },
+          { id: 'maintenance', label: 'Maintenance & Diagnostics', icon: Activity },
+          { id: 'danger', label: 'Danger Zone', icon: AlertTriangle },
         ].map((tab) => {
           const isSelected = activeTab === tab.id;
           const Icon = tab.icon;
@@ -374,28 +375,34 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                  </ConfirmForm>
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Account Deletion (Absolute Last) */}
-            <div style={{ marginTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '2rem' }}>
-               <div className={styles.card} style={{ border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.015)' }}>
-                  <div className={styles.sectionTitle} style={{ color: '#ef4444', marginBottom: '0.5rem' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><AlertTriangle size={20}/> Danger Zone</span></div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
-                    <div style={{ flex: '1 1 450px' }}>
-                      <h4 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Delete AutoDrop Account</h4>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.4' }}>
-                         This action is highly destructive and completely irreversible. It will permanently delete your user profile, subscription parameters, all connected Instagram access tokens, existing automation campaigns, and every lead captured.
-                      </p>
-                    </div>
-                    <div style={{ flexShrink: 0, width: '100%', maxWidth: '280px' }}>
-                       <ConfirmForm message="⚠️ DELETE YOUR ACCOUNT? This will permanently erase all data, automations, and leads. IRREVERSIBLE." action={deleteAccount}>
-                         <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                            <Trash size={18} /> Delete Account Permanently
-                         </button>
-                       </ConfirmForm>
-                    </div>
-                  </div>
-               </div>
+        {activeTab === 'danger' && (
+          <div style={{ maxWidth: '750px' }}>
+            {/* Account Deletion */}
+            <div className={styles.card} style={{ border: '1px solid rgba(239,68,68,0.25)', background: 'rgba(239,68,68,0.015)' }}>
+              <div className={styles.sectionTitle} style={{ color: '#ef4444', marginBottom: '0.5rem' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><AlertTriangle size={20}/> Danger Zone</span></div>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+                <div style={{ flex: '1 1 450px' }}>
+                  <h4 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Delete AutoDrop Account</h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.4' }}>
+                     This action is highly destructive and completely irreversible. It will permanently delete your user profile, subscription parameters, all connected Instagram access tokens, existing automation campaigns, and every lead captured.
+                  </p>
+                </div>
+                <div style={{ flexShrink: 0, width: '100%', maxWidth: '280px' }}>
+                   <ConfirmForm 
+                     message='To verify account deletion, please type "DELETE MY ACCOUNT" in all-capital letters below:' 
+                     promptText="DELETE MY ACCOUNT"
+                     action={deleteAccount}
+                   >
+                     <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <Trash size={18} /> Delete Account Permanently
+                     </button>
+                   </ConfirmForm>
+                </div>
+              </div>
             </div>
           </div>
         )}
