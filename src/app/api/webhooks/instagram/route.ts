@@ -455,9 +455,12 @@ export async function POST(req: Request) {
               // Story automation already handled at top of message handler (before text handlers)
 
               // ---- DM KEYWORD AUTOMATION TRIGGER ----
-              // Fires when a plain-text DM matches a keyword on a 'dm' type automation.
-              // Only runs if no conversation handler already fired (those use `continue`).
-              if (messageText && !quickReplyPayload && !isStoryReply) {
+              // Fires ONLY when:
+              //   1. The connected account owner is on PRO or ELITE plan
+              //   2. They have explicitly created a 'dm' type automation
+              //   3. The incoming message is plain text (not a quick reply, not a story reply)
+              //   4. No existing conversation handler already processed this message
+              if (messageText && !quickReplyPayload && !isStoryReply && (user.plan === 'PRO' || user.plan === 'ELITE')) {
                 const { data: dmKeywordAutomations } = await supabase
                   .from('automations')
                   .select('*')
