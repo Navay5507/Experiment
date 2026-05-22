@@ -677,8 +677,15 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             <div className={styles.heroContent}>
               <FadeIn delay={0.1}>
                 <h1 className={styles.heroHeading} style={{ marginBottom: '1.5rem', width: '100%', lineHeight: 1.15, letterSpacing: '-0.02em' }}>
-                  Turn Instagram Comments Into Leads{' '}
-                  <span className="text-gradient" style={{display: 'inline-block'}}>Automatically</span>
+                  {USE_NOOB_FRIENDLY_HERO ? (
+                    <>
+                      Convert Instagram Comments Into <span className="text-gradient" style={{display: 'inline-block'}}>Leads & Sales</span> Automatically!
+                    </>
+                  ) : (
+                    <>
+                      Turn Instagram Comments Into Leads <span className="text-gradient" style={{display: 'inline-block'}}>Automatically</span>
+                    </>
+                  )}
                 </h1>
               </FadeIn>
               
@@ -688,7 +695,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               <FadeIn delay={0.2}>
                 <p className={styles.heroSub} style={{ maxWidth: '90%', marginBottom: '2rem', lineHeight: 1.6 }}>
-                  Reply to every comment, send DMs instantly, and capture leads while you sleep. Turn your engagement into revenue on autopilot.
+                  {USE_NOOB_FRIENDLY_HERO ? (
+                    "Stop sending links manually. AutoDrop watches your Reels and posts, replying to comments and sending links to DMs instantly, 24/7."
+                  ) : (
+                    "Reply to every comment, send DMs instantly, and capture leads while you sleep. Turn your engagement into revenue on autopilot."
+                  )}
                 </p>
               </FadeIn>
               <FadeIn delay={0.3}>
@@ -731,15 +742,8 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>
-                {USE_NOOB_FRIENDLY_HERO ? "Convert Instagram Comments into Leads & Sales Automatically!" : "Unlock the full Power of Instagram"}
-              </h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
-                {USE_NOOB_FRIENDLY_HERO 
-                  ? "Stop sending links manually. AutoDrop watches your Reels and posts, replying to comments and sending links to DMs instantly, 24/7."
-                  : "A complete toolkit designed to harvest leads predictably without triggering ban limits."
-                }
-              </p>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>Unlock the full Power of Instagram</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>A complete toolkit designed to harvest leads predictably without triggering ban limits.</p>
             </div>
           </FadeIn>
 
