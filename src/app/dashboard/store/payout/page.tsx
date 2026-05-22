@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { CreditCard, ArrowRight, ShieldCheck, Banknote, AlertCircle } from "lucide-react";
+import { CreditCard, ArrowRight, ShieldCheck, Banknote, AlertCircle, Package, ShoppingCart, DollarSign } from "lucide-react";
+import Link from "next/link";
+import styles from "../store.module.css";
 
 export default function PayoutPage() {
   const [userPlan, setUserPlan] = useState<string>("FREE");
@@ -25,17 +27,33 @@ export default function PayoutPage() {
   const feePercentage = (userPlan === 'PRO' || userPlan === 'ELITE') ? 7 : 14;
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <header style={{ marginBottom: '3rem' }}>
+    <div className={styles.storePage} style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
+      <header style={{ marginBottom: '2rem' }}>
         <motion.h1 
           initial={{ opacity: 0, y: -10 }} 
           animate={{ opacity: 1, y: 0 }} 
           style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}
         >
-          Payouts & Earnings
+          Digital Store 🏪
         </motion.h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Manage your creator marketplace earnings and withdrawal methods.</p>
       </header>
+
+      {/* Sub-navigation Tabs */}
+      <div className={styles.tabsNav}>
+        <Link href="/dashboard/store" className={styles.tabLink}>
+          <Package size={16} className={styles.tabIcon} />
+          Products
+        </Link>
+        <Link href="/dashboard/store/orders" className={styles.tabLink}>
+          <ShoppingCart size={16} className={styles.tabIcon} />
+          Orders
+        </Link>
+        <Link href="/dashboard/store/payout" className={`${styles.tabLink} ${styles.activeTabLink}`}>
+          <DollarSign size={16} className={styles.tabIcon} />
+          Payouts
+        </Link>
+      </div>
 
       {/* Fee Structure Card */}
       <motion.div 

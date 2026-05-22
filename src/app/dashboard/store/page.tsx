@@ -7,6 +7,7 @@ import {
   Copy, Pencil, Trash2, ExternalLink, X, Check, Link2, FileText, MessageSquare, UploadCloud, Loader2
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import Link from "next/link";
 import styles from "./store.module.css";
 
 interface Product {
@@ -211,6 +212,22 @@ export default function StorePage() {
         >
           <Plus size={18} /> Create Product
         </motion.button>
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className={styles.tabsNav}>
+        <Link href="/dashboard/store" className={`${styles.tabLink} ${styles.activeTabLink}`}>
+          <Package size={16} className={styles.tabIcon} />
+          Products
+        </Link>
+        <Link href="/dashboard/store/orders" className={styles.tabLink}>
+          <ShoppingCart size={16} className={styles.tabIcon} />
+          Orders
+        </Link>
+        <Link href="/dashboard/store/payout" className={styles.tabLink}>
+          <DollarSign size={16} className={styles.tabIcon} />
+          Payouts
+        </Link>
       </div>
 
       {/* Stats */}

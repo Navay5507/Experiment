@@ -436,3 +436,164 @@
     width: 100%;
   }
 }
+
+/* Unified Tabs Navigation */
+.tabsNav {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+.tabLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9px;
+  color: var(--text-muted, #9ca3af);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.tabLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.activeTabLink {
+  color: #fff !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+  border: 1px solid rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+}
+
+.tabIcon {
+  flex-shrink: 0;
+}
+
+/* Table Styles */
+.tableContainer {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tableTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.ordersTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ordersTable th {
+  padding: 1rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted, #9ca3af);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  letter-spacing: 0.05em;
+}
+
+.ordersTable td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+.ordersTable tr:last-child td {
+  border-bottom: none;
+}
+
+.ordersTable tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.productThumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.productThumbPlaceholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.buyerCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.buyerName {
+  font-weight: 600;
+}
+
+.buyerEmail {
+  font-size: 0.75rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+.badgePaid {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badgePending {
+  background: rgba(234, 179, 8, 0.15);
+  color: #eab308;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.noOrders {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted, #9ca3af);
+}
+
