@@ -320,7 +320,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
                   <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step1 />
-                  </motion.div>
+                  </div>
                </div>
             </div>
 
@@ -336,7 +336,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
                   <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step2 />
-                  </motion.div>
+                  </div>
                </div>
             </div>
 
@@ -352,7 +352,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px', background: 'radial-gradient(ellipse at center, #111 0%, #000 100%)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', minHeight: '350px', alignItems: 'center' }}>
                   <div style={{width:'100%', display:'flex', justifyContent:'center'}}>
                      <UI_Step3 />
-                  </motion.div>
+                  </div>
                </div>
             </div>
 
