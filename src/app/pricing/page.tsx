@@ -142,16 +142,16 @@ export default function PricingPage() {
   };
 
   const rates: Record<Currency, { pro: number, elite: number }> = {
-    USD: { pro: 7, elite: 99 },
-    GBP: { pro: 6, elite: 79 },
-    CAD: { pro: 10, elite: 135 },
-    AUD: { pro: 11, elite: 149 },
-    NZD: { pro: 12, elite: 164 },
-    EUR: { pro: 7, elite: 89 },
-    ZAR: { pro: 139, elite: 1880 },
-    SGD: { pro: 10, elite: 133 },
-    INR: { pro: 499, elite: 8200 },
-    NGN: { pro: 9900, elite: 148500 },
+    USD: { pro: 9, elite: 100 },
+    GBP: { pro: 7, elite: 80 },
+    CAD: { pro: 12, elite: 137 },
+    AUD: { pro: 13, elite: 151 },
+    NZD: { pro: 14, elite: 166 },
+    EUR: { pro: 9, elite: 90 },
+    ZAR: { pro: 167, elite: 1900 },
+    SGD: { pro: 12, elite: 135 },
+    INR: { pro: 599, elite: 8300 },
+    NGN: { pro: 11900, elite: 150000 },
   };
 
   const formatPrice = (price: number) => {
@@ -190,8 +190,8 @@ export default function PricingPage() {
   };
 
   const getPrice = (baseTierPrice: number, applyPromo = true) => {
-    // Universal identical pricing parity based strictly on the India 499 -> 299 model (~40.08% discount)
-    let price = isAnnual ? Math.round(baseTierPrice * (299 / 499)) : baseTierPrice;
+    // Universal identical pricing parity based strictly on the India 599 -> 359 model (~40.07% discount)
+    let price = isAnnual ? Math.round(baseTierPrice * (359 / 599)) : baseTierPrice;
     
     if (applyPromo && activePromo) {
       if (activePromo.type === 'percentage') {
@@ -265,6 +265,7 @@ export default function PricingPage() {
             <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
             <p className={styles.description}>Get started with comment &amp; keyword automation for free.</p>
             <ul className={styles.features}>
+              <li>1 Connected IG Account</li>
               <li>1 Active Automation</li>
               <li>Post &amp; Reel Comment Replies</li>
               <li>Text &amp; Emoji Keywords</li>
@@ -290,6 +291,7 @@ export default function PricingPage() {
             {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
             <p className={styles.description}>Full funnel automation to capture leads and scale.</p>
             <ul className={styles.features}>
+              <li>Connect up to 3 IG Accounts</li>
               <li>Everything in Free</li>
               <li>Post, Reel &amp; Story Automation</li>
               <li>📩 DM Keyword Automation</li>
@@ -346,6 +348,7 @@ export default function PricingPage() {
             <div className={styles.billedYearly} style={{ visibility: 'hidden' }}>Placeholder</div>
             <p className={styles.description}>Replace manual replies with an intelligent AI clone.</p>
             <ul className={styles.features}>
+              <li>Unlimited Connected Accounts</li>
               <li>Everything in Pro</li>
               <li>Unlimited DMs</li>
               <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
@@ -377,6 +380,12 @@ export default function PricingPage() {
                   <td>Active Automations</td>
                   <td>1</td>
                   <td>Unlimited</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td>Connected IG Accounts</td>
+                  <td>1 Account</td>
+                  <td>Up to 3 Accounts</td>
                   <td>Unlimited</td>
                 </tr>
                 <tr>

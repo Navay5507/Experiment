@@ -85,7 +85,7 @@ export default async function ReferralPage() {
       <div className={styles.titleArea}>
         <div>
            <h1>🎁 Referral Program</h1>
-           <p>Invite friends and earn 25% recurring commission for a year.</p>
+           <p>Invite friends and earn 20% recurring commission for a year.</p>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ export default async function ReferralPage() {
           <h3 style={{ margin: 0 }}>Your Referral Link</h3>
         </div>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-          Share this link with friends. When they sign up and <strong style={{ color: '#10b981' }}>purchase Pro</strong>, you earn <strong style={{ color: '#10b981' }}>25% of their payment every month for 1 year</strong>!
+          Share this link with friends. When they sign up and <strong style={{ color: '#10b981' }}>purchase Pro</strong>, you earn <strong style={{ color: '#10b981' }}>20% of their payment every month for 1 year</strong>!
         </p>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input
@@ -241,8 +241,8 @@ export default async function ReferralPage() {
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
             <div style={{ minWidth: 36, height: 36, borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', fontWeight: 700, color: '#10b981' }}>3</div>
             <div>
-              <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Earn 25% for 1 year</div>
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Get 25% of their payments. Automatic payout via GPay/UPI.</div>
+              <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>Earn 20% for 1 year</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Get 20% of their payments. Automatic payout via GPay/UPI.</div>
             </div>
           </div>
         </div>

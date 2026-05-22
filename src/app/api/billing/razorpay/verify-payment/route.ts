@@ -92,19 +92,19 @@ export async function POST(req: Request) {
 
       if (referral) {
         const totalAmountPaid = order ? (order.amount / 100) : 0;
-        const earnedAmount = totalAmountPaid > 0 ? (totalAmountPaid * 0.25) : 0;
+        const earnedAmount = totalAmountPaid > 0 ? (totalAmountPaid * 0.20) : 0;
 
         await supabase
           .from("referrals")
           .update({ 
             status: "completed", 
             reward_applied: true, 
-            reward_type: "commission_25pct",
+            reward_type: "commission_20pct",
             earned_amount: earnedAmount 
           })
           .eq("id", referral.id);
 
-        console.log(`[Referral] 25% commission activated for referral ${referral.id}`);
+        console.log(`[Referral] 20% commission activated for referral ${referral.id}`);
       }
     }
 

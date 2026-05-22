@@ -88,7 +88,8 @@ export default async function SettingsPage() {
                <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem', color: user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'var(--primary)' : '#fff' }}>
                  {user?.plan === 'PRO' ? 'Growth Pro' : user?.plan === 'ELITE' ? 'Elite AI' : 'Free Starter'}
                </h3>
-               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>You currently have access to {user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'Unlimited' : '1'} active automation campaigns.</p>
+               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>You currently have access to {user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'Unlimited' : '1'} active automation campaigns.</p>
+               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Your plan allows connecting up to {user?.plan === 'PRO' ? '3' : user?.plan === 'ELITE' ? 'Unlimited' : '1'} Instagram account{user?.plan === 'PRO' || user?.plan === 'ELITE' ? 's' : ''}.</p>
             </div>
             <a href="mailto:support@autodrop.in" className={styles.btnAction} style={{ width: '100%', textAlign: 'center', display: 'block', textDecoration: 'none' }}>Contact Support</a>
          </div>
