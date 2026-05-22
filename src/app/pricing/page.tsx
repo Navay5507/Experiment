@@ -263,11 +263,12 @@ export default function PricingPage() {
           <div className={styles.card}>
             <h3 className={styles.planName}>Free Starter</h3>
             <div className={styles.price}>{formatPrice(0)}<span className={styles.period}>/mo</span></div>
-            <p className={styles.description}>Test the waters with basic comment replies.</p>
+            <p className={styles.description}>Get started with comment &amp; keyword automation for free.</p>
             <ul className={styles.features}>
               <li>1 Active Automation</li>
-              <li>Unlimited DMs & Comments</li>
-              <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
+              <li>Post &amp; Reel Comment Replies</li>
+              <li>Text &amp; Emoji Keywords</li>
+              <li>Unlimited DMs &amp; Comments</li>
               <li>Basic Analytics</li>
             </ul>
             <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
@@ -289,11 +290,13 @@ export default function PricingPage() {
             {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
             <p className={styles.description}>Full funnel automation to capture leads and scale.</p>
             <ul className={styles.features}>
-              <li>Unlimited Automations</li>
-              <li>Unlimited DMs</li>
-              <li>Creator Marketplace <span style={{fontSize: '0.7rem', color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '4px', fontWeight: 600}}>INCLUDED</span></li>
+              <li>Everything in Free</li>
+              <li>Post, Reel &amp; Story Automation</li>
+              <li>📩 DM Keyword Automation</li>
+              <li>Lead Capture (Email / Phone / Name)</li>
               <li>Follow-Gate Links</li>
-              <li>Lead Capture (Email/Phone)</li>
+              <li>Unlimited Automations</li>
+              <li>Priority Support</li>
             </ul>
             {userPlan === 'PRO' || userPlan === 'ELITE' ? (
                <Link href="/dashboard" className={styles.primaryBtn}>Current Plan</Link>
@@ -389,6 +392,12 @@ export default function PricingPage() {
                   <td><span className={styles.iconCheck}><Check size={20} /></span></td>
                 </tr>
                 <tr>
+                  <td>📩 DM Keyword Automation</td>
+                  <td><span className={styles.iconCross}><Minus size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                  <td><span className={styles.iconCheck}><Check size={20} /></span></td>
+                </tr>
+                <tr>
                   <td>Story Replies</td>
                   <td><span className={styles.iconCross}><Minus size={20} /></span></td>
                   <td><span className={styles.iconCheck}><Check size={20} /></span></td>
@@ -420,9 +429,9 @@ export default function PricingPage() {
                   <td colSpan={4} className={styles.featureCategory}>AI Capabilities</td>
                 </tr>
                 <tr>
-                  <td>Keyword Triggers</td>
-                  <td>Exact Match</td>
-                  <td>Exact & Fuzzy</td>
+                  <td>Keyword Triggers (Text &amp; Emoji)</td>
+                  <td>1 keyword set</td>
+                  <td>Unlimited sets</td>
                   <td>Semantic AI Match</td>
                 </tr>
                 <tr>

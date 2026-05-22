@@ -193,7 +193,7 @@ export default function CreateAutomation() {
                 {[
                   { key: 'post', icon: '📸', label: 'Post / Reel', desc: 'Monitor comments on specific posts or reels', pro: false },
                   { key: 'story', icon: '⏱️', label: 'Story Reply', desc: 'Auto-reply to story responses', pro: true },
-                  { key: 'dm', icon: '📩', label: 'Direct Message', desc: 'Trigger when someone DMs you a keyword', pro: false },
+                  { key: 'dm', icon: '📩', label: 'Direct Message', desc: 'Trigger when someone DMs you a keyword', pro: true },
                 ].map(t => {
                   const isPro = userPlan === 'PRO' || userPlan === 'ELITE';
                   const disabled = t.pro && !isPro;
