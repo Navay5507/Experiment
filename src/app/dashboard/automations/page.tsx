@@ -118,7 +118,7 @@ export default async function AutomationsList() {
             let postTargetText = `${postCount} Specific Post${postCount > 1 ? 's' : ''}`;
             if (isAllPosts) {
               if (auto.target_type === 'story') postTargetText = "All Story Replies";
-              else if (auto.target_type === 'live') postTargetText = "All Live Broadcasts";
+              else if (auto.target_type === 'dm') postTargetText = "DM Keywords";
               else postTargetText = "All Posts";
             }
             

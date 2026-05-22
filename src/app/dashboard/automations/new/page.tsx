@@ -193,7 +193,7 @@ export default function CreateAutomation() {
                 {[
                   { key: 'post', icon: '📸', label: 'Post / Reel', desc: 'Monitor comments on specific posts or reels', pro: false },
                   { key: 'story', icon: '⏱️', label: 'Story Reply', desc: 'Auto-reply to story responses', pro: true },
-                  { key: 'live', icon: '🔴', label: 'Live Comments', desc: 'Capture keywords during broadcasts', pro: true },
+                  { key: 'dm', icon: '📩', label: 'Direct Message', desc: 'Trigger when someone DMs you a keyword', pro: false },
                 ].map(t => {
                   const isPro = userPlan === 'PRO' || userPlan === 'ELITE';
                   const disabled = t.pro && !isPro;
@@ -296,14 +296,14 @@ export default function CreateAutomation() {
                 </div>
               )}
 
-              {targetType === 'live' && (
-                <div style={{ padding: '2rem', borderRadius: '16px', border: '1px solid rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.04)', textAlign: 'center' }}>
-                  <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🔴</div>
-                  <p style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem' }}>Live Comment Automation</p>
+              {targetType === 'dm' && (
+                <div style={{ padding: '2rem', borderRadius: '16px', border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.04)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📩</div>
+                  <p style={{ color: '#fff', fontWeight: 600, marginBottom: '0.5rem' }}>DM Keyword Automation</p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6 }}>
-                    This automation captures <strong style={{ color: '#fff' }}>live stream comments</strong> in real-time. When a viewer comments a matching keyword during your live broadcast, they'll automatically receive a DM after the stream ends.
+                    This automation triggers when someone <strong style={{ color: '#fff' }}>DMs your account</strong> with a specific keyword. AutoDROP will automatically send them your configured reply — with links, lead capture, or follow-gate included.
                   </p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1rem', fontStyle: 'italic' }}>Applies to all live sessions — no specific selection needed.</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '1rem', fontStyle: 'italic' }}>Works on all incoming DMs — no post selection needed.</p>
                 </div>
               )}
             </motion.div>
@@ -314,8 +314,11 @@ export default function CreateAutomation() {
               <h2 className={styles.stepTitle}>2. Add Keywords</h2>
               <div className={styles.formGroup}>
                 <label className={styles.label}>Which words should trigger this automation?</label>
-                <input type="text" className={styles.input} placeholder='e.g. "link", "price", "info" — or leave empty for all comments' value={keywords} onChange={(e) => setKeywords(e.target.value)} autoFocus />
-                <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginTop: "0.5rem" }}>Separate multiple exact-match keywords with commas. <strong style={{ color: '#a855f7' }}>Leave empty to trigger on every comment.</strong></p>
+                <input type="text" className={styles.input} placeholder='e.g. "link", "price", "info", "🔥", "👀"' value={keywords} onChange={(e) => setKeywords(e.target.value)} autoFocus />
+                <p style={{ color: "var(--text-muted)", fontSize: "0.9rem", marginTop: "0.5rem" }}>Separate multiple keywords with commas. <strong style={{ color: '#a855f7' }}>Leave empty → every {targetType === 'dm' ? 'DM' : 'comment'} gets a reply automatically.</strong></p>
+                <div style={{ marginTop: '0.75rem', padding: '0.75rem 1rem', borderRadius: '10px', background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)', fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>💡</span> <span><strong style={{ color: '#c4b5fd' }}>Tip:</strong> Emojis work as keywords too! e.g. 🔥, 👀, ❤️, 💰</span>
+                </div>
               </div>
             </motion.div>
           )}
@@ -323,6 +326,15 @@ export default function CreateAutomation() {
           {step === 3 && (
             <motion.div key="step3" variants={slideVariants} initial="initial" animate="enter" exit="exit" transition={{ duration: 0.3 }} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <h2 className={styles.stepTitle}>3. Public Reply Template</h2>
+              {targetType === 'dm' && (
+                <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.06)', marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>📩</span>
+                  <div>
+                    <p style={{ color: '#fff', fontWeight: 600, marginBottom: '0.25rem' }}>No public reply for DM automations</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>Since this automation is triggered by an incoming DM (not a comment on a post), there is no public comment to reply to. Skip this step — the DM response is fully configured in Step 4.</p>
+                  </div>
+                </div>
+              )}
               <div className={styles.formGroup}>
                 <label className={styles.label}>What should we publicly reply to their comment?</label>
                 <textarea className={styles.textarea} placeholder="Check your DM {{name}} 👀" value={replyTemplate} onChange={(e) => setReplyTemplate(e.target.value)} autoFocus />

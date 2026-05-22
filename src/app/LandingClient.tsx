@@ -798,35 +798,6 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                </motion.div>
              </FadeIn>
 
-             {/* 3. Live Automation */}
-             <FadeIn delay={0.3}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#161616', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}>
-                    <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80) center/cover' }}>
-                      <div style={{ position:'absolute', top:'10px', left:'10px', background:'linear-gradient(45deg, #f05252, #e1306c)', color:'#fff', fontSize:'0.7rem', fontWeight:800, padding:'0.2rem 0.5rem', borderRadius:'4px' }}>LIVE</div>
-                      <div style={{ position:'absolute', top:'10px', right:'10px', background:'rgba(0,0,0,0.5)', color:'#fff', fontSize:'0.75rem', fontWeight:600, padding:'0.2rem 0.5rem', borderRadius:'6px', display:'flex', alignItems:'center', gap:'0.4rem' }}>
-                         <span style={{width:6, height:6, background:'#e1306c', borderRadius:'50%'}}></span> 1.2k
-                      </div>
-                      <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '160px', background: 'linear-gradient(transparent, rgba(0,0,0,0.9))', padding: '0.5rem 1rem 1rem 1rem', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: '0.75rem' }}>
-                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                            <span style={{ fontSize: '0.85rem', color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}><span style={{fontWeight: 700}}>alex_j</span> How do I buy?</span>
-                            <span style={{ fontSize: '0.85rem', color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}><span style={{fontWeight: 700}}>sarah22</span> LINK please!!</span>
-                         </div>
-                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.4)', borderRadius: '100px', padding: '0.4rem 1rem' }}>
-                               <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>Add a comment...</span>
-                            </div>
-                         </div>
-                      </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Live Automation</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Seamlessly send private DMs to followers commenting keywords during your IG Live.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
-
              {/* 4. DM Check */}
              <FadeIn delay={0.4}>
                <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>

@@ -64,9 +64,9 @@ export async function POST(req: Request) {
           { status: 403 }
         );
       }
-      if (payload.targetType === 'story' || payload.targetType === 'live') {
+      if (payload.targetType === 'story') {
         return NextResponse.json(
-          { error: 'Story and Live automations require a Pro plan. Please upgrade to unlock these features.' },
+          { error: 'Story automations require a Pro plan. Please upgrade to unlock this feature.' },
           { status: 403 }
         );
       }

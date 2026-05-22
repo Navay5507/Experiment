@@ -133,10 +133,10 @@ export async function POST(req: Request) {
     if (payload.object === 'instagram') {
       for (const entry of payload.entry) {
 
-        // === COMMENT & LIVE EVENTS ===
+        // === COMMENT EVENTS ===
         if (entry.changes) {
           for (const change of entry.changes) {
-            if (change.field === 'comments' || change.field === 'live_comments') {
+            if (change.field === 'comments') {
               const commentData = change.value;
               const igUserId = entry.id;
               const commentText = commentData.text?.toLowerCase() || '';
@@ -194,14 +194,8 @@ export async function POST(req: Request) {
                 }
 
                 // Ensure the event matches the automation's requested trigger context
-                if (change.field === 'live_comments') {
-                  if (automation.target_type !== 'live') continue;
-                  if (user.plan === 'FREE') {
-                    console.log(`[Webhook] Skipping live automation ${automation.id}: Pro feature restricted for Free user ${user.id}`);
-                    continue;
-                  }
-                }
-                if (change.field === 'comments' && automation.target_type !== 'post') continue;
+                // Skip any non-post automations (story/dm handle their own triggers)
+                if (automation.target_type !== 'post') continue;
 
                 const keywords: string[] = Array.isArray(automation.keywords)
                   ? automation.keywords
@@ -230,33 +224,17 @@ export async function POST(req: Request) {
                     console.log(`[Webhook] ⏳ DM limit active for ${commenterId}. Delaying comment reply by ${dmTTL}s`);
                   }
 
-                  // Dispatch: Reply to comment publicly (Only for standard posts, not lives)
-                  // ANTI-BAN: Comment reply is enqueued with random delay (5-45s)
-                  // DM is NO LONGER dispatched here — it chains from the comment worker after success
-                  if (change.field === 'comments') {
-                    try {
-                      await commentQueue.add('reply', {
-                        userId: user.id,
-                        automationId: automation.id,
-                        commentId: commentId,
-                        recipientId: commenterId,
-                        commenterUsername,
-                      }, { delay: baseDelay + getRandomDelay(5000, 25000) });
-                      console.log('[Webhook] ✅ Comment reply job queued with delay');
-                    } catch (e) { console.error('[Webhook] Comment queue error:', e); }
-                  } else {
-                    // Live comments don't get public replies — dispatch DM directly with delay
-                    try {
-                      await dmQueue.add('send', {
-                        userId: user.id,
-                        automationId: automation.id,
-                        recipientId: commenterId,
-                        commenterUsername,
-                        commentId: commentId,
-                      }, { delay: baseDelay + getRandomDelay(5000, 25000) });
-                      console.log('[Webhook] ✅ Live comment DM job queued with delay');
-                    } catch (e) { console.error('[Webhook] Live DM queue error:', e); }
-                  }
+                  // Dispatch: Reply to comment publicly, DM chains from the comment worker
+                  try {
+                    await commentQueue.add('reply', {
+                      userId: user.id,
+                      automationId: automation.id,
+                      commentId: commentId,
+                      recipientId: commenterId,
+                      commenterUsername,
+                    }, { delay: baseDelay + getRandomDelay(5000, 25000) });
+                    console.log('[Webhook] ✅ Comment reply job queued with delay');
+                  } catch (e) { console.error('[Webhook] Comment queue error:', e); }
 
                   // IMPORTANT: Only trigger ONE automation per comment to prevent duplicate DMs
                   break;
@@ -475,6 +453,56 @@ export async function POST(req: Request) {
               }
 
               // Story automation already handled at top of message handler (before text handlers)
+
+              // ---- DM KEYWORD AUTOMATION TRIGGER ----
+              // Fires when a plain-text DM matches a keyword on a 'dm' type automation.
+              // Only runs if no conversation handler already fired (those use `continue`).
+              if (messageText && !quickReplyPayload && !isStoryReply) {
+                const { data: dmKeywordAutomations } = await supabase
+                  .from('automations')
+                  .select('*')
+                  .eq('user_id', user.id)
+                  .eq('is_active', true)
+                  .eq('target_type', 'dm');
+
+                if (dmKeywordAutomations && dmKeywordAutomations.length > 0) {
+                  const normalizedMsg = messageText.toLowerCase().trim();
+                  for (const automation of dmKeywordAutomations) {
+                    const keywords: string[] = Array.isArray(automation.keywords)
+                      ? automation.keywords
+                      : JSON.parse(automation.keywords || '[]');
+
+                    const matched = keywords.length === 0 || keywords.some((kw: string) =>
+                      normalizedMsg.includes(kw.toLowerCase().trim())
+                    );
+
+                    if (matched) {
+                      console.log(`[Webhook] 📩 DM keyword match! automation: ${automation.id}`);
+                      try {
+                        await supabase.from('analytics_events').insert({
+                          user_id: user.id,
+                          event_type: 'dm_keyword_matched',
+                          metadata: { sender_id: senderId, keyword: keywords.length === 0 ? '*' : keywords.find((kw: string) => normalizedMsg.includes(kw.toLowerCase().trim())) }
+                        });
+                      } catch (e) { console.error('[Webhook] DM keyword analytics error:', e); }
+
+                      try {
+                        const dmTTL = await getDMRestrictionTTL(user.id, senderId);
+                        const baseDelay = dmTTL > 0 ? dmTTL * 1000 : 0;
+                        await dmQueue.add('send', {
+                          userId: user.id,
+                          automationId: automation.id,
+                          recipientId: senderId,
+                          commenterUsername: 'dm_user',
+                        }, { delay: baseDelay + getRandomDelay(2000, 10000) });
+                        console.log(`[Webhook] ✅ DM keyword automation job queued (delay: ${baseDelay}ms)`);
+                      } catch (e) { console.error('[Webhook] DM keyword queue error:', e); }
+
+                      break; // Only trigger one automation per DM
+                    }
+                  }
+                }
+              }
 
               // ---- Email detection (legacy fallback for non-conversational capture) ----
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
