@@ -60,6 +60,7 @@ interface Metrics {
   activeAutomations: number;
   cyclesCompleted: number;
   cyclesInProgress: number;
+  commentsMatched: number;
   leadsCaptured: number;
   storeRevenue: number;
   productsSold: number;
@@ -114,28 +115,28 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(34,211,238,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
-             <span className={styles.metricTitle}>Cycles In Progress</span>
+             <span className={styles.metricTitle}>Comments Matched</span>
              <MessageCircle color="#22D3EE" size={18} />
           </div>
-          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.cyclesInProgress} /></div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.commentsMatched} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
-             {metrics.cyclesInProgress > 0 ? (
-               <span style={{ color: '#22D3EE' }}>Active conversations running</span>
-             ) : <span style={{ color: "var(--text-muted)" }}>No active conversations</span>}
+             {metrics.commentsMatched > 0 ? (
+               <span style={{ color: '#22D3EE' }}>Comments matched keywords</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No matched comments yet</span>}
           </div>
-          {metrics.cyclesInProgress > 0 && <Sparkline color="#22D3EE" />}
+          {metrics.commentsMatched > 0 && <Sparkline color="#22D3EE" />}
         </motion.div>
 
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
-             <span className={styles.metricTitle}>Cycles Completed</span>
+             <span className={styles.metricTitle}>DM</span>
              <Send color="#10b981" size={18} />
           </div>
           <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.cyclesCompleted} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
              {metrics.cyclesCompleted > 0 ? (
-               <span style={{ color: '#10b981' }}>Links securely delivered</span>
-             ) : <span style={{ color: "var(--text-muted)" }}>Queue is empty</span>}
+               <span style={{ color: '#10b981' }}>DM link cycles completed</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No DMs sent yet</span>}
           </div>
           {metrics.cyclesCompleted > 0 && <Sparkline color="#10b981" />}
         </motion.div>
