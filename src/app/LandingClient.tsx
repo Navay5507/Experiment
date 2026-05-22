@@ -8,6 +8,7 @@ import styles from "./page.module.css";
 
 // Dynamic Feature Toggle: Set to false to immediately revert the landing page to the original layout
 const USE_NOOB_FRIENDLY_HERO = true;
+const USE_NOOB_FRIENDLY_FEATURES = true;
 
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
   <div>
@@ -742,207 +743,509 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>Unlock the full Power of Instagram</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>A complete toolkit designed to harvest leads predictably without triggering ban limits.</p>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>
+                {USE_NOOB_FRIENDLY_FEATURES ? "Choose Your Growth Superpowers 🚀" : "Unlock the full Power of Instagram"}
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
+                {USE_NOOB_FRIENDLY_FEATURES 
+                  ? "You don't need to be a tech wizard. AutoDrop does the hard work of turning comments and views into followers, leads, and sales on auto-pilot."
+                  : "A complete toolkit designed to harvest leads predictably without triggering ban limits."
+                }
+              </p>
             </div>
           </FadeIn>
 
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
-             
-             {/* 1. Comment Automation */}
-             <FadeIn delay={0.1}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#fff', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #efefef' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                       <MessageCircle size={16} color="#000" /><span style={{fontSize: '0.85rem', fontWeight: 700, color: '#000'}}>Comments</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                       <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
-                       <div style={{ flex: 1 }}>
-                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>sarajohnson</span>
-                          <span style={{ fontSize: '0.85rem', color: '#000' }}>Drop the link! 😍</span>
-                          <div style={{ fontSize: '0.75rem', color: '#8e8e8e', marginTop: '0.2rem', display: 'flex', gap: '1rem' }}>
-                             <span>2w</span><span style={{fontWeight: 600}}>Reply</span>
-                          </div>
-                       </div>
-                       <Heart size={12} color="#8e8e8e" />
-                    </div>
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2.5rem', marginTop: '1rem' }}>
-                       <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
-                       <div style={{ flex: 1 }}>
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>autodrop</span>
-                          <span style={{ fontSize: '0.8rem', color: '#000' }}>Just sent the link to your DMs! 🚀</span>
-                       </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Comment Automation</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to post & reel comments and send a DM to capture leads instantly.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+          {USE_NOOB_FRIENDLY_FEATURES ? (
+            /* NEW BEAUTIFUL BEGINNER-FRIENDLY & EASY UNDERSTANDABLE FEATURES GRID */
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
+              
+              {/* 1. Comment Magnet */}
+              <FadeIn delay={0.1}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: 'linear-gradient(180deg, #16171d 0%, #0c0d12 100%)', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'center' }}>
+                     {/* Glowing Background Dot */}
+                     <div style={{ position: 'absolute', top: '10%', right: '10%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(91,133,255,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                     
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <MessageCircle size={16} color="#5b85ff" /><span style={{fontSize: '0.8rem', fontWeight: 700, color: '#5b85ff', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Comment Magnet</span>
+                        <span style={{ marginLeft: 'auto', background: 'rgba(91,133,255,0.1)', color: '#5b85ff', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 700 }}>Voted #1 Creator Hack</span>
+                     </div>
 
-             {/* 2. Story Automation */}
-             <FadeIn delay={0.2}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1540228232483-1dfdec35e955?auto=format&fit=crop&w=400&q=80) center/cover' }}>
-                       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}>
-                          <div style={{ width: '100%', height: '2px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }}><div style={{ width: '50%', height: '100%', background: '#fff', borderRadius: '2px' }}/></div>
-                       </div>
-                       <div style={{ position: 'absolute', top: '15px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
-                          <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>autodrop <span style={{opacity: 0.8, fontWeight: 400}}>3h</span></span>
-                       </div>
-                       <div style={{ position: 'absolute', top: '35%', width: '100%', textAlign: 'center' }}>
-                          <span style={{ background: '#fff', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 800 }}>Reply with "PARTY" 🎉</span>
-                       </div>
-                       <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.5rem' }}>
-                          <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.5)', borderRadius: '100px', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center' }}>
-                             <span style={{ fontSize: '0.75rem', color: '#fff' }}>Send message</span>
-                          </div>
-                          <Heart size={20} color="#fff" />
-                          <Send size={20} color="#fff" />
-                       </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Story Automation</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Trigger specific DMs based on keywords or exact emoji reactions on your Stories.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+                     {/* Simulated Chat */}
+                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '0.75rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
+                        <div style={{ flex: 1 }}>
+                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>sarajohnson</span>
+                              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)' }}>Just now</span>
+                           </div>
+                           <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>Drop the link please! 😍</span>
+                        </div>
+                     </div>
 
-             {/* 4. DM Check */}
-             <FadeIn delay={0.4}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
-                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
-                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Hey! I&apos;m interested in the course.</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Awesome! Here is the exclusive link to sign up 🚀</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e5e7eb', borderRadius: '100px', padding: '0.5rem 1rem', marginTop: 'auto' }}>
-                          <span style={{ fontSize: '0.75rem', color: '#aaa' }}>Message...</span>
-                       </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>DM Keyword Triggers</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to users who natively DM you specific keywords or questions.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+                     {/* Instant Auto-Response */}
+                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2rem', marginTop: '0.75rem', background: 'linear-gradient(90deg, rgba(91,133,255,0.1), transparent)', padding: '0.6rem 0.8rem', borderRadius: '12px', borderLeft: '3px solid #5b85ff' }}>
+                        <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                        <div style={{ flex: 1 }}>
+                           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff' }}>autodrop <span style={{fontSize: '0.6rem', color: '#10b981', marginLeft: '0.4rem', border: '1px solid #10b981', padding: '1px 3px', borderRadius: '3px'}}>Active</span></span>
+                           <p style={{ fontSize: '0.75rem', color: '#5b85ff', margin: 0, fontWeight: 600 }}>Done! Check your DMs 🚀</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Auto-Reply to Comments 💬
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       No more copy-pasting links all day! When someone comments a keyword on your Reels or posts, AutoDrop instantly replies to them and slides into their DMs with your link.
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#5b85ff', fontWeight: 700 }}>
+                        <Zap size={14} /> Instant Lead Delivery (0.5s)
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
 
-             {/* 5. Ask For Follow */}
-             <FadeIn delay={0.5}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Please follow us to unlock the link!</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
-                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Followed you!</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Thanks! Here is your download. 👇<div style={{background:'rgba(255,255,255,0.2)', padding:'0.4rem', borderRadius:'6px', marginTop:'0.5rem', fontWeight:600, textAlign: 'center'}}>Download Now</div></div>
-                       </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Follow-Gates</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Verify if the user is following your profile before dispatching the link automation.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+              {/* 2. Story Reply Booster */}
+              <FadeIn delay={0.2}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1540228232483-1dfdec35e955?auto=format&fit=crop&w=400&q=80) center/cover', filter: 'brightness(0.7)' }}>
+                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}>
+                           <div style={{ width: '100%', height: '2px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }}><div style={{ width: '65%', height: '100%', background: '#fff', borderRadius: '2px' }}/></div>
+                        </div>
+                        <div style={{ position: 'absolute', top: '15px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                           <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                           <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>yourprofile <span style={{opacity: 0.8, fontWeight: 400}}>2h</span></span>
+                        </div>
+                        
+                        {/* Interactive Callout */}
+                        <div style={{ position: 'absolute', top: '35%', left: '5%', right: '5%', textAlign: 'center' }}>
+                           <div style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', color: '#fff', padding: '0.75rem 1rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', display: 'inline-block' }}>
+                              <span style={{ display: 'block', fontSize: '0.7rem', color: '#f43f5e', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.1rem' }}>Reply keyword</span>
+                              <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>"GROWTH" 🎉</span>
+                           </div>
+                        </div>
 
-             {/* 6. Re-trigger */}
-             <FadeIn delay={0.6}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#fff', height: '220px', padding: '0', position: 'relative', overflow: 'hidden' }}>
-                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(55, 151, 240, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
-                       <RefreshCcw size={48} color="#fff" />
-                       <div style={{ fontWeight: 800, color: '#fff', fontSize: '1.2rem' }}>Reactivate Viral Posts</div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Historically Re-Trigger</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Run automations on posts published months ago to revive dead traffic streams.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+                        <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                           <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(0,0,0,0.4)', borderRadius: '100px', padding: '0.4rem 1rem', display: 'flex', alignItems: 'center' }}>
+                              <span style={{ fontSize: '0.75rem', color: '#eee' }}>Replying with "GROWTH"...</span>
+                           </div>
+                           <Heart size={18} color="#fff" />
+                           <Send size={18} color="#fff" />
+                        </div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Story Auto-DMs 📖
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       Put a call-to-action on your daily Stories telling users to reply with a specific word. AutoDrop instantly slides into their DMs with your link!
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
+                        <Sparkles size={14} /> Boosts Story Views & Reach (10x)
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
 
-             {/* 7. Collect User Data */}
-             <FadeIn delay={0.7}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>What is the best email to send this to?</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
-                          <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
-                          <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>user@gmail.com</div>
-                       </div>
-                       <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                          <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Sent! Check your inbox. 📥</div>
-                       </div>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Data Capture</h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Seamlessly build your external email lists directly inside the IG DM ecosystem.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+              {/* 3. Inbox Auto-Replies */}
+              <FadeIn delay={0.3}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0a0d14', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     
+                     {/* Glowing Background Dot */}
+                     <div style={{ position: 'absolute', bottom: '10%', left: '10%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-             {/* 8. AI Replies Coming Soon */}
-             <FadeIn delay={0.8}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
-                    {/* Glowing dynamic background */}
-                    <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(168,85,247,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <Zap size={14} color="#10b981" />
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Instant DM Response</span>
+                     </div>
 
-                    <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
-                       <Sparkles size={48} color="#a855f7" />
-                       <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Autodrop <span style={{ color: '#a855f7' }}>AI</span></span>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Custom Trained AI <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span></h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Train an AI model on your store data to contextually answer queries and close sales.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                           <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                           <div style={{ background: '#1c1e24', border: '1px solid rgba(255,255,255,0.05)', padding: '0.5rem 0.85rem', borderRadius: '16px 16px 16px 4px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%' }}>
+                              Hey! I want the secret code <b>GUIDE</b>
+                           </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                           <div style={{ background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', padding: '0.55rem 0.95rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%', boxShadow: '0 4px 15px rgba(59,130,246,0.3)' }}>
+                              Awesome! Here is your download link: <span style={{display: 'block', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.2)', borderRadius: '6px', marginTop: '0.4rem', fontWeight: 700, fontSize: '0.75rem', textAlign: 'center'}}>🔥 Get Guide Now</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Inbox Secret Code Words 📩
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       Create secret code words (like 'VIP', 'OFFER', 'GUIDE') for your bio or emails. When someone DMs you that keyword, AutoDrop sends them the link immediately.
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#10b981', fontWeight: 700 }}>
+                        <CheckCircle2 size={14} /> Response Time: &lt; 0.5 seconds
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
 
-             {/* 9. Creator Marketplace */}
-             <FadeIn delay={0.9}>
-               <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                 <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    
-                    {/* Glowing dynamic background */}
-                    <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(34,211,238,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+              {/* 4. Follower Booster */}
+              <FadeIn delay={0.4}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#090b10', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     
+                     {/* Glowing Background Dot */}
+                     <div style={{ position: 'absolute', top: '15%', left: '30%', width: '90px', height: '90px', background: 'radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-                    <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
-                       <ShoppingBag size={48} color="#22D3EE" />
-                       <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Digital <span style={{ color: '#22D3EE' }}>Store</span></span>
-                    </div>
-                 </div>
-                 <div style={{ padding: '1.5rem', flex: 1 }}>
-                    <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Creator Marketplace <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span></h3>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Host and sell your digital products directly to your audience without leaving the ecosystem.</p>
-                 </div>
-               </motion.div>
-             </FadeIn>
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                        <ShieldCheck size={14} color="#f43f5e" /><span style={{fontSize: '0.75rem', fontWeight: 700, color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Follower Booster</span>
+                     </div>
 
-          </div>
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '0.8rem 1rem', borderRadius: '16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#fff' }}>
+                           <div style={{width: 8, height: 8, borderRadius: '50%', background: '#f59e0b'}} />
+                           <span>Checking follower status...</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#f43f5e', fontWeight: 600 }}>
+                           <span>❌ User not following!</span>
+                        </div>
+                        <div style={{ padding: '0.35rem', background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.3)', borderRadius: '8px', fontSize: '0.7rem', color: '#fff', textAlign: 'center', fontWeight: 700 }}>
+                           👉 Automatically prompt user to follow you!
+                        </div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Follower Booster (Follow-Gate) 🔒
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       Want to double your followers? AutoDrop checks if the user is following you first. If not, it politely asks them to follow you before delivering their link!
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
+                        <ShieldCheck size={14} /> Official Meta Partner API Approved
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+
+              {/* 5. Revive Viral Posts */}
+              <FadeIn delay={0.5}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0c0d12', height: '220px', padding: '0', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover', opacity: 0.25}} />
+                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, transparent 20%, rgba(91,133,255,0.7) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}>
+                           <RefreshCcw size={44} color="#fff" />
+                        </motion.div>
+                        <div style={{ fontWeight: 900, color: '#fff', fontSize: '1rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Wake Up Viral Reels</div>
+                        <div style={{ background: '#10b981', color: '#fff', fontSize: '0.7rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', textTransform: 'uppercase' }}>Capture 100% of traffic</div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Revive Old Viral Posts 🔄
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       Got an old post or Reel that went viral last month but is still gaining views? Turn on AutoDrop on historical posts to catch every comment and collect passive sales forever.
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#5b85ff', fontWeight: 700 }}>
+                        <RefreshCcw size={14} /> Zero wasted organic reach
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+
+              {/* 6. Grow Your Email List */}
+              <FadeIn delay={0.6}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0a0d15', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     
+                     {/* Glowing Background Dot */}
+                     <div style={{ position: 'absolute', bottom: '15%', right: '15%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                        <AtSign size={14} color="#8b5cf6" /><span style={{fontSize: '0.75rem', fontWeight: 700, color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Instant Lead Collector</span>
+                     </div>
+
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                           <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>Enter Email:</span>
+                           <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600 }}>alex@example.com</span>
+                        </div>
+                        <div style={{ background: '#10b981', color: '#fff', padding: '0.4rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800, textAlign: 'center', boxShadow: '0 4px 10px rgba(16,185,129,0.3)' }}>
+                           Saved & Connected directly to Klaviyo/Mailchimp! ✅
+                        </div>
+                     </div>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Grow Your Email List 📧
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       No more clunky landing pages or slow-loading websites. Ask for your customer's email directly inside the IG DM and save it automatically to your lists.
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#8b5cf6', fontWeight: 700 }}>
+                        <CheckCircle2 size={14} /> 10x Higher Opt-In Rate than web landing pages
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+
+              {/* 7. Custom AI Sales Agent */}
+              <FadeIn delay={0.7}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     {/* Glowing dynamic background */}
+                     <div style={{ position: 'absolute', width: '120px', height: '120px', background: 'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)', filter: 'blur(15px)', zIndex: 0 }} />
+
+                     <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                        <Sparkles size={40} color="#a855f7" />
+                        <span style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em' }}>AutoDrop <span style={{ color: '#a855f7' }}>AI</span></span>
+                     </div>
+                     <span style={{ position: 'absolute', bottom: '15px', background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', color: '#a855f7', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 800 }}>LATEST UPGRADE 🔮</span>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Custom AI Sales Agent 🤖 <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       Train an ultra-smart AI bot on your digital files, business PDFs, or product descriptions. It chats naturally with your customers, answers queries, and handles objections automatically!
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
+                        <Sparkles size={14} /> Full Custom AI Training Available
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+
+              {/* 8. Sleek Digital Store */}
+              <FadeIn delay={0.8}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+                  <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     {/* Glowing dynamic background */}
+                     <div style={{ position: 'absolute', width: '120px', height: '120px', background: 'radial-gradient(circle, rgba(34,211,238,0.3) 0%, transparent 70%)', filter: 'blur(15px)', zIndex: 0 }} />
+
+                     <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                        <ShoppingBag size={40} color="#22D3EE" />
+                        <span style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em' }}>Digital <span style={{ color: '#22D3EE' }}>Store</span></span>
+                     </div>
+                     <span style={{ position: 'absolute', bottom: '15px', background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.3)', color: '#22D3EE', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 800 }}>FULLY INCLUDED 🛍️</span>
+                  </div>
+                  <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                       Sleek Digital Store 🛍️ <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
+                     </h3>
+                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                       No external website or Shopify account needed. Simply upload your PDFs, masterclasses, codes, or ebooks to your AutoDrop dashboard, and let customers buy directly inside their chats.
+                     </p>
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#22D3EE', fontWeight: 700 }}>
+                        <ShoppingBag size={14} /> Direct Stripe / Payment Gateway Integration
+                     </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+
+            </div>
+          ) : (
+            /* ORIGINAL FEATURES SECTION */
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+               
+               {/* 1. Comment Automation */}
+               <FadeIn delay={0.1}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#fff', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid #efefef' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                         <MessageCircle size={16} color="#000" /><span style={{fontSize: '0.85rem', fontWeight: 700, color: '#000'}}>Comments</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                         <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
+                         <div style={{ flex: 1 }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>sarajohnson</span>
+                            <span style={{ fontSize: '0.85rem', color: '#000' }}>Drop the link! 😍</span>
+                            <div style={{ fontSize: '0.75rem', color: '#8e8e8e', marginTop: '0.2rem', display: 'flex', gap: '1rem' }}>
+                               <span>2w</span><span style={{fontWeight: 600}}>Reply</span>
+                            </div>
+                         </div>
+                         <Heart size={12} color="#8e8e8e" />
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2.5rem', marginTop: '1rem' }}>
+                         <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                         <div style={{ flex: 1 }}>
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000', marginRight: '0.4rem' }}>autodrop</span>
+                            <span style={{ fontSize: '0.8rem', color: '#000' }}>Just sent the link to your DMs! 🚀</span>
+                         </div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Comment Automation</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to post & reel comments and send a DM to capture leads instantly.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 2. Story Automation */}
+               <FadeIn delay={0.2}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }}>
+                         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), transparent)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}>
+                            <div style={{ width: '100%', height: '2px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }}><div style={{ width: '50%', height: '100%', background: '#fff', borderRadius: '2px' }}/></div>
+                         </div>
+                         <div style={{ position: 'absolute', top: '15px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                            <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>autodrop <span style={{opacity: 0.8, fontWeight: 400}}>3h</span></span>
+                         </div>
+                         <div style={{ position: 'absolute', top: '35%', width: '100%', textAlign: 'center' }}>
+                            <span style={{ background: '#fff', color: '#000', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '1rem', fontWeight: 800 }}>Reply with "PARTY" 🎉</span>
+                         </div>
+                         <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.5rem' }}>
+                            <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.5)', borderRadius: '100px', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center' }}>
+                               <span style={{ fontSize: '0.75rem', color: '#fff' }}>Send message</span>
+                            </div>
+                            <Heart size={20} color="#fff" />
+                            <Send size={20} color="#fff" />
+                         </div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Story Automation</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Trigger specific DMs based on keywords or exact emoji reactions on your Stories.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 4. DM Check */}
+               <FadeIn delay={0.4}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                            <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                            <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Hey! I&apos;m interested in the course.</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                            <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Awesome! Here is the exclusive link to sign up 🚀</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e5e7eb', borderRadius: '100px', padding: '0.5rem 1rem', marginTop: 'auto' }}>
+                            <span style={{ fontSize: '0.75rem', color: '#aaa' }}>Message...</span>
+                         </div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>DM Keyword Triggers</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Automatically reply to users who natively DM you specific keywords or questions.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 5. Ask For Follow */}
+               <FadeIn delay={0.5}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                            <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Please follow us to unlock the link!</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                            <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>Followed you!</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                            <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Thanks! Here is your download. 👇<div style={{background:'rgba(255,255,255,0.2)', padding:'0.4rem', borderRadius:'6px', marginTop:'0.5rem', fontWeight:600, textAlign: 'center'}}>Download Now</div></div>
+                         </div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Follow-Gates</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Verify if the user is following your profile before dispatching the link automation.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 6. Re-trigger */}
+               <FadeIn delay={0.6}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#fff', height: '220px', padding: '0', position: 'relative', overflow: 'hidden' }}>
+                      <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(55, 151, 240, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
+                         <RefreshCcw size={48} color="#fff" />
+                         <div style={{ fontWeight: 800, color: '#fff', fontSize: '1.2rem' }}>Reactivate Viral Posts</div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Historically Re-Trigger</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Run automations on posts published months ago to revive dead traffic streams.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 7. Collect User Data */}
+               <FadeIn delay={0.7}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#fff', height: '220px', padding: '1.5rem', position: 'relative' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', height: '100%', justifyContent: 'center' }}>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                            <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>What is the best email to send this to?</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                            <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                            <div style={{ background: '#efefef', padding: '0.6rem 1rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.85rem', color: '#000', maxWidth: '80%' }}>user@gmail.com</div>
+                         </div>
+                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                            <div style={{ background: '#3797f0', padding: '0.6rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.85rem', color: '#fff', maxWidth: '80%' }}>Sent! Check your inbox. 📥</div>
+                         </div>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Data Capture</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Seamlessly build your external email lists directly inside the IG DM ecosystem.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 8. AI Replies Coming Soon */}
+               <FadeIn delay={0.8}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      
+                      {/* Glowing dynamic background */}
+                      <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(circle at center, rgba(168,85,247,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+
+                      <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                         <Sparkles size={48} color="#a855f7" />
+                         <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Autodrop <span style={{ color: '#a855f7' }}>AI</span></span>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Custom Trained AI <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span></h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Train an AI model on your store data to contextually answer queries and close sales.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+               {/* 9. Creator Marketplace */}
+               <FadeIn delay={0.9}>
+                 <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                   <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      
+                      {/* Glowing dynamic background */}
+                      <div style={{ position: 'absolute', width: '120px', height: '120px', background: 'radial-gradient(circle at center, rgba(34,211,238,0.4) 0%, transparent 70%)', filter: 'blur(20px)' }} />
+
+                      <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
+                         <ShoppingBag size={48} color="#22D3EE" />
+                         <span style={{ fontSize: '2rem', fontWeight: 800, letterSpacing: '-0.03em' }}>Digital <span style={{ color: '#22D3EE' }}>Store</span></span>
+                      </div>
+                   </div>
+                   <div style={{ padding: '1.5rem', flex: 1 }}>
+                      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 700 }}>Creator Marketplace <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span></h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.5 }}>Host and sell your digital products directly to your audience without leaving the ecosystem.</p>
+                   </div>
+                 </motion.div>
+               </FadeIn>
+
+            </div>
+          )}
         </div>
       </section>
 
