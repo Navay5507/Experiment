@@ -9,42 +9,33 @@ export default async function DashboardOverview() {
   const { userId } = await auth();
   if (!userId) redirect("/sign-in");
 
-  const { data: user } = await supabase.from('users').select('id, instagramTokenExpiresAt').eq('clerkId', userId).maybeSingle();
+  const { data: user } = await supabase.from('users').select('id, instagramTokenExpiresAt, instagramAccessToken').eq('clerkId', userId).maybeSingle();
   
   if (!user) {
-     return <DashboardClient metrics={{ activeAutomations: 0, commentsMatched: 0, dmsSent: 0, leadsCaptured: 0, storeRevenue: 0, productsSold: 0 }} feed={[]} expiresAt={null} />;
+     return <DashboardClient metrics={{ activeAutomations: 0, cyclesCompleted: 0, cyclesInProgress: 0, leadsCaptured: 0, storeRevenue: 0, productsSold: 0, hasConnectedIG: false, totalAutomations: 0, totalProducts: 0, activeProducts: 0 }} feed={[]} expiresAt={null} />;
   }
 
   // Pure Promise.all for high performance zero-fake DB agg sweeps
-  const [automationsRes, leadsRes, eventsRes, recentLogsRes, productsRes] = await Promise.all([
-    supabase.from('automations').select('id', { count: 'exact' }).eq('user_id', user.id),
+  const [automationsRes, leadsRes, conversationsRes, recentLogsRes, productsRes] = await Promise.all([
+    supabase.from('automations').select('id, is_active').eq('user_id', user.id),
     supabase.from('leads').select('id', { count: 'exact' }).eq('user_id', user.id),
-    supabase.from('analytics_events').select('event_type, automation_id, metadata').eq('user_id', user.id),
+    supabase.from('dm_conversations').select('state').eq('user_id', user.id),
     supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
-    supabase.from('products').select('total_sales, total_revenue').eq('user_id', user.id)
+    supabase.from('products').select('total_sales, total_revenue, is_active').eq('user_id', user.id)
   ]);
 
-  let commentsMatched = 0;
-  const uniqueDmFlows = new Set<string>();
+  let cyclesCompleted = 0;
+  let cyclesInProgress = 0;
 
-  if (eventsRes.data) {
-     eventsRes.data.forEach(e => {
-        if (e.event_type.includes('comment')) commentsMatched++;
-        if (e.event_type.includes('dm')) {
-           const meta = (typeof e.metadata === 'string' ? JSON.parse(e.metadata) : e.metadata) || {};
-           const recipientId = meta.recipient_id || meta.sender_id || meta.recipient_ig_id;
-           const autoId = e.automation_id || meta.automation_id || 'default';
-           
-           if (recipientId) {
-              uniqueDmFlows.add(`${autoId}_${recipientId}`);
-           } else {
-              uniqueDmFlows.add(`fallback_${Math.random()}_${e.event_type}`);
-           }
+  if (conversationsRes.data) {
+     conversationsRes.data.forEach(c => {
+        if (c.state === 'completed') {
+           cyclesCompleted++;
+        } else {
+           cyclesInProgress++;
         }
      });
   }
-
-  const dmsSent = uniqueDmFlows.size;
 
   // Store revenue aggregation
   let storeRevenue = 0;
@@ -56,13 +47,22 @@ export default async function DashboardOverview() {
     });
   }
 
+  const totalAutomations = automationsRes.data?.length || 0;
+  const activeAutomations = automationsRes.data?.filter(a => a.is_active).length || 0;
+  const totalProducts = productsRes.data?.length || 0;
+  const activeProducts = productsRes.data?.filter(p => p.is_active).length || 0;
+
   const metrics = {
-    activeAutomations: automationsRes.count || 0,
-    commentsMatched,
-    dmsSent,
+    activeAutomations,
+    cyclesCompleted,
+    cyclesInProgress,
     leadsCaptured: leadsRes.count || 0,
     storeRevenue,
     productsSold,
+    hasConnectedIG: !!user.instagramAccessToken,
+    totalAutomations,
+    totalProducts,
+    activeProducts,
   };
 
   // Convert raw DB logs rigidly to the feed map without ANY synthetic intervals
@@ -74,3 +74,4 @@ export default async function DashboardOverview() {
 
   return <DashboardClient metrics={metrics} feed={feed} expiresAt={user.instagramTokenExpiresAt || null} />;
 }
+

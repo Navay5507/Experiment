@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle, DollarSign, ShoppingBag } from "lucide-react";
+import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle, DollarSign, ShoppingBag, Check } from "lucide-react";
 import styles from "./dashboard.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -56,7 +56,18 @@ const Sparkline = ({ color }: { color: string }) => (
   </svg>
 );
 
-interface Metrics { activeAutomations: number; commentsMatched: number; dmsSent: number; leadsCaptured: number; storeRevenue: number; productsSold: number; }
+interface Metrics {
+  activeAutomations: number;
+  cyclesCompleted: number;
+  cyclesInProgress: number;
+  leadsCaptured: number;
+  storeRevenue: number;
+  productsSold: number;
+  hasConnectedIG?: boolean;
+  totalAutomations?: number;
+  totalProducts?: number;
+  activeProducts?: number;
+}
 interface FeedItem { id: string; text: string; time: string; }
 
 interface DashboardProps {
@@ -103,30 +114,30 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(34,211,238,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
-             <span className={styles.metricTitle}>Comments Matched</span>
+             <span className={styles.metricTitle}>Cycles In Progress</span>
              <MessageCircle color="#22D3EE" size={18} />
           </div>
-          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.commentsMatched} /></div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.cyclesInProgress} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
-             {metrics.commentsMatched > 0 ? (
-               <span style={{ color: '#22D3EE' }}>Organic engagements trapped</span>
-             ) : <span style={{ color: "var(--text-muted)" }}>Awaiting trigger words...</span>}
+             {metrics.cyclesInProgress > 0 ? (
+               <span style={{ color: '#22D3EE' }}>Active conversations running</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No active conversations</span>}
           </div>
-          {metrics.commentsMatched > 0 && <Sparkline color="#22D3EE" />}
+          {metrics.cyclesInProgress > 0 && <Sparkline color="#22D3EE" />}
         </motion.div>
 
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
-             <span className={styles.metricTitle}>DMs Sent</span>
+             <span className={styles.metricTitle}>Cycles Completed</span>
              <Send color="#10b981" size={18} />
           </div>
-          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.dmsSent} /></div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.cyclesCompleted} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
-             {metrics.dmsSent > 0 ? (
-               <span style={{ color: '#10b981' }}>Payloads securely routed</span>
+             {metrics.cyclesCompleted > 0 ? (
+               <span style={{ color: '#10b981' }}>Links securely delivered</span>
              ) : <span style={{ color: "var(--text-muted)" }}>Queue is empty</span>}
           </div>
-          {metrics.dmsSent > 0 && <Sparkline color="#10b981" />}
+          {metrics.cyclesCompleted > 0 && <Sparkline color="#10b981" />}
         </motion.div>
 
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(168,85,247,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
@@ -176,42 +187,169 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', gap: '1.25rem', marginTop: '1.5rem' }}>
          
-         {/* Live Activity Feed - HONEST DB DATA */}
-         <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
-            <div className={styles.sectionTitle} style={{ color: '#fff', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-               <Terminal size={18} /> Raw System Log Stream
+         {/* Roadmap to making ₹₹₹ Onboarding Card */}
+         <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', minHeight: '480px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+               <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  Roadmap to making ₹₹₹
+               </h3>
+               <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 600 }}>
+                  {(() => {
+                     const stepsCount = [
+                        !!metrics.hasConnectedIG,
+                        (metrics.totalAutomations || 0) > 0,
+                        (metrics.totalProducts || 0) > 0,
+                        (metrics.activeProducts || 0) > 0
+                     ].filter(Boolean).length;
+                     return `${stepsCount}/4 completed`;
+                  })()}
+               </span>
             </div>
-            
-            {feed.length === 0 ? (
-               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', color: 'var(--text-muted)', gap: '1rem', padding: '2rem' }}>
-                  <ShieldAlert size={32} opacity={0.3} />
-                  <p>Your trace log history is entirely clear.</p>
-                  <Link href="/dashboard/automations/new" className={styles.btnAction}>Build your first Pipeline</Link>
-               </div>
-            ) : (
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem', flex: 1 }}>
-                  <AnimatePresence>
-                     {feed.map((item, i: number) => (
-                       <motion.div 
-                          key={item.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                       >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                             <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)' }} />
-                             <span style={{ fontSize: '0.95rem', color: '#e5e7eb', fontFamily: 'monospace' }}>{item.text}</span>
-                          </div>
-                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{item.time}</span>
-                       </motion.div>
-                     ))}
-                  </AnimatePresence>
-                  <div style={{ marginTop: 'auto', paddingTop: '1rem', fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-                     Pulling securely from Supabase Webhook Clusters
-                  </div>
-               </div>
-            )}
+
+            {/* Progress Bar */}
+            <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.06)', borderRadius: '999px', overflow: 'hidden', marginBottom: '2.5rem' }}>
+               <motion.div 
+                  initial={{ width: 0 }}
+                  animate={{ 
+                     width: `${Math.round(([
+                        !!metrics.hasConnectedIG,
+                        (metrics.totalAutomations || 0) > 0,
+                        (metrics.totalProducts || 0) > 0,
+                        (metrics.activeProducts || 0) > 0
+                     ].filter(Boolean).length / 4) * 100)}%` 
+                  }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  style={{ height: '100%', background: 'linear-gradient(90deg, #3b82f6, #6366f1)', borderRadius: '999px', boxShadow: '0 0 12px rgba(99,102,241,0.5)' }}
+               />
+            </div>
+
+            {/* Steps Container */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative', flex: 1 }}>
+               {/* Vertical Dashed Line */}
+               <div style={{
+                  position: 'absolute',
+                  left: '15px',
+                  top: '20px',
+                  bottom: '20px',
+                  width: '2px',
+                  borderLeft: '2px dashed rgba(255,255,255,0.1)',
+                  zIndex: 0
+               }} />
+
+               {[
+                  {
+                     id: "instagram",
+                     title: "Link your Instagram Account",
+                     description: "Connect your Instagram profile to enable AutoDrop's automated response engine.",
+                     isCompleted: !!metrics.hasConnectedIG,
+                     action: !metrics.hasConnectedIG ? { label: "Connect IG", href: "/dashboard/settings" } : null
+                  },
+                  {
+                     id: "pipeline",
+                     title: "Create a Response Pipeline",
+                     description: "Set up trigger keywords and define the automated response flow for your comments and DMs.",
+                     isCompleted: (metrics.totalAutomations || 0) > 0,
+                     action: !(metrics.totalAutomations || 0) ? { label: "Create Pipeline", href: "/dashboard/automations/new" } : null
+                  },
+                  {
+                     id: "product",
+                     title: "Create a Digital Product",
+                     description: "Launch Digital Products, Webinars, Courses, 1:1 coaching, and more.",
+                     isCompleted: (metrics.totalProducts || 0) > 0,
+                     action: !(metrics.totalProducts || 0) ? { label: "Create Product", href: "/dashboard/store" } : null
+                  },
+                  {
+                     id: "store",
+                     title: "Activate your Digital Store",
+                     description: "Activate at least one product so it can be automatically delivered when users comment.",
+                     isCompleted: (metrics.activeProducts || 0) > 0,
+                     action: !(metrics.activeProducts || 0) ? { label: "Activate Product", href: "/dashboard/store" } : null
+                  }
+               ].map((step, index) => (
+                  <motion.div
+                     key={step.id}
+                     initial={{ opacity: 0, y: 15 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ delay: index * 0.1 }}
+                     style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', zIndex: 1, position: 'relative' }}
+                  >
+                     {/* Circle Indicator */}
+                     <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        background: step.isCompleted ? '#10b981' : 'rgba(255,255,255,0.03)',
+                        border: step.isCompleted ? '1px solid #10b981' : '1px solid rgba(255,255,255,0.15)',
+                        color: step.isCompleted ? '#fff' : 'rgba(255,255,255,0.4)',
+                        transition: 'all 0.3s ease',
+                        boxShadow: step.isCompleted ? '0 0 12px rgba(16,185,129,0.3)' : 'none'
+                     }}>
+                        {step.isCompleted ? (
+                           <Check size={16} strokeWidth={3} />
+                        ) : (
+                           <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+                        )}
+                     </div>
+
+                     {/* Step Panel */}
+                     <div style={{
+                        flex: 1,
+                        background: 'rgba(255,255,255,0.01)',
+                        border: '1px solid rgba(255,255,255,0.03)',
+                        padding: '1rem 1.25rem',
+                        borderRadius: '16px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        transition: 'all 0.2s ease',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.02)'
+                     }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                           <span style={{ fontSize: '0.95rem', fontWeight: 700, color: step.isCompleted ? 'rgba(255,255,255,0.9)' : '#fff' }}>
+                              {step.title}
+                           </span>
+                           <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.4 }}>
+                              {step.description}
+                           </span>
+                        </div>
+
+                        {step.action && (
+                           <Link 
+                              href={step.action.href}
+                              className={styles.btnAction}
+                              style={{
+                                 padding: '0.5rem 1.25rem',
+                                 fontSize: '0.78rem',
+                                 borderRadius: '999px',
+                                 background: '#fff',
+                                 color: '#000',
+                                 border: '1px solid #fff',
+                                 whiteSpace: 'nowrap',
+                                 fontWeight: 700,
+                                 boxShadow: '0 4px 12px rgba(255,255,255,0.1)',
+                                 transition: 'all 0.2s'
+                              }}
+                              onMouseEnter={(e) => {
+                                 e.currentTarget.style.transform = 'scale(1.04)';
+                                 e.currentTarget.style.background = 'rgba(255,255,255,0.95)';
+                              }}
+                              onMouseLeave={(e) => {
+                                 e.currentTarget.style.transform = 'scale(1)';
+                                 e.currentTarget.style.background = '#fff';
+                              }}
+                           >
+                              {step.action.label}
+                           </Link>
+                        )}
+                     </div>
+                  </motion.div>
+               ))}
+            </div>
          </div>
 
          {/* Account Insights */}
@@ -221,15 +359,15 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
                <div>
                   <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Est. Time Saved</div>
                   <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: metrics.commentsMatched > 0 ? '#ffbd2e' : 'rgba(255,255,255,0.2)', boxShadow: metrics.commentsMatched > 0 ? '0 0 20px #ffbd2e' : 'none' }} />
-                     {((metrics.commentsMatched * 1.5) / 60).toFixed(1)} hrs
+                     <div style={{ width: 10, height: 10, borderRadius: '50%', background: metrics.cyclesCompleted > 0 ? '#ffbd2e' : 'rgba(255,255,255,0.2)', boxShadow: metrics.cyclesCompleted > 0 ? '0 0 20px #ffbd2e' : 'none' }} />
+                     {((metrics.cyclesCompleted * 2.5) / 60).toFixed(1)} hrs
                   </div>
                </div>
                <div>
                   <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Total Engine Operations</div>
                   <div style={{ fontSize: '1.5rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#e5e7eb' }}>
                      <Zap size={24} color="var(--text-muted)" />
-                     {(metrics.commentsMatched + metrics.dmsSent).toLocaleString()} actions
+                     {(metrics.cyclesCompleted + metrics.cyclesInProgress).toLocaleString()} actions
                   </div>
                </div>
                <div style={{ marginTop: 'auto', padding: '1.25rem', background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: '12px', color: '#10b981', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600 }}>
@@ -241,3 +379,4 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
     </motion.div>
   );
 }
+
