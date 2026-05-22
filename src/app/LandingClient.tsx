@@ -6,6 +6,9 @@ import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView 
 import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown, ShoppingBag } from "lucide-react";
 import styles from "./page.module.css";
 
+// Dynamic Feature Toggle: Set to false to immediately revert the landing page to the original layout
+const USE_NOOB_FRIENDLY_HERO = true;
+
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
   <div>
     {children}
@@ -598,6 +601,207 @@ const TestimonialsSection = () => {
   );
 };
 
+const SimpleExplainerFlow = () => {
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+      gap: '2rem',
+      marginTop: '3rem',
+      marginBottom: '5rem',
+    }}>
+      {/* Step 1 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        style={{
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          borderRadius: '24px',
+          padding: '2rem',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)',
+        }}
+      >
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'rgba(168, 85, 247, 0.15)',
+          border: '1px solid rgba(168, 85, 247, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#c084fc',
+          fontSize: '1.25rem',
+          fontWeight: 700,
+          marginBottom: '1.5rem',
+        }}>
+          1
+        </div>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '0.75rem' }}>Create a Keyword Post</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+          Publish a post or Reel on Instagram and tell your viewers: <strong>&quot;Comment &apos;GROW&apos; to get my free link!&quot;</strong>
+        </p>
+        
+        {/* Step 1 Mockup */}
+        <div style={{
+          width: '100%',
+          background: '#fff',
+          borderRadius: '12px',
+          padding: '1rem',
+          color: '#000',
+          textAlign: 'left',
+          fontSize: '0.85rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+            <span style={{ fontWeight: 700 }}>yourname</span>
+          </div>
+          <p style={{ margin: 0, color: '#333' }}>
+            Get access to my 7-day automated masterclass. Comment <strong>&quot;GROW&quot;</strong> and I&apos;ll send it directly to your DMs! 👇
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Step 2 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        style={{
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          borderRadius: '24px',
+          padding: '2rem',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)',
+        }}
+      >
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'rgba(34, 211, 238, 0.15)',
+          border: '1px solid rgba(34, 211, 238, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#22d3ee',
+          fontSize: '1.25rem',
+          fontWeight: 700,
+          marginBottom: '1.5rem',
+        }}>
+          2
+        </div>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '0.75rem' }}>Followers Comment</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+          Your audience gets excited about your offer and writes <strong>&quot;GROW&quot;</strong> in the comments.
+        </p>
+
+        {/* Step 2 Mockup */}
+        <div style={{
+          width: '100%',
+          background: '#fff',
+          borderRadius: '12px',
+          padding: '1rem',
+          color: '#000',
+          textAlign: 'left',
+          fontSize: '0.85rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+        }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
+            <div>
+              <span style={{ fontWeight: 700 }}>sarajohnson</span>
+              <span style={{ marginLeft: '0.4rem', color: '#111' }}>GROW! Can&apos;t wait! 😍</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Step 3 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        style={{
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          borderRadius: '24px',
+          padding: '2rem',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)',
+        }}
+      >
+        <div style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'rgba(16, 185, 129, 0.15)',
+          border: '1px solid rgba(16, 185, 129, 0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#10b981',
+          fontSize: '1.25rem',
+          fontWeight: 700,
+          marginBottom: '1.5rem',
+        }}>
+          3
+        </div>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: '0.75rem' }}>AutoDrop Delivers Link</h3>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+          AutoDrop automatically replies to their comment and sends them the link directly to their Instagram DMs!
+        </p>
+
+        {/* Step 3 Mockup */}
+        <div style={{
+          width: '100%',
+          background: '#fff',
+          borderRadius: '12px',
+          padding: '0.75rem',
+          color: '#000',
+          textAlign: 'left',
+          fontSize: '0.8rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.4rem',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f5f5f5', padding: '0.4rem', borderRadius: '8px' }}>
+            <div style={{ width: 16, height: 16, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+            <span>yourname: Sent you a DM! 🚀</span>
+          </div>
+          <div style={{ alignSelf: 'flex-end', background: '#3797f0', color: '#fff', padding: '0.5rem 0.75rem', borderRadius: '12px 12px 2px 12px', fontSize: '0.75rem' }}>
+            Hey! Here is your link: <strong>autodrop.in/class</strong> 🎉
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function LandingClient({ userId }: { userId: string | null }) {
   // Cursor tracking & Mobile state
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -727,10 +931,19 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>Unlock the full Power of Instagram</h2>
-              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>A complete toolkit designed to harvest leads predictably without triggering ban limits.</p>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>
+                {USE_NOOB_FRIENDLY_HERO ? "Convert Instagram Comments into Leads & Sales Automatically!" : "Unlock the full Power of Instagram"}
+              </h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto' }}>
+                {USE_NOOB_FRIENDLY_HERO 
+                  ? "Stop sending links manually. AutoDrop watches your Reels and posts, replying to comments and sending links to DMs instantly, 24/7."
+                  : "A complete toolkit designed to harvest leads predictably without triggering ban limits."
+                }
+              </p>
             </div>
           </FadeIn>
+
+          {USE_NOOB_FRIENDLY_HERO && <SimpleExplainerFlow />}
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
              
