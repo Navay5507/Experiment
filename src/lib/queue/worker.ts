@@ -225,9 +225,33 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   console.log(`[Worker DM] Automation lookup: found=${!!automation}, error=${autoError?.message || 'none'}`);
 
-  if (!user?.instagramAccessToken || !automation) {
-    console.error(`[Worker DM] ABORT: user=${!!user}, hasToken=${!!user?.instagramAccessToken}, automation=${!!automation}`);
+  if (!user || !automation) {
+    console.error(`[Worker DM] ABORT: user=${!!user}, automation=${!!automation}`);
     throw new Error('Missing Auth or Automation Rules');
+  }
+
+  // Handle multi-account credentials switching
+  if (automation.instagram_user_id && automation.instagram_user_id !== user.instagramUserId) {
+    const { data: conn } = await supabase
+      .from('connected_accounts')
+      .select('instagram_access_token, instagram_handle, instagram_user_id')
+      .eq('user_id', userId)
+      .eq('instagram_user_id', automation.instagram_user_id)
+      .maybeSingle();
+
+    if (conn) {
+      user.instagramAccessToken = conn.instagram_access_token;
+      user.instagramHandle = conn.instagram_handle;
+      user.instagramUserId = conn.instagram_user_id;
+      console.log(`[Worker DM] Switched to connected account: @${conn.instagram_handle} (${conn.instagram_user_id})`);
+    } else {
+      console.warn(`[Worker DM] Connected account ${automation.instagram_user_id} not found, using primary`);
+    }
+  }
+
+  if (!user.instagramAccessToken) {
+    console.error(`[Worker DM] ABORT: missing access token`);
+    throw new Error('Missing Instagram Access Token');
   }
 
   const token = user.instagramAccessToken;
@@ -679,17 +703,37 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
 
   const { data: user } = await supabase
     .from('users')
-    .select('instagramAccessToken, plan')
+    .select('instagramAccessToken, instagramUserId, plan')
     .eq('id', userId)
     .single();
 
   const { data: automation } = await supabase
     .from('automations')
-    .select('reply_template, dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
+    .select('instagram_user_id, reply_template, dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
     .eq('id', automationId)
     .single();
 
-  if (!user?.instagramAccessToken || !automation || !commentId) throw new Error('Missing Data');
+  if (!user || !automation || !commentId) throw new Error('Missing Data');
+
+  // Handle multi-account credentials switching
+  if (automation.instagram_user_id && automation.instagram_user_id !== user.instagramUserId) {
+    const { data: conn } = await supabase
+      .from('connected_accounts')
+      .select('instagram_access_token, instagram_user_id')
+      .eq('user_id', userId)
+      .eq('instagram_user_id', automation.instagram_user_id)
+      .maybeSingle();
+
+    if (conn) {
+      user.instagramAccessToken = conn.instagram_access_token;
+      user.instagramUserId = conn.instagram_user_id;
+      console.log(`[Worker Comment] Switched to connected account token for ${automation.instagram_user_id}`);
+    } else {
+      console.warn(`[Worker Comment] Connected account ${automation.instagram_user_id} not found, using primary`);
+    }
+  }
+
+  if (!user.instagramAccessToken) throw new Error('Missing Instagram Access Token');
 
   // ANTI-BAN: Hourly comment reply rate cap (Meta limit: 750/hr, we cap at 600)
   const hourlyCommentCheck = await checkHourlyCommentLimit(userId);

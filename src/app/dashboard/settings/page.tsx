@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
-import { Link2, Activity, CreditCard, AlertTriangle, Trash, Zap } from "lucide-react";
+import { Link2, Activity, CreditCard, AlertTriangle, Trash, Zap, CheckCircle2 } from "lucide-react";
 import ConfirmForm from "../ConfirmForm";
 
 export const dynamic = 'force-dynamic';
@@ -17,15 +17,105 @@ export default async function SettingsPage() {
   console.log("[SETTINGS PAGE] User Data:", user);
   console.log("[SETTINGS PAGE] Supabase Error:", error);
 
+  // Fetch connected accounts for this user
+  let connectedAccounts: any[] = [];
+  if (user) {
+    const { data } = await supabase
+      .from('connected_accounts')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: true });
+    
+    connectedAccounts = data || [];
+
+    // Self-healing / Backfill: If user has a primary Instagram connection but no connected_accounts rows
+    if (connectedAccounts.length === 0 && user.instagramAccessToken && user.instagramUserId && user.instagramHandle) {
+      const { data: backfilled } = await supabase
+        .from('connected_accounts')
+        .insert({
+          user_id: user.id,
+          instagram_access_token: user.instagramAccessToken,
+          instagram_user_id: user.instagramUserId,
+          instagram_handle: user.instagramHandle,
+          instagram_token_expires_at: user.instagramTokenExpiresAt || null,
+        })
+        .select()
+        .single();
+      
+      if (backfilled) {
+        connectedAccounts = [backfilled];
+      }
+    }
+  }
+
+  const maxAccounts = user?.plan === 'PRO' ? 3 : user?.plan === 'ELITE' ? Infinity : 1;
+  const isLimitReached = connectedAccounts.length >= maxAccounts;
+
+  async function disconnectAccount(formData: FormData) {
+    "use server";
+    const accountId = formData.get('accountId') as string;
+    const { userId } = await auth();
+    if (!userId) return;
+
+    const { data: u } = await supabase.from('users').select('*').eq('clerkId', userId).maybeSingle();
+    if (!u) return;
+
+    // Delete from connected_accounts
+    await supabase
+      .from('connected_accounts')
+      .delete()
+      .eq('user_id', u.id)
+      .eq('instagram_user_id', accountId);
+
+    // If it was the primary account, promote another or nullify
+    if (u.instagramUserId === accountId) {
+      const { data: remaining } = await supabase
+        .from('connected_accounts')
+        .select('*')
+        .eq('user_id', u.id)
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (remaining) {
+        await supabase
+          .from('users')
+          .update({
+            instagramAccessToken: remaining.instagram_access_token,
+            instagramUserId: remaining.instagram_user_id,
+            instagramHandle: remaining.instagram_handle,
+            instagramTokenExpiresAt: remaining.instagram_token_expires_at,
+          })
+          .eq('id', u.id);
+      } else {
+        await supabase
+          .from('users')
+          .update({
+            instagramAccessToken: null,
+            instagramUserId: null,
+            instagramHandle: null,
+            instagramTokenExpiresAt: null,
+          })
+          .eq('id', u.id);
+      }
+    }
+
+    redirect('/dashboard/settings');
+  }
 
   async function disconnectInstagram() {
     "use server";
     const { userId } = await auth();
     if (!userId) return;
+    const { data: u } = await supabase.from('users').select('id').eq('clerkId', userId).maybeSingle();
+    if (u) {
+      await supabase.from('connected_accounts').delete().eq('user_id', u.id);
+    }
     await supabase.from('users').update({
       instagramAccessToken: null,
       instagramUserId: null,
       instagramHandle: null,
+      instagramTokenExpiresAt: null,
     }).eq('clerkId', userId);
     redirect('/dashboard/settings');
   }
@@ -40,6 +130,7 @@ export default async function SettingsPage() {
       await supabase.from('analytics_events').delete().eq('user_id', u.id);
       await supabase.from('leads').delete().eq('user_id', u.id);
       await supabase.from('automations').delete().eq('user_id', u.id);
+      await supabase.from('connected_accounts').delete().eq('user_id', u.id);
       await supabase.from('users').delete().eq('id', u.id);
     }
     redirect('/');
@@ -51,7 +142,6 @@ export default async function SettingsPage() {
     if (!userId) return;
     const { data: u } = await supabase.from('users').select('id').eq('clerkId', userId).maybeSingle();
     if (u) {
-      // Clear analytics tracing logs to bring dashboard metrics down to 0
       await supabase.from('analytics_events').delete().eq('user_id', u.id);
     }
     redirect('/dashboard');
@@ -61,7 +151,6 @@ export default async function SettingsPage() {
     "use server";
     const { userId } = await auth();
     if (!userId) return;
-    // Call internal API to flush BullMQ queues
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     await fetch(`${appUrl}/api/queue/clear`, {
       method: 'POST',
@@ -95,22 +184,95 @@ export default async function SettingsPage() {
          </div>
 
          {/* Meta Integration */}
-         <div className={styles.card}>
-            <div className={styles.sectionTitle}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Link2 size={20}/> Instagram Connection</span></div>
-            <div style={{ marginBottom: '1.5rem' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                 Status: {user?.instagramAccessToken ? <span style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 600 }}>Connected</span> : <span style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 600 }}>Disconnected</span>}
+         <div className={styles.card} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div className={styles.sectionTitle}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Link2 size={20}/> Instagram Connections</span></div>
+            
+            <div style={{ flexGrow: 1, marginBottom: '1.5rem' }}>
+               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                 Status: {connectedAccounts.length > 0 ? (
+                   <span style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 600 }}>
+                     Connected ({connectedAccounts.length}/{maxAccounts === Infinity ? '∞' : maxAccounts})
+                   </span>
+                 ) : (
+                   <span style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem', fontWeight: 600 }}>
+                     Disconnected
+                   </span>
+                 )}
                </div>
-               {user?.instagramHandle && (
-                 <p style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}>@{user.instagramHandle}</p>
-               )}
-               <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>Autodrop requires an active Instagram Professional connection to process webhooks.</p>
-            </div>
-            <a href="/api/auth/instagram" className={styles.btnAction} style={{ width: '100%', textAlign: 'center' }}>
-               {user?.instagramAccessToken ? 'Refresh Connection' : 'Connect Instagram'}
-            </a>
-         </div>
 
+               {connectedAccounts.length > 0 ? (
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                   {connectedAccounts.map((conn) => {
+                     const isPrimary = conn.instagram_user_id === user?.instagramUserId;
+                     return (
+                       <div key={conn.id} style={{
+                         display: 'flex',
+                         alignItems: 'center',
+                         justifyContent: 'space-between',
+                         background: 'rgba(255, 255, 255, 0.02)',
+                         border: '1px solid rgba(255, 255, 255, 0.05)',
+                         borderRadius: '8px',
+                         padding: '0.75rem',
+                       }}>
+                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                           <span style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}>@{conn.instagram_handle}</span>
+                           {isPrimary && (
+                             <span style={{
+                               background: 'rgba(168, 85, 247, 0.15)',
+                               color: '#c084fc',
+                               border: '1px solid rgba(168, 85, 247, 0.3)',
+                               padding: '0.1rem 0.4rem',
+                               borderRadius: '4px',
+                               fontSize: '0.75rem',
+                               fontWeight: 600,
+                               display: 'flex',
+                               alignItems: 'center',
+                               gap: '0.2rem'
+                             }}>
+                               <CheckCircle2 size={10} /> Primary
+                             </span>
+                           )}
+                         </div>
+
+                         <ConfirmForm message={`Disconnect @${conn.instagram_handle}?`} action={disconnectAccount}>
+                           <input type="hidden" name="accountId" value={conn.instagram_user_id} />
+                           <button type="submit" style={{
+                             background: 'transparent',
+                             border: 'none',
+                             color: '#ef4444',
+                             cursor: 'pointer',
+                             opacity: 0.8,
+                             display: 'flex',
+                             alignItems: 'center',
+                             padding: '0.25rem'
+                           }} title="Disconnect Account">
+                             <Trash size={15} />
+                           </button>
+                         </ConfirmForm>
+                       </div>
+                     );
+                   })}
+                 </div>
+               ) : (
+                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Autodrop requires an active Instagram Professional connection to process webhooks.</p>
+               )}
+            </div>
+
+            {isLimitReached ? (
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ color: '#f59e0b', fontSize: '0.85rem', marginBottom: '0.5rem', fontWeight: 500 }}>
+                  Limit reached for {user?.plan === 'PRO' ? 'Growth Pro' : 'Free Starter'} plan.
+                </p>
+                <Link href="/pricing" className={styles.btnAction} style={{ width: '100%', textAlign: 'center', display: 'block', background: 'rgba(168, 85, 247, 0.2)', border: '1px solid rgba(168, 85, 247, 0.4)', color: '#c084fc' }}>
+                  Upgrade Plan to Connect More
+                </Link>
+              </div>
+            ) : (
+              <a href="/api/auth/instagram" className={styles.btnAction} style={{ width: '100%', textAlign: 'center' }}>
+                {connectedAccounts.length > 0 ? 'Connect Another Account' : 'Connect Instagram'}
+              </a>
+            )}
+         </div>
 
          {/* Danger Zone */}
          <div className={styles.card} style={{ border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.02)' }}>
@@ -120,24 +282,24 @@ export default async function SettingsPage() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                <ConfirmForm message="Clear all pending automation jobs? This will stop any scheduled DMs from being sent." action={clearQueue}>
-                 <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <Zap size={18} /> Clear Automation Queue
-                 </button>
+                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #f59e0b', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                     <Zap size={18} /> Clear Automation Queue
+                  </button>
                </ConfirmForm>
-               <ConfirmForm message="Disconnect your Instagram account? All automations will stop working." action={disconnectInstagram}>
-                 <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <Link2 size={18} /> Disconnect Instagram
-                 </button>
+               <ConfirmForm message="Disconnect all Instagram accounts? All automations will stop working." action={disconnectInstagram}>
+                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                     <Link2 size={18} /> Disconnect All Accounts
+                  </button>
                </ConfirmForm>
                <ConfirmForm message="Reset all dashboard stats to zero? This cannot be undone." action={resetStats}>
-                 <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <Activity size={18} /> Reset Dashboard Stats
-                 </button>
+                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                     <Activity size={18} /> Reset Dashboard Stats
+                  </button>
                </ConfirmForm>
                <ConfirmForm message="⚠️ DELETE YOUR ACCOUNT? This will permanently erase all data, automations, and leads. IRREVERSIBLE." action={deleteAccount}>
-                 <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                    <Trash size={18} /> Delete Account Permanently
-                 </button>
+                  <button type="submit" className={styles.btnAction} style={{ width: '100%', background: '#ef4444', border: '1px solid #ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                     <Trash size={18} /> Delete Account Permanently
+                  </button>
                </ConfirmForm>
             </div>
          </div>

@@ -30,14 +30,45 @@ export async function GET(req: Request) {
 
 // Helper: Find user by any Instagram ID format
 async function findUserByInstagramId(igId: string) {
-  // Try exact match first
+  // Try exact match first on users table
   const { data: user } = await supabase
     .from('users')
     .select('id, instagramUserId, instagramAccessToken, plan')
     .eq('instagramUserId', igId)
     .maybeSingle();
 
-  if (user) return user;
+  if (user) {
+    return {
+      ...user,
+      primaryInstagramUserId: user.instagramUserId,
+    };
+  }
+
+  // Try exact match in connected_accounts table
+  const { data: conn } = await supabase
+    .from('connected_accounts')
+    .select('user_id, instagram_user_id, instagram_access_token')
+    .eq('instagram_user_id', igId)
+    .maybeSingle();
+
+  if (conn) {
+    const { data: userFromConn } = await supabase
+      .from('users')
+      .select('id, instagramUserId, instagramAccessToken, plan')
+      .eq('id', conn.user_id)
+      .maybeSingle();
+
+    if (userFromConn) {
+      console.log(`[Webhook] Matched user ${userFromConn.id} via connected_accounts for IG ID ${igId}`);
+      return {
+        id: userFromConn.id,
+        instagramUserId: conn.instagram_user_id,
+        instagramAccessToken: conn.instagram_access_token,
+        plan: userFromConn.plan,
+        primaryInstagramUserId: userFromConn.instagramUserId,
+      };
+    }
+  }
 
   // If no exact match, the webhook might send a different ID format.
   // Try fetching ALL users with an instagram connection and see if any match.
@@ -57,7 +88,10 @@ async function findUserByInstagramId(igId: string) {
     // For production: we'd verify by calling the Graph API with their token
     if (users.length === 1) {
       console.log(`[Webhook] Found single connected user: ${users[0].id} (IG: ${users[0].instagramUserId})`);
-      return users[0];
+      return {
+        ...users[0],
+        primaryInstagramUserId: users[0].instagramUserId,
+      };
     }
 
     // Multiple users: try to verify which user owns this webhook event
@@ -72,7 +106,10 @@ async function findUserByInstagramId(igId: string) {
         // webhook's entry.id matches either the user_id or id from /me
         if (data.user_id === igId || data.id === igId || String(data.user_id) === igId || String(data.id) === igId) {
           console.log(`[Webhook] Verified user ${u.id} owns IG ID ${igId} via Graph API`);
-          return u;
+          return {
+            ...u,
+            primaryInstagramUserId: u.instagramUserId,
+          };
         }
       } catch (e) {
         console.warn(`[Webhook] Failed to verify user ${u.id}:`, e);
@@ -81,7 +118,10 @@ async function findUserByInstagramId(igId: string) {
 
     // Last resort for development: use the most recently connected user
     console.warn(`[Webhook] Could not verify owner of IG ID ${igId}, using first connected user as fallback`);
-    return users[0];
+    return {
+      ...users[0],
+      primaryInstagramUserId: users[0].instagramUserId,
+    };
   }
 
   return null;
@@ -181,6 +221,13 @@ export async function POST(req: Request) {
               if (!automations || automations.length === 0) continue;
 
               for (const automation of automations) {
+                // Ensure the automation belongs to the correct account
+                const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
+                if (targetAccount && targetAccount !== igUserId) {
+                  console.log(`[Webhook] Skipping automation ${automation.id}: belongs to account ${targetAccount}, event is for ${igUserId}`);
+                  continue;
+                }
+
                 // Check if this automation applies to this media post
                 // instagram_media_id can be a comma-separated list or empty (= all posts)
                 const targetMediaIds = automation.instagram_media_id
@@ -284,6 +331,12 @@ export async function POST(req: Request) {
                 if (storyAutomations && storyAutomations.length > 0) {
                   let storyMatched = false;
                   for (const automation of storyAutomations) {
+                    // Ensure the automation belongs to the correct account
+                    const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
+                    if (targetAccount && targetAccount !== igUserId) {
+                      continue;
+                    }
+
                     const keywords: string[] = Array.isArray(automation.keywords) ? automation.keywords : JSON.parse(automation.keywords || '[]');
                     const cleanMsg = messageText.toLowerCase().replace(/[^\w\s\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/g, '').trim();
                     const matched = keywords.length === 0 || keywords.some(kw => {
@@ -471,6 +524,12 @@ export async function POST(req: Request) {
                 if (dmKeywordAutomations && dmKeywordAutomations.length > 0) {
                   const normalizedMsg = messageText.toLowerCase().trim();
                   for (const automation of dmKeywordAutomations) {
+                    // Ensure the automation belongs to the correct account
+                    const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
+                    if (targetAccount && targetAccount !== igUserId) {
+                      continue;
+                    }
+
                     const keywords: string[] = Array.isArray(automation.keywords)
                       ? automation.keywords
                       : JSON.parse(automation.keywords || '[]');
@@ -528,25 +587,30 @@ export async function POST(req: Request) {
 
               // ---- Elite AI ----
               if (user.plan === 'ELITE') {
-                const { data: aiAutomation } = await supabase
+                const { data: aiAutomations } = await supabase
                   .from('automations')
                   .select('*')
                   .eq('user_id', user.id)
                   .eq('is_active', true)
-                  .eq('ai_enabled', true)
-                  .limit(1)
-                  .maybeSingle();
+                  .eq('ai_enabled', true);
 
-                if (aiAutomation) {
-                  try {
-                    await dmQueue.add('ai-reply', {
-                      userId: user.id,
-                      automationId: aiAutomation.id,
-                      recipientId: senderId,
-                      messageText: messageText,
-                    });
-                    console.log('[Webhook] ✅ AI-reply job queued');
-                  } catch (e) { console.error('[Webhook] AI DM queue error:', e); }
+                if (aiAutomations && aiAutomations.length > 0) {
+                  const matchingAiAutomation = aiAutomations.find(automation => {
+                    const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
+                    return !targetAccount || targetAccount === igUserId;
+                  });
+
+                  if (matchingAiAutomation) {
+                    try {
+                      await dmQueue.add('ai-reply', {
+                        userId: user.id,
+                        automationId: matchingAiAutomation.id,
+                        recipientId: senderId,
+                        messageText: messageText,
+                      });
+                      console.log('[Webhook] ✅ AI-reply job queued');
+                    } catch (e) { console.error('[Webhook] AI DM queue error:', e); }
+                  }
                 }
               }
             }

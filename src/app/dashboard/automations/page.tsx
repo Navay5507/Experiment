@@ -9,10 +9,15 @@ import ConfirmForm from "../ConfirmForm";
 
 export const dynamic = 'force-dynamic';
 
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
 async function toggleAutomation(formData: FormData) {
   "use server";
   const id = formData.get('automationId') as string;
   const currentState = formData.get('currentState') === 'true';
+  const activeAccount = formData.get('activeAccount') as string;
   const { userId } = await auth();
   if (!userId) return;
 
@@ -32,38 +37,87 @@ async function toggleAutomation(formData: FormData) {
   }
 
   await supabase.from('automations').update({ is_active: !currentState }).eq('id', id);
-  redirect('/dashboard/automations');
+  redirect(activeAccount ? `/dashboard/automations?account=${activeAccount}` : '/dashboard/automations');
 }
 
 async function deleteAutomation(formData: FormData) {
   "use server";
   const id = formData.get('automationId') as string;
+  const activeAccount = formData.get('activeAccount') as string;
   await supabase.from('automations').delete().eq('id', id);
-  redirect('/dashboard/automations');
+  redirect(activeAccount ? `/dashboard/automations?account=${activeAccount}` : '/dashboard/automations');
 }
 
-export default async function AutomationsList() {
+export default async function AutomationsList({ searchParams }: PageProps) {
   const { userId: clerkId } = await auth();
   if (!clerkId) redirect("/sign-in");
 
-  const { data: user } = await supabase.from('users').select('id, plan').eq('clerkId', clerkId).maybeSingle();
+  const resolvedSearchParams = await searchParams;
+  const activeAccountId = resolvedSearchParams.account as string | undefined;
 
-  let automations: { id: string; campaign_name?: string; target_type: string; keywords: string | string[]; is_active: boolean; ai_enabled: boolean; follow_gate_enabled: boolean; lead_capture_fields?: string | string[]; instagram_media_id?: string }[] = [];
+  const { data: user } = await supabase.from('users').select('*').eq('clerkId', clerkId).maybeSingle();
+
+  // Fetch connected accounts
+  let connectedAccounts: any[] = [];
   if (user) {
     const { data } = await supabase
-      .from('automations')
+      .from('connected_accounts')
       .select('*')
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: true });
+    connectedAccounts = data || [];
+
+    // Self-healing / Backfill
+    if (connectedAccounts.length === 0 && user.instagramAccessToken && user.instagramUserId && user.instagramHandle) {
+      const { data: backfilled } = await supabase
+        .from('connected_accounts')
+        .insert({
+          user_id: user.id,
+          instagram_access_token: user.instagramAccessToken,
+          instagram_user_id: user.instagramUserId,
+          instagram_handle: user.instagramHandle,
+          instagram_token_expires_at: user.instagramTokenExpiresAt || null,
+        })
+        .select()
+        .single();
+      if (backfilled) {
+        connectedAccounts = [backfilled];
+      }
+    }
+  }
+
+  // Resolve target account
+  const defaultAccountId = user?.instagramUserId || connectedAccounts[0]?.instagram_user_id;
+  const selectedAccountId = activeAccountId || defaultAccountId;
+
+  let automations: any[] = [];
+  if (user) {
+    let query = supabase
+      .from('automations')
+      .select('*')
+      .eq('user_id', user.id);
+
+    if (selectedAccountId) {
+      // If the selected account is the primary account, match both that ID and legacy null values
+      if (selectedAccountId === user.instagramUserId) {
+        query = query.or(`instagram_user_id.eq.${selectedAccountId},instagram_user_id.is.null`);
+      } else {
+        query = query.eq('instagram_user_id', selectedAccountId);
+      }
+    }
+
+    const { data } = await query.order('created_at', { ascending: false });
     automations = data || [];
   }
 
   let recentMedia: any[] = [];
-  if (user?.plan && automations.length > 0) {
-    const { data: userToken } = await supabase.from('users').select('instagramAccessToken').eq('id', user.id).single();
-    if (userToken?.instagramAccessToken) {
+  if (user?.plan && automations.length > 0 && selectedAccountId) {
+    const activeAccount = connectedAccounts.find(c => c.instagram_user_id === selectedAccountId);
+    const activeToken = activeAccount ? activeAccount.instagram_access_token : user.instagramAccessToken;
+
+    if (activeToken) {
       try {
-        const resp = await fetch(`https://graph.instagram.com/v21.0/me/media?fields=id,media_url,thumbnail_url,caption&limit=50&access_token=${userToken.instagramAccessToken}`, { next: { revalidate: 60 } });
+        const resp = await fetch(`https://graph.instagram.com/v21.0/me/media?fields=id,media_url,thumbnail_url,caption&limit=50&access_token=${activeToken}`, { next: { revalidate: 60 } });
         const j = await resp.json();
         recentMedia = j.data || [];
       } catch (e) {
@@ -84,7 +138,7 @@ export default async function AutomationsList() {
           <p>Manage your active Instagram engagement pipelines.</p>
         </div>
         {canCreate ? (
-          <Link href="/dashboard/automations/new" className={styles.btnAction} style={{ background: 'var(--primary)', borderColor: 'var(--primary)' }}>
+          <Link href={selectedAccountId ? `/dashboard/automations/new?account=${selectedAccountId}` : "/dashboard/automations/new"} className={styles.btnAction} style={{ background: 'var(--primary)', borderColor: 'var(--primary)' }}>
             + New Automation
           </Link>
         ) : (
@@ -94,23 +148,70 @@ export default async function AutomationsList() {
         )}
       </div>
 
+      {/* Account Switcher tab bar */}
+      {connectedAccounts.length > 1 && (
+        <div style={{
+          display: 'flex',
+          gap: '0.75rem',
+          marginBottom: '1.5rem',
+          padding: '0.5rem',
+          background: 'rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 255, 255, 0.05)',
+          borderRadius: '12px',
+          backdropFilter: 'blur(10px)',
+          overflowX: 'auto',
+          scrollbarWidth: 'none',
+        }}>
+          {connectedAccounts.map((conn) => {
+            const isSelected = conn.instagram_user_id === selectedAccountId;
+            return (
+              <Link
+                key={conn.id}
+                href={`/dashboard/automations?account=${conn.instagram_user_id}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  background: isSelected ? 'rgba(168, 85, 247, 0.15)' : 'transparent',
+                  border: '1px solid',
+                  borderColor: isSelected ? 'rgba(168, 85, 247, 0.4)' : 'transparent',
+                  color: isSelected ? '#c084fc' : 'var(--text-muted)',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  fontWeight: 600,
+                  transition: 'all 0.2s ease',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <span style={{
+                  display: 'inline-block',
+                  width: 8,
+                  height: 8,
+                  background: isSelected ? '#a855f7' : 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '50%',
+                }}></span>
+                @{conn.instagram_handle}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {automations.length === 0 ? (
           <div className={styles.emptyState} style={{ textAlign: 'center', padding: '4rem 2rem' }}>
             <Zap size={40} style={{ opacity: 0.3, marginBottom: '1rem' }} />
             <h3>No automations yet</h3>
             <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Create your first automation to start converting comments into leads automatically.</p>
-            <Link href="/dashboard/automations/new" className={styles.btnAction} style={{ background: 'var(--primary)', borderColor: 'var(--primary)' }}>
+            <Link href={selectedAccountId ? `/dashboard/automations/new?account=${selectedAccountId}` : "/dashboard/automations/new"} className={styles.btnAction} style={{ background: 'var(--primary)', borderColor: 'var(--primary)' }}>
               Build Your First Pipeline
             </Link>
           </div>
         ) : (
           automations.map((auto) => {
             const keywords = Array.isArray(auto.keywords) ? auto.keywords.join(', ') : auto.keywords || 'None';
-            const isLeadGen = Array.isArray(auto.lead_capture_fields) 
-              ? auto.lead_capture_fields.length > 0 
-              : !!auto.lead_capture_fields && auto.lead_capture_fields !== '[]' && auto.lead_capture_fields !== 'null';
-
             const isAllPosts = !auto.instagram_media_id || auto.instagram_media_id.trim() === '';
             const postIds = auto.instagram_media_id ? auto.instagram_media_id.split(',').filter(Boolean) : [];
             const postCount = isAllPosts ? 0 : postIds.length;
@@ -122,7 +223,7 @@ export default async function AutomationsList() {
               else postTargetText = "All Posts";
             }
             
-            const matchedMedia = postIds.map(id => recentMedia.find(m => m.id === id)).filter(Boolean);
+            const matchedMedia = postIds.map((id: string) => recentMedia.find(m => m.id === id)).filter(Boolean);
 
             return (
               <div key={auto.id} className={styles.card} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -167,12 +268,14 @@ export default async function AutomationsList() {
                   <ConfirmForm message={auto.is_active ? "Pause this automation? It will stop responding to new comments." : "Activate this automation?"} action={toggleAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
                     <input type="hidden" name="currentState" value={String(auto.is_active)} />
+                    <input type="hidden" name="activeAccount" value={selectedAccountId || ''} />
                     <button type="submit" className={styles.btnAction} title={auto.is_active ? "Pause" : "Start"}>
                       {auto.is_active ? <Pause size={16} /> : <Play size={16} />}
                     </button>
                   </ConfirmForm>
                   <ConfirmForm message="Delete this automation permanently? This cannot be undone." action={deleteAutomation}>
                     <input type="hidden" name="automationId" value={auto.id} />
+                    <input type="hidden" name="activeAccount" value={selectedAccountId || ''} />
                     <button type="submit" className={styles.btnAction} style={{ borderColor: '#ef4444', color: '#ef4444' }}>
                       <Trash2 size={16} />
                     </button>

@@ -90,27 +90,101 @@ export async function GET(req: Request) {
     const expiresInSecs = longLivedData.expires_in || 5184000;
     const expiresAt = new Date(Date.now() + expiresInSecs * 1000).toISOString();
 
-    const updatePayload: any = {
-      instagramAccessToken: finalToken,
-      instagramUserId: igUserId,
-      onboardingSkipped: false,
-      instagramTokenExpiresAt: expiresAt,
-    };
-    if (igHandle) updatePayload.instagramHandle = igHandle;
-
-    const { error: sbError, count } = await supabase
+    let { data: user } = await supabase
       .from('users')
-      .update(updatePayload, { count: 'exact' })
-      .eq('clerkId', clerkId);
+      .select('*')
+      .eq('clerkId', clerkId)
+      .maybeSingle();
 
-    if (sbError || count === 0) {
-      await supabase.from('users').insert({
-        id: crypto.randomUUID(),
+    if (!user) {
+      const newUserId = crypto.randomUUID();
+      const { data: insertedUser } = await supabase.from('users').insert({
+        id: newUserId,
         clerkId: clerkId,
         email: `${clerkId}@autodrop.co`,
         plan: 'FREE',
-        ...updatePayload,
-      });
+      }).select().maybeSingle();
+      
+      user = insertedUser;
+    }
+
+    if (!user) {
+      throw new Error("Could not find or create user record");
+    }
+
+    const isPrimary = user.instagramUserId === igUserId;
+    
+    // Check if account is already connected in connected_accounts
+    const { data: existingConn } = await supabase
+      .from('connected_accounts')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('instagram_user_id', igUserId)
+      .maybeSingle();
+
+    if (isPrimary || existingConn) {
+      // Update existing connection
+      if (isPrimary) {
+        await supabase
+          .from('users')
+          .update({
+            instagramAccessToken: finalToken,
+            instagramTokenExpiresAt: expiresAt,
+            instagramHandle: igHandle,
+          })
+          .eq('id', user.id);
+      }
+      
+      await supabase
+        .from('connected_accounts')
+        .upsert({
+          user_id: user.id,
+          instagram_access_token: finalToken,
+          instagram_user_id: igUserId,
+          instagram_handle: igHandle || '',
+          instagram_token_expires_at: expiresAt,
+        }, { onConflict: 'user_id,instagram_user_id' });
+
+    } else {
+      // Connecting a brand NEW account!
+      // Enforce plan limits (FREE = 1, PRO = 3, ELITE = unlimited)
+      const { data: allConns } = await supabase
+        .from('connected_accounts')
+        .select('id')
+        .eq('user_id', user.id);
+      
+      const currentCount = allConns?.length || 0;
+      const limit = user.plan === 'FREE' ? 1 : user.plan === 'PRO' ? 3 : Infinity;
+
+      if (currentCount >= limit) {
+        console.warn(`[IG Callback] Limit reached for plan ${user.plan}: current=${currentCount}, limit=${limit}`);
+        return NextResponse.redirect(new URL('?error=account_limit_reached', FRONTEND_DASHBOARD));
+      }
+
+      // If they don't have a primary account set yet, set this as primary in users
+      if (!user.instagramAccessToken) {
+        await supabase
+          .from('users')
+          .update({
+            instagramAccessToken: finalToken,
+            instagramUserId: igUserId,
+            instagramHandle: igHandle,
+            instagramTokenExpiresAt: expiresAt,
+            onboardingSkipped: false,
+          })
+          .eq('id', user.id);
+      }
+
+      // Always insert into connected_accounts
+      await supabase
+        .from('connected_accounts')
+        .insert({
+          user_id: user.id,
+          instagram_access_token: finalToken,
+          instagram_user_id: igUserId,
+          instagram_handle: igHandle || '',
+          instagram_token_expires_at: expiresAt,
+        });
     }
 
     try {

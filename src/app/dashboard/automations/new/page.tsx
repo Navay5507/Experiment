@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./form.module.css";
 import Link from "next/link";
@@ -9,6 +9,8 @@ import { Check, ChevronRight, ChevronLeft, Image as ImageIcon, Sparkles, Loader2
 
 export default function CreateAutomation() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const accountId = searchParams.get('account') || '';
   const [step, setStep] = useState(1);
   
   // State Payloads
@@ -53,7 +55,7 @@ export default function CreateAutomation() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const mediaRes = await fetch('/api/instagram/media');
+        const mediaRes = await fetch(accountId ? `/api/instagram/media?accountId=${accountId}` : '/api/instagram/media');
         const mediaData = await mediaRes.json();
         setIsConnected(mediaData.isConnected === true);
         if (mediaData.media && mediaData.media.length > 0) {
@@ -127,11 +129,12 @@ export default function CreateAutomation() {
           aiEnabled,
           initialDmText,
           leadCaptureFields: featureType === 'lead_capture' ? leadCaptureFields : [],
+          instagramUserId: accountId || null,
         })
       });
 
       if (!res.ok) throw new Error("Server error saving automation");
-      router.push('/dashboard/automations');
+      router.push(accountId ? `/dashboard/automations?account=${accountId}` : '/dashboard/automations');
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : 'Unknown error');
       setIsSubmitting(false);
