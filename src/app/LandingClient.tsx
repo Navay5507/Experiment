@@ -756,39 +756,43 @@ export default function LandingClient({ userId }: { userId: string | null }) {
           </FadeIn>
 
           {USE_NOOB_FRIENDLY_FEATURES ? (
-            /* NEW BEAUTIFUL BEGINNER-FRIENDLY & EASY UNDERSTANDABLE FEATURES GRID */
+            /* NEW HIGH-FIDELITY INSTAGRAM-RESEMBLING FEATURES GRID */
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
               
-              {/* 1. Comment Magnet */}
+              {/* 1. Comment Magnet - Reel Comment Sheet Simulation */}
               <FadeIn delay={0.1}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: 'linear-gradient(180deg, #16171d 0%, #0c0d12 100%)', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'center' }}>
-                     {/* Glowing Background Dot */}
-                     <div style={{ position: 'absolute', top: '10%', right: '10%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(91,133,255,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-                     
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <MessageCircle size={16} color="#5b85ff" /><span style={{fontSize: '0.8rem', fontWeight: 700, color: '#5b85ff', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Comment Magnet</span>
-                        <span style={{ marginLeft: 'auto', background: 'rgba(91,133,255,0.1)', color: '#5b85ff', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 700 }}>Voted #1 Creator Hack</span>
+                  <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'flex-start', overflow: 'hidden' }}>
+                     {/* Instagram Reel Header Mockup */}
+                     <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>Comments</span>
+                        <span style={{ marginLeft: 'auto', background: 'rgba(91,133,255,0.1)', color: '#3897f0', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 700 }}>Instagram Reel</span>
                      </div>
-
-                     {/* Simulated Chat */}
-                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', background: 'rgba(255,255,255,0.02)', padding: '0.75rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.03)' }}>
-                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover' }} />
+                     
+                     {/* Simulated Instagram Comment Bubble */}
+                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', background: '#1e1e1e', padding: '0.75rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
                         <div style={{ flex: 1 }}>
                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>sarajohnson</span>
-                              <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)' }}>Just now</span>
+                              <Heart size={12} color="#ff3040" fill="#ff3040" style={{ cursor: 'pointer' }} />
                            </div>
-                           <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>Drop the link please! 😍</span>
+                           <span style={{ fontSize: '0.8rem', color: '#dedede' }}>Drop the link please! 😍</span>
+                           <div style={{ fontSize: '0.7rem', color: '#888', marginTop: '0.25rem', display: 'flex', gap: '0.75rem' }}>
+                              <span>1m</span><span>Reply</span>
+                           </div>
                         </div>
                      </div>
 
-                     {/* Instant Auto-Response */}
-                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2rem', marginTop: '0.75rem', background: 'linear-gradient(90deg, rgba(91,133,255,0.1), transparent)', padding: '0.6rem 0.8rem', borderRadius: '12px', borderLeft: '3px solid #5b85ff' }}>
-                        <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
+                     {/* Instant Auto-Response Subthread */}
+                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start', marginLeft: '2rem', marginTop: '0.5rem', background: 'rgba(56, 151, 240, 0.05)', padding: '0.5rem 0.75rem', borderRadius: '12px', borderLeft: '2px solid #3897f0' }}>
+                        <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)', flexShrink: 0 }} />
                         <div style={{ flex: 1 }}>
-                           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff' }}>autodrop <span style={{fontSize: '0.6rem', color: '#10b981', marginLeft: '0.4rem', border: '1px solid #10b981', padding: '1px 3px', borderRadius: '3px'}}>Active</span></span>
-                           <p style={{ fontSize: '0.75rem', color: '#5b85ff', margin: 0, fontWeight: 600 }}>Done! Check your DMs 🚀</p>
+                           <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                              yourbrand 
+                              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} title="Active" />
+                           </span>
+                           <p style={{ fontSize: '0.75rem', color: '#3897f0', margin: 0, fontWeight: 600 }}>Sent! Check your DMs 🚀</p>
                         </div>
                      </div>
                   </div>
@@ -797,39 +801,51 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                        Auto-Reply to Comments 💬
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       No more copy-pasting links all day! When someone comments a keyword on your Reels or posts, AutoDrop instantly replies to them and slides into their DMs with your link.
+                       No more copy-pasting links in comments! When fans comment a keyword on your Reels or posts, AutoDrop instantly replies and slides into their DMs with your link automatically.
                      </p>
-                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#5b85ff', fontWeight: 700 }}>
-                        <Zap size={14} /> Instant Lead Delivery (0.5s)
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#3897f0', fontWeight: 700 }}>
+                        <Zap size={14} /> Official Meta API Instant Dispatch (0.5s)
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 2. Story Reply Booster */}
+              {/* 2. Story Reply Booster - Story View UI Simulation */}
               <FadeIn delay={0.2}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
                   <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                     <div style={{ position: 'relative', width: '100%', height: '100%', background: 'url(https://images.unsplash.com/photo-1540228232483-1dfdec35e955?auto=format&fit=crop&w=400&q=80) center/cover', filter: 'brightness(0.7)' }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '40px', background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}>
-                           <div style={{ width: '100%', height: '2px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }}><div style={{ width: '65%', height: '100%', background: '#fff', borderRadius: '2px' }}/></div>
+                     <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(180deg, #1f1f1f 0%, #0d0d0d 100%)' }}>
+                        {/* Story Progress Lines */}
+                        <div style={{ position: 'absolute', top: '10px', left: '10px', right: '10px', height: '2px', background: 'rgba(255,255,255,0.2)', borderRadius: '2px', display: 'flex', gap: '4px' }}>
+                           <div style={{ flex: 1, height: '100%', background: '#fff', borderRadius: '2px' }} />
+                           <div style={{ flex: 1, height: '100%', background: 'rgba(255,255,255,0.2)', borderRadius: '2px' }} />
                         </div>
-                        <div style={{ position: 'absolute', top: '15px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                           <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f43f5e, #f97316)' }} />
-                           <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>yourprofile <span style={{opacity: 0.8, fontWeight: 400}}>2h</span></span>
+                        {/* Story Header */}
+                        <div style={{ position: 'absolute', top: '18px', left: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                           <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)', padding: '1px' }}>
+                              <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#000' }} />
+                           </div>
+                           <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600 }}>yourprofile <span style={{ opacity: 0.6, fontWeight: 400 }}>5m</span></span>
                         </div>
                         
-                        {/* Interactive Callout */}
-                        <div style={{ position: 'absolute', top: '35%', left: '5%', right: '5%', textAlign: 'center' }}>
-                           <div style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', color: '#fff', padding: '0.75rem 1rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', display: 'inline-block' }}>
-                              <span style={{ display: 'block', fontSize: '0.7rem', color: '#f43f5e', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.1rem' }}>Reply keyword</span>
-                              <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center' }}>"GROWTH" 🎉</span>
-                           </div>
+                        {/* Floating Instagram Story Link Sticker */}
+                        <div style={{ position: 'absolute', top: '30%', left: '10%', right: '10%', textAlign: 'center' }}>
+                           <motion.div 
+                              animate={{ scale: [1, 1.03, 1] }} 
+                              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                              style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', color: '#000', padding: '0.8rem 1.2rem', borderRadius: '20px', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', display: 'inline-flex', flexDirection: 'column', alignItems: 'center', border: '1px solid rgba(255,255,255,0.2)' }}
+                           >
+                              <span style={{ fontSize: '0.65rem', color: '#e1306c', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.15rem' }}>REPLY TO STORY</span>
+                              <span style={{ fontSize: '1.05rem', fontWeight: 900, color: '#000', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                 💬 "GROW" for playbook
+                              </span>
+                           </motion.div>
                         </div>
 
-                        <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                           <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.4)', background: 'rgba(0,0,0,0.4)', borderRadius: '100px', padding: '0.4rem 1rem', display: 'flex', alignItems: 'center' }}>
-                              <span style={{ fontSize: '0.75rem', color: '#eee' }}>Replying with "GROWTH"...</span>
+                        {/* Bottom Interaction Bar */}
+                        <div style={{ position: 'absolute', bottom: '15px', left: '10px', right: '10px', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                           <div style={{ flex: 1, border: '1px solid rgba(255,255,255,0.3)', background: 'rgba(0,0,0,0.5)', borderRadius: '100px', padding: '0.5rem 1rem', fontSize: '0.75rem', color: '#fff' }}>
+                              Typing "GROW"...
                            </div>
                            <Heart size={18} color="#fff" />
                            <Send size={18} color="#fff" />
@@ -838,41 +854,45 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                      <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
-                       Story Auto-DMs 📖
+                       Story Interactive Auto-DMs 📖
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       Put a call-to-action on your daily Stories telling users to reply with a specific word. AutoDrop instantly slides into their DMs with your link!
+                       Double Story link conversions! Simply post a Story asking followers to reply with a keyword. AutoDrop automatically reads Story replies and delivers DMs instantly.
                      </p>
-                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
-                        <Sparkles size={14} /> Boosts Story Views & Reach (10x)
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#e1306c', fontWeight: 700 }}>
+                        <Sparkles size={14} /> Instantly Boosts Story Engagement & Reach
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 3. Inbox Auto-Replies */}
+              {/* 3. Inbox Auto-Replies - High Fidelity DM Simulation */}
               <FadeIn delay={0.3}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#0a0d14', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                     
-                     {/* Glowing Background Dot */}
-                     <div style={{ position: 'absolute', bottom: '10%', left: '10%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                        <Zap size={14} color="#10b981" />
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Instant DM Response</span>
+                  <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     {/* DM Chat Header */}
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} />
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#fff' }}>Alex Johnson</span>
+                        <span style={{ marginLeft: 'auto', fontSize: '0.65rem', color: '#888' }}>Active Now</span>
                      </div>
 
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {/* Inbound Message Bubble */}
                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
                            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
-                           <div style={{ background: '#1c1e24', border: '1px solid rgba(255,255,255,0.05)', padding: '0.5rem 0.85rem', borderRadius: '16px 16px 16px 4px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%' }}>
+                           <div style={{ background: '#262626', padding: '0.5rem 0.85rem', borderRadius: '18px 18px 18px 4px', fontSize: '0.8rem', color: '#fff', maxWidth: '75%' }}>
                               Hey! I want the secret code <b>GUIDE</b>
                            </div>
                         </div>
+                        
+                        {/* Outbound Beautiful IG Gradient DM bubble */}
                         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
-                           <div style={{ background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)', padding: '0.55rem 0.95rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%', boxShadow: '0 4px 15px rgba(59,130,246,0.3)' }}>
-                              Awesome! Here is your download link: <span style={{display: 'block', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.2)', borderRadius: '6px', marginTop: '0.4rem', fontWeight: 700, fontSize: '0.75rem', textAlign: 'center'}}>🔥 Get Guide Now</span>
+                           <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.65rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%', boxShadow: '0 4px 15px rgba(168,85,247,0.25)' }}>
+                              <div>Here is your exclusive link:</div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.6rem', background: 'rgba(255,255,255,0.15)', borderRadius: '10px', marginTop: '0.4rem', fontWeight: 700, fontSize: '0.75rem', textAlign: 'center', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                 📘 drop.site/free-guide
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -882,38 +902,42 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                        Inbox Secret Code Words 📩
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       Create secret code words (like 'VIP', 'OFFER', 'GUIDE') for your bio or emails. When someone DMs you that keyword, AutoDrop sends them the link immediately.
+                       Create secret keywords (like 'VIP', 'OFFER', 'GUIDE') for your bio or offline flyers. When customers DM you that specific word, AutoDrop sends them links instantly.
                      </p>
-                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#10b981', fontWeight: 700 }}>
-                        <CheckCircle2 size={14} /> Response Time: &lt; 0.5 seconds
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
+                        <CheckCircle2 size={14} /> Dispatch speed: &lt; 0.5s (official webhook integration)
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 4. Follower Booster */}
+              {/* 4. Follower Booster - Profile Gated Simulation */}
               <FadeIn delay={0.4}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#090b10', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                     
-                     {/* Glowing Background Dot */}
-                     <div style={{ position: 'absolute', top: '15%', left: '30%', width: '90px', height: '90px', background: 'radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        <ShieldCheck size={14} color="#f43f5e" /><span style={{fontSize: '0.75rem', fontWeight: 700, color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Follower Booster</span>
+                  <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     {/* Instagram Profile Simulation */}
+                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+                        <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)', padding: '2px', flexShrink: 0 }}>
+                           <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#000' }} />
+                        </div>
+                        <div style={{ flex: 1, display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
+                           <div><div style={{fontSize: '0.8rem', fontWeight: 800, color: '#fff'}}>156</div><div style={{fontSize: '0.6rem', color: '#888'}}>posts</div></div>
+                           <div><div style={{fontSize: '0.8rem', fontWeight: 800, color: '#fff'}}>12.4k</div><div style={{fontSize: '0.6rem', color: '#888'}}>followers</div></div>
+                           <div><div style={{fontSize: '0.8rem', fontWeight: 800, color: '#fff'}}>420</div><div style={{fontSize: '0.6rem', color: '#888'}}>following</div></div>
+                        </div>
                      </div>
 
-                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)', padding: '0.8rem 1rem', borderRadius: '16px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#fff' }}>
-                           <div style={{width: 8, height: 8, borderRadius: '50%', background: '#f59e0b'}} />
-                           <span>Checking follower status...</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', color: '#f43f5e', fontWeight: 600 }}>
-                           <span>❌ User not following!</span>
-                        </div>
-                        <div style={{ padding: '0.35rem', background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.3)', borderRadius: '8px', fontSize: '0.7rem', color: '#fff', textAlign: 'center', fontWeight: 700 }}>
-                           👉 Automatically prompt user to follow you!
-                        </div>
+                     {/* Pulsing Blue IG Follow Button */}
+                     <motion.div 
+                        animate={{ scale: [1, 1.02, 1] }} 
+                        transition={{ duration: 2, repeat: Infinity }}
+                        style={{ background: '#0095f6', color: '#fff', padding: '0.5rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800, textAlign: 'center', cursor: 'pointer', marginBottom: '0.75rem' }}
+                     >
+                        Follow
+                     </motion.div>
+
+                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', justifyContent: 'center', background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.25)', padding: '0.4rem', borderRadius: '8px', fontSize: '0.7rem', color: '#f43f5e', fontWeight: 700 }}>
+                        <ShieldCheck size={12} /> Auto-checking follower status...
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -921,62 +945,90 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                        Follower Booster (Follow-Gate) 🔒
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       Want to double your followers? AutoDrop checks if the user is following you first. If not, it politely asks them to follow you before delivering their link!
+                       Turn commenters into followers! AutoDrop automatically checks if a user is following your profile. If they aren't, it politely reminds them to follow you before delivering their link.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
-                        <ShieldCheck size={14} /> Official Meta Partner API Approved
+                        <ShieldCheck size={14} /> Boosts follower conversion by up to 2.4x
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 5. Revive Viral Posts */}
+              {/* 5. Revive Viral Posts - Reels Grid Simulation */}
               <FadeIn delay={0.5}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#0c0d12', height: '220px', padding: '0', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                     <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover', opacity: 0.25}} />
-                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(180deg, transparent 20%, rgba(91,133,255,0.7) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
-                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}>
-                           <RefreshCcw size={44} color="#fff" />
-                        </motion.div>
-                        <div style={{ fontWeight: 900, color: '#fff', fontSize: '1rem', textShadow: '0 2px 10px rgba(0,0,0,0.5)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Wake Up Viral Reels</div>
-                        <div style={{ background: '#10b981', color: '#fff', fontSize: '0.7rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', textTransform: 'uppercase' }}>Capture 100% of traffic</div>
+                  <div style={{ background: '#121212', height: '220px', padding: '0.75rem', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                     {/* Instagram Profile Post Grid Mockup */}
+                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px', height: '100%' }}>
+                        <div style={{ background: 'linear-gradient(135deg, #252830, #141517)', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '4px' }}>
+                           <span style={{ fontSize: '0.55rem', color: '#fff', fontWeight: 700 }}>▶ 12k</span>
+                        </div>
+                        <div style={{ background: 'linear-gradient(135deg, #252830, #141517)', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '4px' }}>
+                           <span style={{ fontSize: '0.55rem', color: '#fff', fontWeight: 700 }}>▶ 84k</span>
+                        </div>
+                        {/* Highlighted active AutoDrop post */}
+                        <div style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05))', border: '1px solid #10b981', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '4px' }}>
+                           <motion.div animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}>
+                              <RefreshCcw size={16} color="#10b981" />
+                           </motion.div>
+                           <span style={{ fontSize: '0.5rem', color: '#10b981', fontWeight: 800, marginTop: '4px', textAlign: 'center' }}>▶ 1.2M VIEWS</span>
+                           <span style={{ fontSize: '0.45rem', color: '#fff', background: '#10b981', padding: '1px 3px', borderRadius: '3px', marginTop: '2px', fontWeight: 700 }}>ACTIVE</span>
+                        </div>
+                        <div style={{ background: 'linear-gradient(135deg, #252830, #141517)', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '4px' }}>
+                           <span style={{ fontSize: '0.55rem', color: '#fff', fontWeight: 700 }}>▶ 140k</span>
+                        </div>
+                        <div style={{ background: 'linear-gradient(135deg, #252830, #141517)', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '4px' }}>
+                           <span style={{ fontSize: '0.55rem', color: '#fff', fontWeight: 700 }}>▶ 6.4k</span>
+                        </div>
+                        <div style={{ background: 'linear-gradient(135deg, #252830, #141517)', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: '4px' }}>
+                           <span style={{ fontSize: '0.55rem', color: '#fff', fontWeight: 700 }}>▶ 95k</span>
+                        </div>
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                      <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
-                       Revive Old Viral Posts 🔄
+                       Revive Old Viral Reels 🔄
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       Got an old post or Reel that went viral last month but is still gaining views? Turn on AutoDrop on historical posts to catch every comment and collect passive sales forever.
+                       Maximize old organic traffic! Got an old post that's still getting views or just went viral? Toggle AutoDrop on historical Reels to convert late viewers into fans automatically.
                      </p>
-                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#5b85ff', fontWeight: 700 }}>
-                        <RefreshCcw size={14} /> Zero wasted organic reach
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#10b981', fontWeight: 700 }}>
+                        <RefreshCcw size={14} /> Wake up past reels with 1 simple click
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 6. Grow Your Email List */}
+              {/* 6. Grow Your Email List - In-Chat email capture */}
               <FadeIn delay={0.6}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#0a0d15', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ background: '#121212', height: '220px', padding: '1rem 1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      
-                     {/* Glowing Background Dot */}
-                     <div style={{ position: 'absolute', bottom: '15%', right: '15%', width: '80px', height: '80px', background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        <AtSign size={14} color="#8b5cf6" /><span style={{fontSize: '0.75rem', fontWeight: 700, color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Instant Lead Collector</span>
-                     </div>
-
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                           <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>Enter Email:</span>
-                           <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600 }}>alex@example.com</span>
+                        {/* DM Prompt */}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                           <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.45rem 0.85rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.75rem', color: '#fff', maxWidth: '85%' }}>
+                              Where should I send the code? Reply with your Email! 📬
+                           </div>
                         </div>
-                        <div style={{ background: '#10b981', color: '#fff', padding: '0.4rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800, textAlign: 'center', boxShadow: '0 4px 10px rgba(16,185,129,0.3)' }}>
-                           Saved & Connected directly to Klaviyo/Mailchimp! ✅
+
+                        {/* Customer Email Reply */}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                           <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                           <div style={{ background: '#262626', padding: '0.45rem 0.85rem', borderRadius: '16px 16px 16px 4px', fontSize: '0.75rem', color: '#fff', maxWidth: '85%' }}>
+                              <b>alex@gmail.com</b>
+                           </div>
                         </div>
+
+                        {/* Automated email saving card */}
+                        <motion.div 
+                           initial={{ opacity: 0, scale: 0.9 }}
+                           animate={{ opacity: 1, scale: 1 }}
+                           style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.3)', padding: '0.5rem', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}
+                        >
+                           <CheckCircle2 size={14} color="#10b981" />
+                           <span style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 700 }}>Saved & synced to Klaviyo / Mailchimp!</span>
+                        </motion.div>
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
@@ -984,64 +1036,93 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                        Grow Your Email List 📧
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       No more clunky landing pages or slow-loading websites. Ask for your customer's email directly inside the IG DM and save it automatically to your lists.
+                       Forget slow, clunky web landing pages. Collect your customer's email directly inside the Instagram DM chat and automatically sync it straight to your email lists.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#8b5cf6', fontWeight: 700 }}>
-                        <CheckCircle2 size={14} /> 10x Higher Opt-In Rate than web landing pages
+                        <AtSign size={14} /> 10x higher opt-in conversion rates than web pages
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 7. Custom AI Sales Agent */}
+              {/* 7. Custom AI Sales Agent - Organic typing simulation */}
               <FadeIn delay={0.7}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                     {/* Glowing dynamic background */}
-                     <div style={{ position: 'absolute', width: '120px', height: '120px', background: 'radial-gradient(circle, rgba(168,85,247,0.3) 0%, transparent 70%)', filter: 'blur(15px)', zIndex: 0 }} />
+                  <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {/* Customer Question */}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem' }}>
+                           <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80) center/cover', flexShrink: 0 }} />
+                           <div style={{ background: '#262626', padding: '0.45rem 0.85rem', borderRadius: '16px 16px 16px 4px', fontSize: '0.75rem', color: '#fff' }}>
+                              Is the guide beginner friendly?
+                           </div>
+                        </div>
 
-                     <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
-                        <Sparkles size={40} color="#a855f7" />
-                        <span style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em' }}>AutoDrop <span style={{ color: '#a855f7' }}>AI</span></span>
+                        {/* AI Reply */}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
+                           <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.55rem 0.95rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.75rem', color: '#fff', maxWidth: '85%' }}>
+                              Yes! It starts from absolute scratch. Here's a 10% coupon: <b>NOOB10</b> 🎁
+                           </div>
+                        </div>
+
+                        {/* Custom typing state */}
+                        <div style={{ display: 'flex', gap: '0.3rem', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '100px', width: '50px', justifyContent: 'center' }}>
+                           <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#fff' }} />
+                           <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#fff' }} />
+                           <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#fff' }} />
+                        </div>
                      </div>
-                     <span style={{ position: 'absolute', bottom: '15px', background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.3)', color: '#a855f7', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 800 }}>LATEST UPGRADE 🔮</span>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                      <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Custom AI Sales Agent 🤖 <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       Train an ultra-smart AI bot on your digital files, business PDFs, or product descriptions. It chats naturally with your customers, answers queries, and handles objections automatically!
+                       Train an ultra-smart AI bot on your business files or FAQs. It chats organically with your customers, answers product questions, and overcomes purchase objections naturally 24/7.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
-                        <Sparkles size={14} /> Full Custom AI Training Available
+                        <Sparkles size={14} /> Natural language sales conversational flows
                      </div>
                   </div>
                 </motion.div>
               </FadeIn>
 
-              {/* 8. Sleek Digital Store */}
+              {/* 8. Sleek Digital Store - Checkout overlay */}
               <FadeIn delay={0.8}>
                 <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-                  <div style={{ background: '#0a0a0a', height: '220px', padding: '1.5rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                     {/* Glowing dynamic background */}
-                     <div style={{ position: 'absolute', width: '120px', height: '120px', background: 'radial-gradient(circle, rgba(34,211,238,0.3) 0%, transparent 70%)', filter: 'blur(15px)', zIndex: 0 }} />
+                  <div style={{ background: '#121212', height: '220px', padding: '1rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                     
+                     {/* Digital Store checkout popup */}
+                     <div style={{ background: '#1e1e1e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                           <div style={{ width: 40, height: 40, background: 'linear-gradient(135deg, #ff3f70, #a855f7)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: '0.6rem', textAlign: 'center' }}>PDF</div>
+                           <div>
+                              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#fff' }}>Viral Reels Playbook</div>
+                              <div style={{ fontSize: '0.65rem', color: '#888' }}>Instant PDF Download</div>
+                           </div>
+                           <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981' }}>$27.00</div>
+                           </div>
+                        </div>
 
-                     <div style={{ color: '#fff', display: 'flex', alignItems: 'center', gap: '0.75rem', position: 'relative', zIndex: 1 }}>
-                        <ShoppingBag size={40} color="#22D3EE" />
-                        <span style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.03em' }}>Digital <span style={{ color: '#22D3EE' }}>Store</span></span>
+                        {/* Interactive Checkout CTA */}
+                        <div style={{ background: '#fff', color: '#000', padding: '0.45rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: 'pointer' }}>
+                           <span>Pay with Apple Pay</span>
+                        </div>
+                        <div style={{ fontSize: '0.55rem', color: '#888', textAlign: 'center' }}>
+                           🔒 Secured by Stripe. Standard Instagram Browser Sheet
+                        </div>
                      </div>
-                     <span style={{ position: 'absolute', bottom: '15px', background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.3)', color: '#22D3EE', padding: '0.2rem 0.6rem', borderRadius: '100px', fontSize: '0.65rem', fontWeight: 800 }}>FULLY INCLUDED 🛍️</span>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                      <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Sleek Digital Store 🛍️ <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
-                       No external website or Shopify account needed. Simply upload your PDFs, masterclasses, codes, or ebooks to your AutoDrop dashboard, and let customers buy directly inside their chats.
+                       No external website or Shopify account needed. Simply upload your PDF guides, masterclasses, or ebooks to your AutoDrop dashboard, and sell directly inside DMs.
                      </p>
-                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#22D3EE', fontWeight: 700 }}>
-                        <ShoppingBag size={14} /> Direct Stripe / Payment Gateway Integration
+                     <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#22d3ee', fontWeight: 700 }}>
+                        <ShoppingBag size={14} /> Full Stripe & Payment Gateway integrations included
                      </div>
                   </div>
                 </motion.div>
