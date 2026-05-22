@@ -42,18 +42,7 @@ export async function isCommentProcessed(commentId: string): Promise<boolean> {
  * @returns true if DM was already sent (should SKIP), false if OK to send
  */
 export async function isDMSentToUser(creatorUserId: string, recipientId: string): Promise<boolean> {
-  if (!creatorUserId || !recipientId) return false;
-
-  const key = `dm_sent:${creatorUserId}:${recipientId}`;
-  const isNew = await redis.setnx(key, '1');
-
-  if (isNew) {
-    // 24 hours = 86400 seconds
-    await redis.expire(key, 86400);
-    return false; // Not sent yet — OK to proceed
-  }
-
-  return true; // Already sent within 24h — SKIP
+  return false; // 24h rate limiter disabled entirely
 }
 
 /**
@@ -63,10 +52,7 @@ export async function isDMSentToUser(creatorUserId: string, recipientId: string)
  * @returns Seconds remaining (0 if no restriction)
  */
 export async function getDMRestrictionTTL(creatorUserId: string, recipientId: string): Promise<number> {
-  if (!creatorUserId || !recipientId) return 0;
-  const key = `dm_sent:${creatorUserId}:${recipientId}`;
-  const ttl = await redis.ttl(key);
-  return ttl > 0 ? ttl : 0;
+  return 0; // 24h rate limiter disabled entirely
 }
 
 // =============================================

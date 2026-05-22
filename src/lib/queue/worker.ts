@@ -254,22 +254,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     return { success: false, reason: `Hourly DM cap reached (${hourlyCheck.count}/${hourlyCheck.limit})` };
   }
 
-  // ANTI-BAN: Per-user 24h dedup (Meta 2026 rule: max 1 DM per user per 24h from triggers)
-  // Only applies to the initial trigger ('send' job)
-  if (job.name === 'send' && !job.data.skipDedup) {
-    const dmAlreadySent = await isDMSentToUser(userId, recipientId);
-    if (dmAlreadySent) {
-      console.log(`[Worker] ⏩ Skipping DM to ${recipientId} — already sent within 24h`);
-      // If DM is triggered directly (e.g. story reply), requeue it for when the limit lifts
-      const ttl = await getDMRestrictionTTL(userId, recipientId);
-      if (ttl > 0) {
-        console.log(`[Worker] ⏳ Re-queueing DM job with ${ttl}s delay`);
-        await dmQueue.add(job.name, job.data, { delay: ttl * 1000 + getRandomDelay(5000, 25000) });
-        return { success: false, reason: `delayed for ${ttl}s due to 24h limit` };
-      }
-      return { success: false, reason: 'dm limit hit, no ttl' };
-    }
-  }
+  // 24h per-user rate limiter has been disabled per user request. Proceeding straight to job dispatching.
 
   // ---- JOB TYPE: SEND (Initial trigger from comment match) ----
   if (job.name === 'send') {
