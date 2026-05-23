@@ -18,7 +18,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: rgba(11, 15, 20, 0.7);
+  background: var(--navbar-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -365,7 +365,7 @@
 /* FEATURES */
 .featuresSection {
   padding: 120px 0;
-  background: var(--surface);
+  background: var(--section-bg);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
@@ -396,10 +396,11 @@
 }
 
 .featureCard {
-  background: var(--bg-primary);
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
 }
 
 .featureIcon {
@@ -484,16 +485,17 @@
 }
 
 .priceCard {
-  background: var(--bg-primary);
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 3rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.02);
 }
 
 .priceCard.pro {
   border-color: var(--primary);
   box-shadow: 0 0 40px rgba(99, 102, 241, 0.15);
-  background: linear-gradient(to bottom, #11151c, var(--bg-primary));
+  background: var(--price-pro-bg);
 }
 
 .priceName {
@@ -613,7 +615,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(11, 15, 20, 0.95);
+    background: var(--mobile-menu-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     flex-direction: column;

@@ -4,7 +4,6 @@
   --primary: #8b5cf6;
   --primary-hover: #7c3aed;
   --secondary: #1f2937;
-  --accent: #a855f7;
   --surface: rgba(255, 255, 255, 0.03);
   --surface-hover: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.1);
@@ -24,6 +23,13 @@
   --border-glow: rgba(34, 211, 238, 0.3);
   
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Theme Switcher Solid / Transparent Custom Variables */
+  --navbar-bg: rgba(11, 15, 20, 0.7);
+  --mobile-menu-bg: rgba(11, 15, 20, 0.95);
+  --section-bg: var(--surface);
+  --card-bg: var(--bg-primary);
+  --price-pro-bg: linear-gradient(to bottom, #11151c, var(--bg-primary));
 }
 
 [data-theme="light"] {
@@ -38,6 +44,13 @@
   --border: rgba(0, 0, 0, 0.09);
   --border-glow: rgba(99, 102, 241, 0.15);
   --glass: rgba(248, 248, 247, 0.8);
+
+  /* Theme Switcher Solid overrides in Light Mode */
+  --navbar-bg: #ffffff;
+  --mobile-menu-bg: #ffffff;
+  --section-bg: transparent;
+  --card-bg: var(--surface);
+  --price-pro-bg: linear-gradient(to bottom, #ffffff, #f1f1f0);
 }
 
 [data-theme="light"] body {
