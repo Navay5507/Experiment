@@ -12,27 +12,6 @@ import {
 import styles from "../page.module.css";
 import ThemeToggle from "../components/ThemeToggle";
 
-/* ── Animated counter hook ── */
-function useCounter(target: number, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, target, duration]);
-
-  return { count, ref };
-}
-
 /* ── FadeIn wrapper ── */
 const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.ReactNode; delay?: number; direction?: "up"|"left"|"right" }) => (
   <motion.div
@@ -44,21 +23,6 @@ const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.Rea
     {children}
   </motion.div>
 );
-
-/* ── Animated stat card ── */
-function StatCard({ value, label, prefix = "", suffix = "" }: { value: number; label: string; prefix?: string; suffix?: string }) {
-  const { count, ref } = useCounter(value);
-  return (
-    <div style={{ textAlign: "center", padding: "2rem 1.5rem", background: "rgba(139,92,246,0.06)", border: "1px solid rgba(139,92,246,0.15)", borderRadius: "1.25rem", flex: "1 1 180px" }}>
-      <div style={{ fontSize: "3rem", fontWeight: 900, letterSpacing: "-0.04em", background: "linear-gradient(135deg,#818cf8,#5b85ff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-        <span>{prefix}</span>
-        <span ref={ref}>{count.toLocaleString()}</span>
-        <span>{suffix}</span>
-      </div>
-      <div style={{ color: "#9ca3af", fontSize: "0.9rem", marginTop: "0.5rem", fontWeight: 500 }}>{label}</div>
-    </div>
-  );
-}
 
 /* ── Value card ── */
 function ValueCard({ icon: Icon, title, desc, delay }: { icon: any; title: string; desc: string; delay?: number }) {
@@ -89,52 +53,7 @@ function ValueCard({ icon: Icon, title, desc, delay }: { icon: any; title: strin
   );
 }
 
-/* ── Timeline event ── */
-function TimelineEvent({ year, title, desc, index }: { year: string; title: string; desc: string; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const isLeft = index % 2 === 0;
 
-  return (
-    <div ref={ref} style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr", alignItems: "center", marginBottom: "3rem", gap: "1rem" }}>
-      {/* Left content */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.7, delay: 0.1 }}
-        style={{ textAlign: "right", paddingRight: "1rem", display: isLeft ? "block" : "none" }}
-      >
-        <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.25rem 0.75rem", borderRadius: "100px", marginBottom: "0.5rem" }}>{year}</span>
-        <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-heading)", margin: "0 0 0.4rem 0" }}>{title}</h3>
-        <p style={{ color: "#9ca3af", fontSize: "0.875rem", lineHeight: 1.6, margin: 0 }}>{desc}</p>
-      </motion.div>
-      <div style={{ display: isLeft ? "none" : "block" }} />
-
-      {/* Center dot */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={inView ? { scale: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.2, type: "spring" }}
-          style={{ width: 16, height: 16, borderRadius: "50%", background: "linear-gradient(135deg,#818cf8,#5b85ff)", boxShadow: "0 0 20px rgba(129,140,248,0.6)", flexShrink: 0 }}
-        />
-      </div>
-
-      {/* Right content */}
-      <div style={{ display: isLeft ? "none" : "block" }} />
-      <motion.div
-        initial={{ opacity: 0, x: 50 }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.7, delay: 0.1 }}
-        style={{ paddingLeft: "1rem", display: isLeft ? "none" : "block" }}
-      >
-        <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.25rem 0.75rem", borderRadius: "100px", marginBottom: "0.5rem" }}>{year}</span>
-        <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-heading)", margin: "0 0 0.4rem 0" }}>{title}</h3>
-        <p style={{ color: "#9ca3af", fontSize: "0.875rem", lineHeight: 1.6, margin: 0 }}>{desc}</p>
-      </motion.div>
-    </div>
-  );
-}
 
 export default function AboutPage() {
   const { user } = useUser();
@@ -147,13 +66,7 @@ export default function AboutPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const timeline = [
-    { year: "2024 Q1", title: "The Spark", desc: "Frustrated watching creators reply to thousands of DMs manually, our founder sketched the first AutoDrop prototype on a notebook." },
-    { year: "2024 Q2", title: "First Beta", desc: "100 creators joined our closed beta. Within 30 days, they collectively saved 2,400+ hours of manual DM replies." },
-    { year: "2024 Q3", title: "Meta Partnership", desc: "AutoDrop became an official Meta Business Partner — validating our commitment to building on verified, safe infrastructure." },
-    { year: "2024 Q4", title: "Growth Explosion", desc: "Crossed 1,000 active creators. Our automation engine processed over 500,000 DMs in a single month." },
-    { year: "2025", title: "What's Next", desc: "AI-powered smart replies, Creator Marketplace, and deeper analytics — we're just getting started." },
-  ];
+
 
   const values = [
     { icon: Zap, title: "Speed First", desc: "Every second a creator waits is a lead lost. We obsess over response times and real-time delivery." },
@@ -282,20 +195,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── STATS ── */}
-      <section style={{ padding: "80px 0" }}>
-        <div className={styles.container}>
-          <FadeIn>
-            <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", justifyContent: "center" }}>
-              <StatCard value={5000} suffix="+" label="Active Creators" />
-              <StatCard value={2} suffix="M+" label="DMs Automated" />
-              <StatCard value={120} suffix="K+" label="Hours Saved" />
-              <StatCard value={50} suffix="+" label="Countries Reached" />
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
       {/* ── ORIGIN STORY ── */}
       <section style={{ padding: "80px 0" }}>
         <div className={styles.container}>
@@ -315,7 +214,7 @@ export default function AboutPage() {
                   Manually replying to 3,000 DMs is not just exhausting — it means missing leads, losing sales, and burning out the creator before they can even enjoy their moment.
                 </p>
                 <p style={{ color: "#9ca3af", fontSize: "1rem", lineHeight: 1.8 }}>
-                  <span style={{ color: "var(--text-heading)", fontWeight: 600 }}>So we automated it.</span> AutoDrop was built in a weekend, tested on 10 creators, and was processing 100,000 DMs a month before we even had a proper website.
+                  <span style={{ color: "var(--text-heading)", fontWeight: 600 }}>So we automated it.</span> We built AutoDrop to instantly reply to comments and send DMs, turning passive engagement into direct leads on autopilot.
                 </p>
               </div>
             </FadeIn>
@@ -323,41 +222,10 @@ export default function AboutPage() {
             <FadeIn direction="right" delay={0.15}>
               <div style={{ position: "relative" }}>
                 <div style={{ borderRadius: "1.5rem", overflow: "hidden", border: "1px solid rgba(139,92,246,0.2)", boxShadow: "0 30px 80px rgba(99,102,241,0.15)" }}>
-                  <img src="/about_mission.png" alt="AutoDrop mission" style={{ width: "100%", height: "420px", objectFit: "cover", display: "block" }} />
+                  <img src="/about_dashboard.png" alt="AutoDrop dashboard" style={{ width: "100%", height: "420px", objectFit: "cover", display: "block" }} />
                 </div>
-                {/* Floating badge */}
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ position: "absolute", bottom: "-1.5rem", left: "-1.5rem", background: "linear-gradient(135deg,#1e1b4b,#2d1f5e)", border: "1px solid rgba(139,92,246,0.4)", borderRadius: "1rem", padding: "1rem 1.5rem", boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-                    <ShieldCheck size={20} color="#10b981" />
-                    <span style={{ color: "#fff", fontWeight: 700, fontSize: "0.9rem" }}>Official Meta Partner</span>
-                  </div>
-                </motion.div>
               </div>
             </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TIMELINE ── */}
-      <section style={{ padding: "80px 0" }}>
-        <div className={styles.container}>
-          <FadeIn>
-            <div style={{ textAlign: "center", marginBottom: "5rem" }}>
-              <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.3rem 0.9rem", borderRadius: "100px", marginBottom: "1rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>Our Journey</span>
-              <h2 style={{ fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "var(--text-heading)", margin: 0 }}>From idea to impact</h2>
-            </div>
-          </FadeIn>
-
-          {/* Timeline line */}
-          <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "2px", background: "linear-gradient(to bottom, transparent, rgba(139,92,246,0.4) 10%, rgba(139,92,246,0.4) 90%, transparent)", transform: "translateX(-50%)" }} />
-            {timeline.map((item, i) => (
-              <TimelineEvent key={i} year={item.year} title={item.title} desc={item.desc} index={i} />
-            ))}
           </div>
         </div>
       </section>
