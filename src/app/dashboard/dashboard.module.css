@@ -225,7 +225,7 @@
 .metricValue {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-heading);
+  color: #fff;
 }
 
 .metricTrend {
