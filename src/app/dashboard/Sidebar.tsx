@@ -25,7 +25,7 @@ function NavItem({ href, icon: Icon, label, isBottom = false, isActive, isComing
         className={styles.navItem}
         style={{
           display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.85rem 1.25rem',
-          borderRadius: '12px', color: isActive ? '#fff' : 'var(--text-muted)',
+          borderRadius: '12px', color: isActive ? '#fff' : '#9ca3af',
           background: isActive ? 'linear-gradient(90deg, rgba(99,102,241,0.1), transparent)' : 'transparent',
           borderLeft: isActive ? '3px solid var(--primary)' : '3px solid transparent',
           marginTop: isBottom ? 'auto' : 0,
@@ -90,7 +90,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
           className={styles.sidebarCloseBtn}
           aria-label="Close sidebar"
         >
-          <X size={20} color="var(--text-muted)" />
+          <X size={20} color="#9ca3af" />
         </button>
       </div>
       <nav className={styles.nav} style={{ padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
@@ -114,7 +114,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop: always-visible sidebar */}
-      <aside className={`${styles.sidebar} ${styles.desktopSidebar}`} style={{ background: 'rgba(18,24,33,0.4)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+      <aside className={`${styles.sidebar} ${styles.desktopSidebar}`} style={{ background: '#0d1017', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
         {navContent}
       </aside>
 
@@ -140,7 +140,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className={`${styles.sidebar} ${styles.mobileSidebar}`}
-              style={{ background: 'rgba(12,16,23,0.98)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.07)' }}
+              style={{ background: '#0d1017', borderRight: '1px solid rgba(255,255,255,0.07)' }}
             >
               {navContent}
             </motion.aside>

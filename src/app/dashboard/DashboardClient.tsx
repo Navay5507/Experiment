@@ -83,7 +83,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
 
   return (
     <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-      <div className={styles.sectionTitle} style={{ color: '#fff', fontSize: '1.5rem', letterSpacing: '-0.02em', fontWeight: 800 }}>Workspace Overview</div>
+      <div className={styles.sectionTitle} style={{ color: 'var(--text-heading)', fontSize: '1.5rem', letterSpacing: '-0.02em', fontWeight: 800 }}>Workspace Overview</div>
       
       {daysLeft !== null && daysLeft <= 7 && (
         <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '1rem 1.5rem', borderRadius: '12px', color: '#ef4444', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between', flexWrap: 'wrap' }}>
