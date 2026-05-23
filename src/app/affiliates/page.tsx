@@ -24,7 +24,7 @@ export default function AffiliatesPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <main className={styles.main} style={{ background: 'var(--bg-primary)', minHeight: '100vh', color: 'var(--text-main)', overflowX: 'hidden' }}>
+    <main className={styles.main} style={{ background: 'transparent', minHeight: '100vh', color: 'var(--text-main)', overflowX: 'hidden' }}>
       {/* Navigation */}
       <div className={styles.navbarWrapper}>
         <nav className={styles.navbar}>
@@ -172,27 +172,27 @@ export default function AffiliatesPage() {
                </FadeIn>
                
                <FadeIn delay={0.2}>
-                  <div style={{ background: '#111318', border: '1px solid var(--border)', borderRadius: '24px', padding: '2.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ background: '#111318', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '24px', padding: '2.5rem', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', position: 'relative', overflow: 'hidden' }}>
                      <div style={{ position: 'absolute', top: -50, right: -50, width: 200, height: 200, background: 'rgba(16, 185, 129, 0.2)', filter: 'blur(50px)', borderRadius: '50%' }} />
                      
                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                        <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>Your Dashboard</div>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#ffffff' }}>Your Dashboard</div>
                         <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '4px 12px', borderRadius: '100px', fontSize: '0.85rem', fontWeight: 600 }}>Active Overview</div>
                      </div>
                      
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                         <div>
-                           <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Available Balance</div>
-                           <div style={{ fontSize: '2.5rem', fontWeight: 800 }}>₹11,490 <span style={{ fontSize: '1rem', color: '#10b981', fontWeight: 600 }}>+₹2,000 this week</span></div>
+                           <div style={{ color: '#9ca3af', fontSize: '0.9rem', marginBottom: '0.25rem' }}>Available Balance</div>
+                           <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffffff' }}>₹11,490 <span style={{ fontSize: '1rem', color: '#10b981', fontWeight: 600 }}>+₹2,000 this week</span></div>
                         </div>
                         <div style={{ display: 'flex', gap: '1rem' }}>
-                           <div style={{ flex: 1, background: '#16181D', border: '1px solid var(--border)', padding: '1rem', borderRadius: '12px' }}>
-                              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '0.25rem' }}>Active Referrals</div>
-                              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>42</div>
+                           <div style={{ flex: 1, background: '#16181D', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '1rem', borderRadius: '12px' }}>
+                              <div style={{ color: '#9ca3af', fontSize: '0.8rem', marginBottom: '0.25rem' }}>Active Referrals</div>
+                              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#ffffff' }}>42</div>
                            </div>
-                           <div style={{ flex: 1, background: '#16181D', border: '1px solid var(--border)', padding: '1rem', borderRadius: '12px' }}>
-                              <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: '0.25rem' }}>Clicks</div>
-                              <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>1,804</div>
+                           <div style={{ flex: 1, background: '#16181D', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '1rem', borderRadius: '12px' }}>
+                              <div style={{ color: '#9ca3af', fontSize: '0.8rem', marginBottom: '0.25rem' }}>Clicks</div>
+                              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#ffffff' }}>1,804</div>
                            </div>
                         </div>
                      </div>
