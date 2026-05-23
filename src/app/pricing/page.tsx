@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { MessageCircle, Check, X, Minus, Loader2, ShieldCheck } from "lucide-react";
 import styles from "./pricing.module.css";
+import ThemeToggle from "../components/ThemeToggle";
 
 type Currency = "USD" | "INR" | "EUR" | "GBP" | "CAD" | "AUD" | "NZD" | "ZAR" | "SGD" | "NGN";
 
@@ -209,9 +210,12 @@ export default function PricingPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1 }}>
-        <button onClick={() => router.back()} style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', cursor: 'pointer', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.5rem 1rem', borderRadius: '8px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, backdropFilter: 'blur(10px)' }}>
+        <button onClick={() => router.back()} style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', padding: '0.5rem 1rem', borderRadius: '8px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, backdropFilter: 'blur(10px)' }}>
           ← Go Back
         </button>
+        <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 10 }}>
+          <ThemeToggle />
+        </div>
         <div className={styles.blob} />
         <header className={styles.header}>
           <h1 className={styles.title}>Simple, transparent pricing</h1>
@@ -310,12 +314,12 @@ export default function PricingPage() {
                      placeholder="Promo Code" 
                      value={promoCodeInput}
                      onChange={(e) => setPromoCodeInput(e.target.value.toUpperCase())}
-                     style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', background: 'rgba(0,0,0,0.2)', color: 'white', textTransform: 'uppercase' }}
+                     style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', background: 'rgba(128, 128, 128, 0.05)', color: 'var(--text-main)', textTransform: 'uppercase' }}
                    />
                    <button 
                      onClick={handleApplyPromo} 
                      disabled={promoLoading || !promoCodeInput.trim()}
-                     style={{ padding: '0 1rem', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 600, cursor: promoCodeInput.trim() ? 'pointer' : 'not-allowed' }}
+                     style={{ padding: '0 1rem', borderRadius: '8px', background: 'rgba(128, 128, 128, 0.1)', color: 'var(--text-heading)', fontWeight: 600, cursor: promoCodeInput.trim() ? 'pointer' : 'not-allowed' }}
                    >
                      {promoLoading ? <Loader2 className="animate-spin" size={16} /> : 'Apply'}
                    </button>
@@ -462,17 +466,17 @@ export default function PricingPage() {
       </main>
 
       {/* FAQ SECTION */}
-      <section style={{ width: '100%', background: '#000000', padding: '6rem 2rem' }}>
+      <section style={{ width: '100%', background: 'var(--bg-primary)', padding: '6rem 2rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', color: '#fff' }}>Frequently Asked Questions</h2>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', color: 'var(--text-heading)' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
                { q: 'Is my Instagram account safe using AutoDrop?', a: '100% yes. We use the official Meta Instagram Graph API. We never ask for your password, and our platform is fully compliant with Instagram’s terms of service, meaning zero risk of shadowbans.' },
                { q: 'If I upgrade to Growth Pro, how soon does it activate?', a: 'Instantly. As soon as your payment is confirmed, your account limits are removed and you can immediately create unlimited automations and use Lead Capture / Follow-Gate features.' },
                { q: 'Do I need any technical skills to set this up?', a: 'Not at all. We designed AutoDrop to be as simple as setting up an Instagram profile. If you get stuck, Growth Pro users get priority access to our support team for 1-on-1 help.' }
             ].map((faq, idx) => (
-               <details key={idx} style={{ background: '#111318', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
-                  <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff' }}>
+               <details key={idx} style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '1.25rem', borderRadius: '12px' }}>
+                  <summary style={{ fontWeight: 600, fontSize: '1.1rem', cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-heading)' }}>
                      {faq.q}
                      <span style={{ opacity: 0.5 }}>▾</span>
                   </summary>
@@ -495,11 +499,11 @@ export default function PricingPage() {
                 <span style={{ color: '#ffffff' }}>Drop</span>
               </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
+            <p style={{ color: '#9ca3af', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
           </div>
 
           {/* Nav Links */}
-          <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link href="/" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Home</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Pricing</Link>
             <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Contact Us</a>
@@ -510,9 +514,9 @@ export default function PricingPage() {
           <div style={{ width: '100%', maxWidth: '400px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)' }} />
 
           {/* Copyright + Small Text */}
-          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
+          <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
             <p>&copy; {new Date().getFullYear()} AutoDrop. All rights reserved.</p>
-            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#9ca3af' }}>
                <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
             </p>
           </div>
