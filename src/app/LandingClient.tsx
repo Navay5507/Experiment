@@ -1115,7 +1115,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                         {/* Interactive Checkout CTA */}
                         <div style={{ background: '#fff', color: '#000', padding: '0.45rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: 'pointer' }}>
-                           <span>Pay with Apple Pay</span>
+                           <span>Pay with UPI/Card/Apple Pay</span>
                         </div>
                         <div style={{ fontSize: '0.55rem', color: '#888', textAlign: 'center' }}>
                            🔒 Secured by Stripe. Standard Instagram Browser Sheet
