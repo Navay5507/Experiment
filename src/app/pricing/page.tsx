@@ -224,22 +224,23 @@ export default function PricingPage() {
             </div>
           </Link>
 
-          <button className={pageStyles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-             {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} className={pageStyles.mobileControls}>
+             <div className={pageStyles.mobileThemeToggle}>
+                <ThemeToggle />
+             </div>
+             <button className={pageStyles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {isMobileMenuOpen ? <X size={28} color="var(--text-heading)" /> : <Menu size={28} color="var(--text-heading)" />}
+             </button>
+          </div>
 
           <div className={`${pageStyles.navLinks} ${isMobileMenuOpen ? pageStyles.mobileNavOpen : ''}`}>
             <Link href="/#features" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
             <Link href="/#how-it-works" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
-            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
+            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-heading)', fontWeight: 600 }}>Pricing</Link>
             <Link href="/affiliates" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
             <Link href="/support" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
             {isMobileMenuOpen && (
                <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#9ca3af' }}>
-                     <span>Theme:</span>
-                     <ThemeToggle />
-                  </div>
                   {user ? (
                      <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
                   ) : (
@@ -548,10 +549,13 @@ export default function PricingPage() {
 
           {/* Nav Links */}
           <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link href="/" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Home</Link>
-            <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Pricing</Link>
-            <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}>Contact Us</a>
-            <span style={{ opacity: 0.5 }}>Terms &amp; Privacy</span>
+            <Link href="/#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
+            <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
+            <Link href="/affiliates" style={{ color: 'inherit', textDecoration: 'none' }}>Partner Program</Link>
+            <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
+            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
+            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
+            <Link href="/refund-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Refund Policy</Link>
           </div>
 
           {/* Gradient Divider */}
@@ -567,8 +571,8 @@ export default function PricingPage() {
         </div>
 
         {/* GIANT BACKGROUND WATERMARK */}
-        <div style={{ width: '100%', overflow: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
-          <span style={{ fontSize: 'min(24vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase' }}>
+        <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip', overflowY: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
+          <span style={{ fontSize: 'clamp(3rem, 15vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
             AutoDrop
           </span>
         </div>

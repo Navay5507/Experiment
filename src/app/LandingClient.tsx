@@ -645,9 +645,14 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             </div>
           </Link>
 
-          <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-             {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} className={styles.mobileControls}>
+             <div className={styles.mobileThemeToggle}>
+                <ThemeToggle />
+             </div>
+             <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {isMobileMenuOpen ? <X size={28} color="var(--text-heading)" /> : <Menu size={28} color="var(--text-heading)" />}
+             </button>
+          </div>
 
           <div className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
             <a href="#features" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' }); setIsMobileMenuOpen(false); }}>Features</a>
@@ -657,10 +662,6 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
             {isMobileMenuOpen && (
                <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#9ca3af' }}>
-                     <span>Theme:</span>
-                     <ThemeToggle />
-                  </div>
                   {userId ? (
                      <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
                   ) : (
@@ -1394,7 +1395,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
           {/* Nav Links */}
           <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link href="#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
+            <Link href="/#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
             <Link href="/affiliates" style={{ color: 'inherit', textDecoration: 'none' }}>Partner Program</Link>
             <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>

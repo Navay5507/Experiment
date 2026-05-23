@@ -38,22 +38,24 @@ export default function AffiliatesPage() {
             </div>
           </Link>
 
-          <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-             {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} className={styles.mobileControls}>
+             <div className={styles.mobileThemeToggle}>
+                <ThemeToggle />
+             </div>
+             <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                {isMobileMenuOpen ? <X size={28} color="var(--text-heading)" /> : <Menu size={28} color="var(--text-heading)" />}
+             </button>
+          </div>
 
           <div className={`${styles.navLinks} ${isMobileMenuOpen ? styles.mobileNavOpen : ''}`}>
              <Link href="/#features" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
              <Link href="/#how-it-works" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
              <Link href="/pricing" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
-             <Link href="/affiliates" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
+             <Link href="/affiliates" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-heading)', fontWeight: 600 }}>Partner Program</Link>
              <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
              {isMobileMenuOpen && (
                 <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#9ca3af' }}>
-                      <span>Theme:</span>
-                      <ThemeToggle />
-                   </div>
+                   {/* Theme toggle removed from here as it's now in the header */}
                    {user ? (
                       <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
                    ) : (
@@ -229,21 +231,30 @@ export default function AffiliatesPage() {
           </div>
 
           <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+            <Link href="/#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
-            <Link href="/affiliates" style={{ color: '#fff', textDecoration: 'none', fontWeight: 600 }}>Partner Program</Link>
+            <Link href="/affiliates" style={{ color: 'inherit', textDecoration: 'none' }}>Partner Program</Link>
             <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
-            <span style={{ opacity: 0.5 }}>Terms &amp; Privacy</span>
+            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
+            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
+            <Link href="/refund-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Refund Policy</Link>
           </div>
 
           <div style={{ width: '100%', maxWidth: '400px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)' }} />
 
           <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
-            <p>&copy; {new Date().getFullYear()} Autodrop. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} AutoDrop. All rights reserved.</p>
             <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#9ca3af' }}>
                <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
             </p>
           </div>
+        </div>
+
+        {/* GIANT BACKGROUND WATERMARK */}
+        <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip', overflowY: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
+          <span style={{ fontSize: 'clamp(3rem, 15vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
+            AutoDrop
+          </span>
         </div>
       </footer>
     </main>

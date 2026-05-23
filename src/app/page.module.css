@@ -72,6 +72,10 @@
   z-index: 1001;
 }
 
+.mobileThemeToggle {
+  display: none;
+}
+
 .authCol {
   display: flex;
   gap: 1rem;
@@ -609,6 +613,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .mobileThemeToggle {
+    display: block;
   }
   .navLinks {
     display: none;
