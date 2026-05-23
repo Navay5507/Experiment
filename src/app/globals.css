@@ -49,7 +49,7 @@
   --navbar-bg: #050505;
   --mobile-menu-bg: #050505;
   --section-bg: transparent;
-  --card-bg: var(--surface);
+  --card-bg: #eaeaea;
   --price-pro-bg: linear-gradient(to bottom, #ffffff, #f1f1f0);
 }
 
