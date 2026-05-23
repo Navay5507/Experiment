@@ -551,7 +551,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section style={{ padding: '8rem 0', background: 'var(--background)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ padding: '8rem 0', background: 'transparent', position: 'relative', overflow: 'hidden' }}>
       {/* Background Glows */}
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 60%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
       
