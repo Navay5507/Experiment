@@ -769,7 +769,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
               
               {/* 1. Comment Magnet - Reel Comment Sheet Simulation */}
               <FadeIn delay={0.1}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'flex-start', overflow: 'hidden' }}>
                      {/* Instagram Reel Header Mockup */}
                      <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
@@ -805,10 +805,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Auto-Reply to Comments 💬
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        No more copy-pasting links in comments! When fans comment a keyword on your Reels or posts, AutoDrop instantly replies and slides into their DMs with your link automatically.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#3897f0', fontWeight: 700 }}>
@@ -820,7 +820,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 2. Story Reply Booster - Story View UI Simulation */}
               <FadeIn delay={0.2}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(180deg, #1f1f1f 0%, #0d0d0d 100%)' }}>
                         {/* Story Progress Lines */}
@@ -861,10 +861,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Story Interactive Auto-DMs 📖
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Double Story link conversions! Simply post a Story asking followers to reply with a keyword. AutoDrop automatically reads Story replies and delivers DMs instantly.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#e1306c', fontWeight: 700 }}>
@@ -876,7 +876,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 3. Inbox Auto-Replies - High Fidelity DM Simulation */}
               <FadeIn delay={0.3}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      {/* DM Chat Header */}
                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
@@ -906,10 +906,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Inbox Secret Code Words 📩
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Create secret keywords (like 'VIP', 'OFFER', 'GUIDE') for your bio or offline flyers. When customers DM you that specific word, AutoDrop sends them links instantly.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
@@ -921,7 +921,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 4. Follower Booster - Profile Gated Simulation */}
               <FadeIn delay={0.4}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      {/* Instagram Profile Simulation */}
                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
@@ -949,10 +949,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Follower Booster (Follow-Gate) 🔒
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Turn commenters into followers! AutoDrop automatically checks if a user is following your profile. If they aren't, it politely reminds them to follow you before delivering their link.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
@@ -964,7 +964,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 5. Revive Viral Posts - Reels Grid Simulation */}
               <FadeIn delay={0.5}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '0.75rem', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                      {/* Instagram Profile Post Grid Mockup */}
                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px', height: '100%' }}>
@@ -994,10 +994,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Revive Old Viral Reels 🔄
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Maximize old organic traffic! Got an old post that's still getting views or just went viral? Toggle AutoDrop on historical Reels to convert late viewers into fans automatically.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#10b981', fontWeight: 700 }}>
@@ -1009,7 +1009,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 6. Grow Your Email List - In-Chat email capture */}
               <FadeIn delay={0.6}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1rem 1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -1040,10 +1040,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Grow Your Email List 📧
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Forget slow, clunky web landing pages. Collect your customer's email directly inside the Instagram DM chat and automatically sync it straight to your email lists.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#8b5cf6', fontWeight: 700 }}>
@@ -1055,7 +1055,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 7. Custom AI Sales Agent - Organic typing simulation */}
               <FadeIn delay={0.7}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {/* Customer Question */}
@@ -1082,10 +1082,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Custom AI Sales Agent 🤖 <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        Train an ultra-smart AI bot on your business files or FAQs. It chats organically with your customers, answers product questions, and overcomes purchase objections naturally 24/7.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
@@ -1097,7 +1097,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
               {/* 8. Sleek Digital Store - Checkout overlay */}
               <FadeIn delay={0.8}>
-                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'linear-gradient(135deg, rgba(30,30,38,0.75) 0%, rgba(15,15,20,0.75) 100%)', borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.13)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(16px)' }}>
+                <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
                   <div style={{ background: '#121212', height: '220px', padding: '1rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                      
                      {/* Digital Store checkout popup */}
@@ -1120,13 +1120,13 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                         <div style={{ fontSize: '0.55rem', color: '#888', textAlign: 'center' }}>
                            🔒 Secured by Stripe. Standard Instagram Browser Sheet
                         </div>
-                     </div>
+                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Sleek Digital Store 🛍️ <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
                      </h3>
-                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
+                     <p style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                        No external website or Shopify account needed. Simply upload your PDF guides, masterclasses, or ebooks to your AutoDrop dashboard, and sell directly inside DMs.
                      </p>
                      <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.8rem', color: '#22d3ee', fontWeight: 700 }}>
