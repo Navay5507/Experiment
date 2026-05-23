@@ -93,7 +93,7 @@ export default async function ReferralPage() {
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '1rem 1.25rem', background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.25)', borderRadius: '12px', marginBottom: '1.5rem' }}>
         <AlertCircle size={20} color="#eab308" style={{ flexShrink: 0, marginTop: 2 }} />
         <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-          <strong style={{ color: '#eab308' }}>Payout Policy:</strong> Commission payouts are processed <strong style={{ color: '#fff' }}>1 month after</strong> the referred user&apos;s payment. This ensures the transaction is confirmed and non-refundable. Payouts will be directly transferred to your saved UPI ID.
+          <strong style={{ color: '#eab308' }}>Payout Policy:</strong> Commission payouts are processed <strong style={{ color: 'var(--text-heading)' }}>1 month after</strong> the referred user&apos;s payment. This ensures the transaction is confirmed and non-refundable. Payouts will be directly transferred to your saved UPI ID.
         </div>
       </div>
 
@@ -111,7 +111,7 @@ export default async function ReferralPage() {
             type="text"
             readOnly
             value={referralLink || 'Generating...'}
-            style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.85rem 1rem', borderRadius: '10px', color: '#fff', fontSize: '0.9rem', fontFamily: 'monospace' }}
+            style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.85rem 1rem', borderRadius: '10px', color: 'var(--text-main)', fontSize: '0.9rem', fontFamily: 'monospace' }}
           />
           <CopyButton text={referralLink} />
         </div>
@@ -121,7 +121,7 @@ export default async function ReferralPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
         <div className={styles.card} style={{ textAlign: 'center' }}>
           <Users size={24} color="var(--primary)" style={{ marginBottom: '0.75rem' }} />
-          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff', lineHeight: 1 }}>{stats.total}</div>
+          <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-heading)', lineHeight: 1 }}>{stats.total}</div>
           <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Total Referrals</div>
         </div>
         <div className={styles.card} style={{ textAlign: 'center' }}>
@@ -157,7 +157,7 @@ export default async function ReferralPage() {
               name="upi_id"
               placeholder="yourname@okaxis"
               defaultValue={user?.upi_id || ''}
-              style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.8rem 1rem', borderRadius: '10px', color: '#fff', fontSize: '0.9rem' }}
+              style={{ flex: 1, background: 'var(--bg-primary)', border: '1px solid var(--border)', padding: '0.8rem 1rem', borderRadius: '10px', color: 'var(--text-main)', fontSize: '0.9rem' }}
               required
             />
             <button type="submit" className={styles.btnAction} style={{ padding: '0.8rem 1.25rem', background: '#10b981', borderColor: '#10b981' }}>
@@ -196,7 +196,7 @@ export default async function ReferralPage() {
             {withdrawals.map((wd: any) => (
               <div key={wd.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.25rem', background: 'var(--bg-primary)', borderRadius: '10px', border: '1px solid var(--border)' }}>
                 <div>
-                  <div style={{ fontWeight: 600, marginBottom: '0.25rem', color: '#fff' }}>
+                  <div style={{ fontWeight: 600, marginBottom: '0.25rem', color: 'var(--text-heading)' }}>
                     Withdrawal to {wd.payout_details}
                   </div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>

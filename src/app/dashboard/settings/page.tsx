@@ -181,8 +181,8 @@ export default async function SettingsPage({ searchParams }: PageProps) {
         gap: '0.5rem',
         marginBottom: '2rem',
         padding: '0.4rem',
-        background: 'rgba(255, 255, 255, 0.02)',
-        border: '1px solid rgba(255, 255, 255, 0.05)',
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
         borderRadius: '100px',
         maxWidth: 'fit-content',
         backdropFilter: 'blur(10px)',
@@ -255,13 +255,13 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                            display: 'flex',
                            alignItems: 'center',
                            justifyContent: 'space-between',
-                           background: 'rgba(255, 255, 255, 0.02)',
-                           border: '1px solid rgba(255, 255, 255, 0.05)',
+                           background: 'var(--surface-hover)',
+                           border: '1px solid var(--border)',
                            borderRadius: '8px',
                            padding: '0.75rem',
                          }}>
                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                             <span style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}>@{conn.instagram_handle}</span>
+                             <span style={{ color: 'var(--text-heading)', fontSize: '0.9rem', fontWeight: 600 }}>@{conn.instagram_handle}</span>
                              {isPrimary && (
                                <span style={{
                                  background: 'rgba(168, 85, 247, 0.15)',
@@ -328,7 +328,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
             <div className={styles.card}>
               <div className={styles.sectionTitle}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><CreditCard size={20}/> Subscription Tier</span></div>
               <div style={{ marginBottom: '1.5rem' }}>
-                 <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem', color: user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'var(--primary)' : '#fff' }}>
+                 <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem', color: user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'var(--primary)' : 'var(--text-heading)' }}>
                    {user?.plan === 'PRO' ? 'Growth Pro' : user?.plan === 'ELITE' ? 'Elite AI' : 'Free Starter'}
                  </h3>
                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>You currently have access to {user?.plan === 'PRO' || user?.plan === 'ELITE' ? 'Unlimited' : '1'} active automation campaigns.</p>
@@ -355,7 +355,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                       </button>
                     </ConfirmForm>
                     <ConfirmForm message="Reset all dashboard stats to zero? This cannot be undone." action={resetStats}>
-                      <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                      <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                          <Activity size={18} /> Reset Dashboard Stats
                       </button>
                     </ConfirmForm>
@@ -386,7 +386,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
               
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
                 <div style={{ flex: '1 1 450px' }}>
-                  <h4 style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Delete AutoDrop Account</h4>
+                  <h4 style={{ color: 'var(--text-heading)', fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Delete AutoDrop Account</h4>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.4' }}>
                      This action is highly destructive and completely irreversible. It will permanently delete your user profile, subscription parameters, all connected Instagram access tokens, existing automation campaigns, and every lead captured.
                   </p>
