@@ -128,7 +128,7 @@
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.04em;
-  color: #fff;
+  color: var(--text-heading);
 }
 
 .gradientText {
@@ -171,7 +171,7 @@
 
 .secondaryBtn {
   background: var(--surface);
-  color: #fff;
+  color: var(--text-heading);
   padding: 1rem 2rem;
   border-radius: 12px;
   font-size: 1.1rem;
@@ -310,7 +310,7 @@
 .logoItem {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-heading);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -543,13 +543,14 @@
   text-decoration: none;
   background: var(--surface);
   border: 1px solid var(--border);
-  color: #fff;
+  color: var(--text-heading);
   transition: background 0.2s;
 }
 
 .priceCard.pro .priceBtn {
   background: var(--primary);
   border: none;
+  color: #fff;
 }
 
 /* FINAL CTA */
