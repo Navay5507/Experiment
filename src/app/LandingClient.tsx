@@ -650,7 +650,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                 <ThemeToggle />
              </div>
              <button className={styles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X size={28} color="var(--text-heading)" /> : <Menu size={28} color="var(--text-heading)" />}
+                {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
              </button>
           </div>
 

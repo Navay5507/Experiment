@@ -229,7 +229,7 @@ export default function PricingPage() {
                 <ThemeToggle />
              </div>
              <button className={pageStyles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X size={28} color="var(--text-heading)" /> : <Menu size={28} color="var(--text-heading)" />}
+                {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
              </button>
           </div>
 
@@ -249,7 +249,7 @@ export default function PricingPage() {
                </div>
             )}
           </div>
-          <div className={pageStyles.authCol} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div className={pageStyles.authCol}>
             <ThemeToggle />
             {user ? (
                <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
