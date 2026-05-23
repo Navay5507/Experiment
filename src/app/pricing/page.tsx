@@ -5,8 +5,9 @@ import Link from "next/link";
 import Script from "next/script";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Check, X, Minus, Loader2, ShieldCheck } from "lucide-react";
+import { MessageCircle, Check, X, Minus, Loader2, ShieldCheck, Menu } from "lucide-react";
 import styles from "./pricing.module.css";
+import pageStyles from "../page.module.css";
 import ThemeToggle from "../components/ThemeToggle";
 
 type Currency = "USD" | "INR" | "EUR" | "GBP" | "CAD" | "AUD" | "NZD" | "ZAR" | "SGD" | "NGN";
@@ -47,6 +48,7 @@ export default function PricingPage() {
   const [activePromo, setActivePromo] = useState<{code: string, type: string, value: number} | null>(null);
   const [promoLoading, setPromoLoading] = useState(false);
   const [promoMessage, setPromoMessage] = useState({ text: "", type: "" });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Sync the plan status if possible
   useEffect(() => {
@@ -209,15 +211,60 @@ export default function PricingPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1 }}>
-        <button onClick={() => router.back()} style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', padding: '0.5rem 1rem', borderRadius: '8px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, backdropFilter: 'blur(10px)' }}>
-          ← Go Back
-        </button>
-        <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 10 }}>
-          <ThemeToggle />
-        </div>
+      {/* Navigation Header */}
+      <div className={pageStyles.navbarWrapper}>
+        <nav className={pageStyles.navbar}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <div className={pageStyles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 38, objectFit: 'contain' }} />
+              <div style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
+                <span style={{ color: '#5b85ff' }}>Auto</span>
+                <span style={{ color: '#ffffff' }}>Drop</span>
+              </div>
+            </div>
+          </Link>
+
+          <button className={pageStyles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+             {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
+          </button>
+
+          <div className={`${pageStyles.navLinks} ${isMobileMenuOpen ? pageStyles.mobileNavOpen : ''}`}>
+            <Link href="/#features" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
+            <Link href="/#how-it-works" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
+            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
+            <Link href="/affiliates" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
+            <Link href="/support" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
+            {isMobileMenuOpen && (
+               <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#9ca3af' }}>
+                     <span>Theme:</span>
+                     <ThemeToggle />
+                  </div>
+                  {user ? (
+                     <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
+                  ) : (
+                     <Link href="/sign-in" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Sign In</Link>
+                  )}
+               </div>
+            )}
+          </div>
+          <div className={pageStyles.authCol} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <ThemeToggle />
+            {user ? (
+               <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
+            ) : (
+               <Link href="/sign-in" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Sign In</Link>
+            )}
+          </div>
+        </nav>
+      </div>
+
+      <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1, paddingTop: '140px' }}>
         <div className={styles.blob} />
         <header className={styles.header}>
+          <button onClick={() => router.back()} style={{ cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', padding: '0.5rem 1rem', borderRadius: '8px', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, marginBottom: '2.5rem' }}>
+            ← Go Back
+          </button>
           <h1 className={styles.title}>Simple, transparent pricing</h1>
           <p className={styles.subtitle}>Unlock AutoDrop&apos;s full potential and convert your audience into revenue.</p>
         </header>
