@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, DollarSign, RefreshCcw, ShieldCheck, TrendingUp, Zap, Menu, X } from "lucide-react";
@@ -30,7 +31,7 @@ export default function AffiliatesPage() {
         <nav className={styles.navbar}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 38, objectFit: 'contain' }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={38} height={38} style={{ objectFit: 'contain' }} />
               <div style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 <span style={{ color: '#5b85ff' }}>Auto</span>
                 <span style={{ color: '#ffffff' }}>Drop</span>
@@ -222,7 +223,7 @@ export default function AffiliatesPage() {
         <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 48, objectFit: 'contain' }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={48} height={48} style={{ objectFit: 'contain' }} />
               <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 <span style={{ color: '#5b85ff' }}>Auto</span>
                 <span style={{ color: '#ffffff' }}>Drop</span>

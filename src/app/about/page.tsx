@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import {
@@ -85,7 +86,7 @@ export default function AboutPage() {
         <nav className={styles.navbar}>
           <Link href="/" style={{ textDecoration: "none" }}>
             <div className={styles.logo} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 38, objectFit: "contain" }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={38} height={38} style={{ objectFit: "contain" }} />
               <div style={{ fontSize: "1.75rem", fontWeight: 900, letterSpacing: "-0.02em", display: "flex", alignItems: "center", lineHeight: 1 }}>
                 <span style={{ color: "#5b85ff" }}>Auto</span>
                 <span style={{ color: "#ffffff" }}>Drop</span>
@@ -222,7 +223,7 @@ export default function AboutPage() {
             <FadeIn direction="right" delay={0.15}>
               <div style={{ position: "relative" }}>
                 <div style={{ borderRadius: "1.5rem", overflow: "hidden", border: "1px solid rgba(139,92,246,0.2)", boxShadow: "0 30px 80px rgba(99,102,241,0.15)" }}>
-                  <img src="/about_dashboard.png" alt="AutoDrop dashboard" style={{ width: "100%", height: "420px", objectFit: "cover", display: "block" }} />
+                  <Image src="/about_dashboard.png" alt="AutoDrop dashboard" width={1200} height={420} style={{ width: "100%", height: "420px", objectFit: "cover", display: "block" }} />
                 </div>
               </div>
             </FadeIn>
@@ -317,7 +318,7 @@ export default function AboutPage() {
         <div className={styles.container} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 48, objectFit: "contain" }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={48} height={48} style={{ objectFit: "contain" }} />
               <div style={{ fontSize: "2.2rem", fontWeight: 900, letterSpacing: "-0.02em", display: "flex", alignItems: "center", lineHeight: 1 }}>
                 <span style={{ color: "#5b85ff" }}>Auto</span>
                 <span style={{ color: "#ffffff" }}>Drop</span>

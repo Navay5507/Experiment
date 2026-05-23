@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView } from "framer-motion";
 import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown, ShoppingBag } from "lucide-react";
 import styles from "./page.module.css";
@@ -450,8 +451,8 @@ const HeroUseCases = () => {
                    </div>
 
                    {/* IG Post Image Visual */}
-                   <div style={{width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '1.25rem', border: '1px solid rgba(255,255,255,0.05)', background: '#222'}}>
-                      <img src={current.image} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Post preview" />
+                   <div style={{position: 'relative', width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '1.25rem', border: '1px solid rgba(255,255,255,0.05)', background: '#222'}}>
+                      <Image src={current.image} fill style={{objectFit: 'cover'}} alt="Post preview" />
                    </div>
 
                    {/* IG Post Caption */}
@@ -583,7 +584,7 @@ const TestimonialsSection = () => {
                    {/* User Info & Metric Badge */}
                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', marginTop: 'auto' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                         <img src={t.avatar} alt={t.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
+                         <Image src={t.avatar} alt={t.name} width={48} height={48} style={{ borderRadius: '50%', objectFit: 'cover' }} />
                          <div>
                             <div style={{ color: 'var(--text-heading)', fontWeight: 700, fontSize: '0.95rem' }}>{t.name}</div>
                             <div style={{ color: '#818cf8', fontSize: '0.85rem' }}>{t.handle}</div>
@@ -637,7 +638,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <nav className={styles.navbar}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div className={styles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 38, objectFit: 'contain' }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={38} height={38} style={{ objectFit: 'contain' }} />
               <div style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 <span style={{ color: '#5b85ff' }}>Auto</span>
                 <span style={{ color: '#ffffff' }}>Drop</span>
@@ -1258,7 +1259,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                <FadeIn delay={0.6}>
                  <motion.div whileHover={{ y: -5 }} style={{ background: '#111318', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', height: '100%' }}>
                    <div style={{ background: '#fff', height: '220px', padding: '0', position: 'relative', overflow: 'hidden' }}>
-                      <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                      <Image src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80" alt="Viral post" fill style={{objectFit: 'cover'}} />
                       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(55, 151, 240, 0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '0.5rem' }}>
                          <RefreshCcw size={48} color="#fff" />
                          <div style={{ fontWeight: 800, color: '#fff', fontSize: '1.2rem' }}>Reactivate Viral Posts</div>
@@ -1385,7 +1386,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 48, objectFit: 'contain' }} />
+              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={48} height={48} style={{ objectFit: 'contain' }} />
               <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
                 <span style={{ color: '#5b85ff' }}>Auto</span>
                 <span style={{ color: '#ffffff' }}>Drop</span>

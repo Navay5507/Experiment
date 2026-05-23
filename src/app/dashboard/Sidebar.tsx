@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag, GraduationCap } from "lucide-react";
@@ -77,7 +78,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
       <div className={styles.brand} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '1.5rem 1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-            <img src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" style={{ height: 34, objectFit: 'contain' }} />
+            <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={34} height={34} style={{ objectFit: 'contain' }} />
           </motion.div>
           <div style={{ fontSize: '1.6rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
             <span style={{ color: '#5b85ff' }}>Auto</span>
