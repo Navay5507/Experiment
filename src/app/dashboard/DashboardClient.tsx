@@ -187,13 +187,6 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         </motion.div>
       </div>
 
-      <DashboardChart 
-         commentsMatched={metrics.commentsMatched}
-         cyclesCompleted={metrics.cyclesCompleted}
-         leadsCaptured={metrics.leadsCaptured}
-         storeRevenue={metrics.storeRevenue}
-      />
-
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', gap: '1.25rem', marginTop: '1.5rem' }}>
          
          {/* Roadmap to making ₹₹₹ Onboarding Card */}
@@ -385,6 +378,13 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
             </div>
          </div>
       </div>
+
+      <DashboardChart 
+         commentsMatched={metrics.commentsMatched}
+         cyclesCompleted={metrics.cyclesCompleted}
+         leadsCaptured={metrics.leadsCaptured}
+         storeRevenue={metrics.storeRevenue}
+      />
     </motion.div>
   );
 }
