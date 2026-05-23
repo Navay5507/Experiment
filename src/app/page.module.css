@@ -52,7 +52,7 @@
 }
 
 .navLink {
-  color: var(--text-muted);
+  color: #9ca3af;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -79,7 +79,7 @@
 }
 
 .loginBtn {
-  color: var(--text-main);
+  color: #e5e7eb;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;

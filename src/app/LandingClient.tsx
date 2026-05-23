@@ -657,7 +657,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
             {isMobileMenuOpen && (
                <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: '#9ca3af' }}>
                      <span>Theme:</span>
                      <ThemeToggle />
                   </div>
@@ -1378,7 +1378,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: 'var(--surface)' }}>
+      <footer style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', padding: '3rem 0 1.5rem', background: '#121821' }}>
         <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
@@ -1389,11 +1389,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                 <span style={{ color: '#ffffff' }}>Drop</span>
               </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
+            <p style={{ color: '#9ca3af', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
           </div>
 
           {/* Nav Links */}
-          <div style={{ display: 'flex', gap: '2rem', color: 'var(--text-muted)', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link href="#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
             <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
             <Link href="/affiliates" style={{ color: 'inherit', textDecoration: 'none' }}>Partner Program</Link>
@@ -1407,9 +1407,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
           <div style={{ width: '100%', maxWidth: '400px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)' }} />
 
           {/* Copyright + Small Text */}
-          <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
+          <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
             <p>&copy; {new Date().getFullYear()} Autodrop. All rights reserved.</p>
-            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: 'var(--text-muted)' }}>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#9ca3af' }}>
                <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
             </p>
           </div>
