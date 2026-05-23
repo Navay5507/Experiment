@@ -77,8 +77,8 @@ body {
   min-height: 100vh;
   /* Dark theme: subtle purple blueprint grid */
   background-image:
-    linear-gradient(rgba(139, 92, 246, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(139, 92, 246, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.14) 1px, transparent 1px);
   background-size: 40px 40px;
   background-attachment: fixed;
 }

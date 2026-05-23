@@ -149,7 +149,10 @@ export default async function SettingsPage({ searchParams }: PageProps) {
     if (!userId) return;
     const { data: u } = await supabase.from('users').select('id').eq('clerkId', userId).maybeSingle();
     if (u) {
-      await supabase.from('analytics_events').delete().eq('user_id', u.id);
+      // Only clear Comments Matched stat (analytics events of type comment_matched)
+      await supabase.from('analytics_events').delete().eq('user_id', u.id).eq('event_type', 'comment_matched');
+      // Only clear DM Cycles stat (completed dm_conversations)
+      await supabase.from('dm_conversations').delete().eq('user_id', u.id).eq('state', 'completed');
     }
     redirect('/dashboard/settings?tab=maintenance');
   }
