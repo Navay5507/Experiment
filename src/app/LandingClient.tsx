@@ -751,7 +751,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
         <div className={styles.container}>
           <FadeIn>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#fff' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-heading)' }}>
                 {USE_NOOB_FRIENDLY_FEATURES ? "Choose Your Growth Superpowers 🚀" : "Unlock the full Power of Instagram"}
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
@@ -1347,10 +1347,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <TestimonialsSection />
 
       {/* FAQ SECTION */}
-      <section style={{ padding: '8rem 0', background: '#000000', borderTop: '1px solid var(--border)' }}>
+      <section style={{ padding: '8rem 0', background: 'transparent', borderTop: '1px solid var(--border)' }}>
         <div className={styles.container} style={{ maxWidth: '800px' }}>
           <FadeIn>
-             <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Frequently Asked Questions</h2>
+             <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: 'var(--text-heading)', textAlign: 'center' }}>Frequently Asked Questions</h2>
              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '3rem', textAlign: 'center' }}>Everything you need to know about the product and billing.</p>
           </FadeIn>
           <FadeIn delay={0.2}>
@@ -1366,7 +1366,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <section style={{ padding: '10rem 0', textAlign: 'center' }}>
         <div className={styles.container}>
           <FadeIn>
-             <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em', color: '#fff' }}>Ready to Scale?</h2>
+             <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em', color: 'var(--text-heading)' }}>Ready to Scale?</h2>
              <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', lineHeight: 1.6 }}>Join the 10,000+ creators literally saving 15 hours a week manually answering DMs.</p>
              {userId ? (
                 <Link href="/dashboard" className="premium-btn" style={{ padding: '1.25rem 3rem', fontSize: '1.2rem' }}>Dashboard</Link>
