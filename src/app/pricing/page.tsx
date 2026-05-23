@@ -236,7 +236,7 @@ export default function PricingPage() {
           <div className={`${pageStyles.navLinks} ${isMobileMenuOpen ? pageStyles.mobileNavOpen : ''}`}>
             <Link href="/#features" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
             <Link href="/#how-it-works" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
-            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)} style={{ color: 'var(--text-heading)', fontWeight: 600 }}>Pricing</Link>
+            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)} style={{ color: '#fff', fontWeight: 600 }}>Pricing</Link>
             <Link href="/affiliates" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
             <Link href="/support" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
             {isMobileMenuOpen && (
