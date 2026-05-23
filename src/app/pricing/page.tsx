@@ -262,9 +262,6 @@ export default function PricingPage() {
       <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1, paddingTop: '140px' }}>
         <div className={styles.blob} />
         <header className={styles.header}>
-          <button onClick={() => router.back()} style={{ cursor: 'pointer', background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', padding: '0.5rem 1rem', borderRadius: '8px', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', fontWeight: 500, marginBottom: '2.5rem' }}>
-            ← Go Back
-          </button>
           <h1 className={styles.title}>Simple, transparent pricing</h1>
           <p className={styles.subtitle}>Unlock AutoDrop&apos;s full potential and convert your audience into revenue.</p>
         </header>
