@@ -5,6 +5,7 @@ import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert
 import styles from "./dashboard.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import DashboardChart from "./DashboardChart";
 
 // Count up exactly to the REAL Database Aggregate integer.
 const CountUpReal = ({ end }: { end: number }) => {
@@ -185,6 +186,13 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
           {metrics.productsSold > 0 && <Sparkline color="#eab308" />}
         </motion.div>
       </div>
+
+      <DashboardChart 
+         commentsMatched={metrics.commentsMatched}
+         cyclesCompleted={metrics.cyclesCompleted}
+         leadsCaptured={metrics.leadsCaptured}
+         storeRevenue={metrics.storeRevenue}
+      />
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', gap: '1.25rem', marginTop: '1.5rem' }}>
          
