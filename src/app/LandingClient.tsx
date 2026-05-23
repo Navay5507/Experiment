@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView } from "framer-motion";
 import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown, ShoppingBag } from "lucide-react";
 import styles from "./page.module.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 // Dynamic Feature Toggle: Set to false to immediately revert the landing page to the original layout
 const USE_NOOB_FRIENDLY_HERO = true;
@@ -308,7 +309,7 @@ const UI_Step3 = () => {
 const HowItWorksInteractive = () => {
    return (
       <div className={styles.container}>
-         <FadeIn><h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '6rem', color: '#fff', textAlign: 'center' }}>How it works</h2></FadeIn>
+         <FadeIn><h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '6rem', color: 'var(--text-heading)', textAlign: 'center' }}>How it works</h2></FadeIn>
          
          <div style={{ display: 'flex', flexDirection: 'column', gap: '8rem' }}>
             
@@ -317,7 +318,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 1</div>
-                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Connect securely</h3>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: 'var(--text-heading)', fontWeight: 700, lineHeight: 1.1 }}>Connect securely</h3>
                      <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>OAuth directly into Meta's official API node. No passwords required, strictly compliant.</p>
                   </FadeIn>
                </div>
@@ -333,7 +334,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn delay={0.1}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 2</div>
-                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Train the triggers</h3>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: 'var(--text-heading)', fontWeight: 700, lineHeight: 1.1 }}>Train the triggers</h3>
                      <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>Deploy keywords specific to your newest Reel or Static Post instantly from the dashboard.</p>
                   </FadeIn>
                </div>
@@ -349,7 +350,7 @@ const HowItWorksInteractive = () => {
                <div style={{ flex: 1, minWidth: '300px' }}>
                   <FadeIn delay={0.2}>
                      <div style={{ display: 'inline-block', background: 'rgba(99,102,241,0.1)', color: '#818cf8', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(99,102,241,0.2)', fontSize: '0.85rem' }}>Step 3</div>
-                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: '#fff', fontWeight: 700, lineHeight: 1.1 }}>Drive engagement & sales</h3>
+                     <h3 style={{ fontSize: '2.5rem', marginBottom: '1.25rem', color: 'var(--text-heading)', fontWeight: 700, lineHeight: 1.1 }}>Drive engagement & sales</h3>
                      <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '1.15rem' }}>AutoDrop routes inbound requests 24/7 capturing core analytics and interactions live in your dashboard.</p>
                   </FadeIn>
                </div>
@@ -515,10 +516,10 @@ const faqs = [
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div style={{ marginBottom: '1rem', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', background: '#111318' }}>
+    <div style={{ marginBottom: '1rem', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden', background: 'var(--surface)' }}>
       <button 
         onClick={() => setIsOpen(!isOpen)} 
-        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', background: 'transparent', border: 'none', color: '#fff', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', textAlign: 'left' }}
+        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem 1.5rem', background: 'transparent', border: 'none', color: 'var(--text-heading)', fontSize: '1rem', fontWeight: 600, cursor: 'pointer', textAlign: 'left' }}
       >
         <span>{question}</span>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
@@ -556,14 +557,14 @@ const TestimonialsSection = () => {
       
       <div className={styles.container}>
         <FadeIn>
-           <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: '#fff', textAlign: 'center' }}>Creator Success</h2>
+           <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: 'var(--text-heading)', textAlign: 'center' }}>Creator Success</h2>
            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '4rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto 4rem auto' }}>See how creators are using AutoDrop to automate their growth and reclaim their time.</p>
         </FadeIn>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
           {testimonials.map((t, idx) => (
              <FadeIn delay={idx * 0.15} key={idx}>
-                <div style={{ background: '#111318', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '24px', padding: '2rem', display: 'flex', flexDirection: 'column', height: '100%', position: 'relative', overflow: 'hidden' }}>
                    
                    {/* Star Rating */}
                    <div style={{ display: 'flex', gap: '0.2rem', marginBottom: '1.5rem' }}>
@@ -575,16 +576,16 @@ const TestimonialsSection = () => {
                    </div>
 
                    {/* Review Text */}
-                   <p style={{ color: '#F8FAFC', fontSize: '1.05rem', lineHeight: 1.6, flex: 1, marginBottom: '2rem', fontStyle: 'italic' }}>
+                   <p style={{ color: 'var(--text-main)', fontSize: '1.05rem', lineHeight: 1.6, flex: 1, marginBottom: '2rem', fontStyle: 'italic' }}>
                       "{t.text}"
                    </p>
 
                    {/* User Info & Metric Badge */}
-                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', marginTop: 'auto' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', marginTop: 'auto' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                          <img src={t.avatar} alt={t.name} style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
                          <div>
-                            <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>{t.name}</div>
+                            <div style={{ color: 'var(--text-heading)', fontWeight: 700, fontSize: '0.95rem' }}>{t.name}</div>
                             <div style={{ color: '#818cf8', fontSize: '0.85rem' }}>{t.handle}</div>
                          </div>
                       </div>
@@ -655,14 +656,21 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             <Link href="/affiliates" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
             <Link href="/support" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
             {isMobileMenuOpen && (
-               userId ? (
-                 <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Dashboard</Link>
-               ) : (
-                 <Link href="/sign-in" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', marginTop: '1rem', textAlign: 'center' }}>Sign In</Link>
-               )
+               <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                     <span>Theme:</span>
+                     <ThemeToggle />
+                  </div>
+                  {userId ? (
+                     <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
+                  ) : (
+                     <Link href="/sign-in" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Sign In</Link>
+                  )}
+               </div>
             )}
           </div>
-          <div className={styles.authCol}>
+          <div className={styles.authCol} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <ThemeToggle />
             {userId ? (
                <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
             ) : (
@@ -710,17 +718,17 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   ) : (
                      <Link href="/sign-up" className="premium-btn" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '1rem', whiteSpace: 'nowrap' }}>Start Free Trial <ArrowRight size={20}/></Link>
                   )}
-                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, color: '#fff', fontWeight: 600, padding: '1rem', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>See How it Works</a>
+                  <a href="#how-it-works" className={styles.navLink} onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} style={{ flex: 1, color: 'var(--text-heading)', fontWeight: 600, padding: '1rem', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.02)', borderRadius: '999px', transition: 'all 0.2s', textDecoration: 'none', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>See How it Works</a>
                 </div>
               </FadeIn>
-              <FadeIn delay={0.4}>
-                <div className={styles.metaBadgeBox}>
+              <FadeIn delay={0.35}>
+                <div className={styles.metaBadgeBox} style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
                    <div style={{ textAlign: 'left', flex: 1 }}>
                       <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#3b82f6', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Badged Partner</div>
-                      <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, color: '#fff', marginBottom: '0.25rem' }}>AutoDrop is a Meta Business Partner</h3>
+                      <h3 style={{ fontSize: 'clamp(0.9rem, 3vw, 1.1rem)', fontWeight: 700, color: 'var(--text-heading)', marginBottom: '0.25rem' }}>AutoDrop is a Meta Business Partner</h3>
                       <p style={{ fontSize: 'clamp(0.75rem, 2vw, 0.85rem)', color: 'var(--text-muted)', lineHeight: 1.5 }}>Offering peace of mind by ensuring complete compliance with automation standards across Instagram.</p>
                    </div>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 600, fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', whiteSpace: 'nowrap' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-heading)', fontWeight: 600, fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)', whiteSpace: 'nowrap' }}>
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="#3b82f6" xmlns="http://www.w3.org/2000/svg" style={{flexShrink: 0, marginRight: '0.25rem'}}>
                          <path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z" />
                       </svg>
@@ -797,7 +805,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Auto-Reply to Comments 💬
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -853,7 +861,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Story Interactive Auto-DMs 📖
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -898,7 +906,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Inbox Secret Code Words 📩
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -941,7 +949,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Follower Booster (Follow-Gate) 🔒
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -986,7 +994,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Revive Old Viral Reels 🔄
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -1032,7 +1040,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Grow Your Email List 📧
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -1074,7 +1082,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Custom AI Sales Agent 🤖 <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
@@ -1115,7 +1123,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </div>
                   </div>
                   <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                     <h3 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', fontWeight: 800 }}>
+                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
                        Sleek Digital Store 🛍️ <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border:'1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
                      </h3>
                      <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>

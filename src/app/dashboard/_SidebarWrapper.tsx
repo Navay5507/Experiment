@@ -5,6 +5,7 @@ import { Menu, AlertCircle } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import Sidebar from "./Sidebar";
 import styles from "./dashboard.module.css";
+import ThemeToggle from "../components/ThemeToggle";
 
 interface SidebarWrapperProps {
   isConnected: boolean;
@@ -25,10 +26,10 @@ export default function SidebarWrapper({ isConnected, children }: SidebarWrapper
             onClick={() => setIsMobileOpen(true)}
             aria-label="Open navigation"
           >
-            <Menu size={22} color="#fff" />
+            <Menu size={22} color="var(--text-heading)" />
           </button>
 
-          <div className={styles.pageTitle} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className={styles.pageTitle} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-heading)' }}>
             Dashboard
             {isConnected ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(16,185,129,0.1)', color: '#10b981', padding: '0.2rem 0.7rem', borderRadius: '100px', fontSize: '0.7rem', fontWeight: 600 }}>
@@ -42,7 +43,8 @@ export default function SidebarWrapper({ isConnected, children }: SidebarWrapper
             )}
           </div>
 
-          <div className={styles.userProfile}>
+          <div className={styles.userProfile} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <ThemeToggle />
             <UserButton appearance={{ elements: { avatarBox: { width: 34, height: 34 } } }} />
           </div>
         </header>
