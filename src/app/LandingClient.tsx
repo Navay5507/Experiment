@@ -669,7 +669,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                </div>
             )}
           </div>
-          <div className={styles.authCol} style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <div className={styles.authCol}>
             <ThemeToggle />
             {userId ? (
                <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
@@ -1378,7 +1378,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', padding: '3rem 0 1.5rem', background: '#121821' }}>
+      <footer style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', padding: '3rem 0 1.5rem', background: '#000000' }}>
         <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
           {/* Logo + Tagline */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>

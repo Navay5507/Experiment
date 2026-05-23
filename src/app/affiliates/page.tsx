@@ -215,7 +215,7 @@ export default function AffiliatesPage() {
       </section>
 
        {/* FOOTER */}
-       <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: '#121821' }}>
+       <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: '#000000' }}>
         <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
