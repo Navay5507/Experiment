@@ -172,16 +172,16 @@ export default function AboutPage() {
       {/* ── HOW WE'RE DIFFERENT ── */}
       <section style={{ padding: "100px 0", position: "relative" }}>
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "700px", height: "500px", background: "radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)", pointerEvents: "none" }} />
-        
+
         <div className={styles.container}>
-          <div style={{ 
-            background: "rgba(255, 255, 255, 0.01)", 
+          <div style={{
+            background: "rgba(255, 255, 255, 0.01)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.04)", 
-            borderRadius: "2.5rem", 
-            padding: "4.5rem 3rem", 
-            position: "relative", 
+            border: "1px solid rgba(255, 255, 255, 0.04)",
+            borderRadius: "2.5rem",
+            padding: "4.5rem 3rem",
+            position: "relative",
             overflow: "hidden",
             boxShadow: "0 30px 100px rgba(0, 0, 0, 0.4)"
           }}>
@@ -189,9 +189,6 @@ export default function AboutPage() {
 
             <FadeIn>
               <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-                <div style={{ display: "inline-block", padding: "0.5rem 1.25rem", borderRadius: "999px", background: "rgba(99,102,241,0.1)", border: "1px solid rgba(99,102,241,0.2)", color: "#818cf8", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: "1rem" }}>
-                  Side-By-Side Comparison
-                </div>
                 <h2 style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "var(--text-heading)", margin: 0 }}>The honest comparison</h2>
                 <p style={{ color: "#9ca3af", fontSize: "1rem", marginTop: "1rem", opacity: 0.8 }}>No fluff. Just a direct look at how much time and money you save with automation.</p>
               </div>
@@ -199,40 +196,40 @@ export default function AboutPage() {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2.5rem", position: "relative", zIndex: 2 }}>
               {[
-                { 
-                  title: "Without AutoDrop", 
+                {
+                  title: "Without AutoDrop",
                   items: [
-                    "Reply to DMs manually, one-by-one", 
-                    "Miss leads while you're sleeping", 
-                    "Lose track of who asked what", 
-                    "Spend 3+ hours/day on DMs", 
+                    "Reply to DMs manually, one-by-one",
+                    "Miss leads while you're sleeping",
+                    "Lose track of who asked what",
+                    "Spend 3+ hours/day on DMs",
                     "No data on what's converting"
-                  ], 
-                  bad: true 
+                  ],
+                  bad: true
                 },
-                { 
-                  title: "With AutoDrop", 
+                {
+                  title: "With AutoDrop",
                   items: [
-                    "Instant, smart replies 24/7", 
-                    "Every lead captured automatically", 
-                    "Full conversation history + CRM", 
-                    "Zero time spent on repeat DMs", 
+                    "Instant, smart replies 24/7",
+                    "Every lead captured automatically",
+                    "Full conversation history + CRM",
+                    "Zero time spent on repeat DMs",
                     "Deep analytics on every campaign"
-                  ], 
-                  bad: false 
+                  ],
+                  bad: false
                 },
               ].map((col, ci) => (
                 <FadeIn key={ci} delay={ci * 0.15}>
-                  <div style={{ 
-                    padding: "3rem 2.5rem", 
-                    background: col.bad ? "rgba(239, 68, 68, 0.01)" : "rgba(16, 185, 129, 0.02)", 
-                    border: `1px solid ${col.bad ? "rgba(239, 68, 68, 0.08)" : "rgba(16, 185, 129, 0.15)"}`, 
+                  <div style={{
+                    padding: "3rem 2.5rem",
+                    background: col.bad ? "rgba(239, 68, 68, 0.01)" : "rgba(16, 185, 129, 0.02)",
+                    border: `1px solid ${col.bad ? "rgba(239, 68, 68, 0.08)" : "rgba(16, 185, 129, 0.15)"}`,
                     borderRadius: "1.75rem",
                     boxShadow: col.bad ? "none" : "0 20px 50px rgba(16, 185, 129, 0.03)",
                     transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
                     position: "relative"
                   }}
-                  className={col.bad ? "comparison-card-bad" : "comparison-card-good"}
+                    className={col.bad ? "comparison-card-bad" : "comparison-card-good"}
                   >
                     {/* Visual Glowing Badge */}
                     <div style={{
@@ -246,10 +243,10 @@ export default function AboutPage() {
                       boxShadow: col.bad ? "0 0 12px #ef4444" : "0 0 12px #10b981",
                     }} />
 
-                    <h3 style={{ 
-                      fontSize: "1.35rem", 
-                      fontWeight: 800, 
-                      color: col.bad ? "#fca5a5" : "#34d399", 
+                    <h3 style={{
+                      fontSize: "1.35rem",
+                      fontWeight: 800,
+                      color: col.bad ? "#fca5a5" : "#34d399",
                       marginBottom: "2rem",
                       letterSpacing: "-0.01em",
                       display: "flex",

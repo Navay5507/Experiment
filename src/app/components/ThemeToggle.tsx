@@ -39,11 +39,12 @@ export default function ThemeToggle() {
     return (
       <div 
         style={{ 
-          width: "40px", 
-          height: "40px", 
-          borderRadius: "50%", 
-          background: "rgba(255, 255, 255, 0.05)", 
-          border: "1px solid rgba(255, 255, 255, 0.08)" 
+          width: "56px", 
+          height: "30px", 
+          borderRadius: "99px", 
+          background: "rgba(255, 255, 255, 0.03)", 
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          flexShrink: 0
         }} 
       />
     );
@@ -54,34 +55,62 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
       style={{
-        width: "40px",
-        height: "40px",
-        borderRadius: "50%",
+        width: "56px",
+        height: "30px",
+        borderRadius: "99px",
+        background: theme === "dark" ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.03)",
+        border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid rgba(0, 0, 0, 0.08)",
+        padding: "2px",
+        position: "relative",
+        cursor: "pointer",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-        background: theme === "dark" ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.04)",
-        border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(0, 0, 0, 0.08)",
-        cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-        boxShadow: theme === "dark" ? "none" : "0 4px 12px rgba(0, 0, 0, 0.04)",
+        justifyContent: "space-between",
+        transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
         outline: "none",
-        flexShrink: 0
+        flexShrink: 0,
+        boxShadow: theme === "dark" ? "none" : "inset 0 1px 3px rgba(0, 0, 0, 0.03)"
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "scale(1.08)";
-        e.currentTarget.style.background = theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
+        e.currentTarget.style.transform = "scale(1.04)";
+        e.currentTarget.style.borderColor = theme === "dark" ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "scale(1)";
-        e.currentTarget.style.background = theme === "dark" ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.04)";
+        e.currentTarget.style.borderColor = theme === "dark" ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
       }}
     >
-      {theme === "dark" ? (
-        <Sun size={18} color="#facc15" fill="#facc15" style={{ transition: "all 0.3s ease" }} />
-      ) : (
-        <Moon size={18} color="#4f46e5" fill="#4f46e5" style={{ transition: "all 0.3s ease" }} />
-      )}
+      {/* Background Icons (faint indicators) */}
+      <div style={{ display: "flex", width: "100%", justifyContent: "space-between", padding: "0 6px", opacity: 0.3, pointerEvents: "none" }}>
+        <Sun size={10} color={theme === "light" ? "var(--text-heading)" : "#888"} />
+        <Moon size={10} color={theme === "dark" ? "var(--text-heading)" : "#888"} />
+      </div>
+
+      {/* Active Sliding Thumb */}
+      <div
+        style={{
+          position: "absolute",
+          top: "2px",
+          left: "2px",
+          width: "24px",
+          height: "24px",
+          borderRadius: "50%",
+          background: theme === "dark" ? "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)" : "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)",
+          border: theme === "dark" ? "1px solid rgba(255, 255, 255, 0.12)" : "1px solid rgba(0, 0, 0, 0.06)",
+          boxShadow: theme === "dark" ? "0 2px 4px rgba(0, 0, 0, 0.4)" : "0 2px 4px rgba(0, 0, 0, 0.08)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transform: `translateX(${theme === "dark" ? "28px" : "0px"})`,
+          transition: "transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s, border-color 0.3s"
+        }}
+      >
+        {theme === "dark" ? (
+          <Moon size={11} color="#38bdf8" fill="#38bdf8" style={{ transform: "rotate(-12deg)", transition: "transform 0.5s ease" }} />
+        ) : (
+          <Sun size={11} color="#f59e0b" fill="#f59e0b" style={{ transition: "transform 0.5s ease" }} />
+        )}
+      </div>
     </button>
   );
 }

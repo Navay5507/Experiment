@@ -7,7 +7,7 @@ import styles from "../page.module.css";
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--border)", padding: "3rem 0 1.5rem", background: "var(--surface)", position: "relative", zIndex: 10 }}>
+    <footer style={{ borderTop: "1px solid var(--border)", padding: "3rem 0 1.5rem", background: "var(--surface)", position: "relative", zIndex: 10, overflow: "hidden", width: "100%" }}>
       <div className={styles.container} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
         
         {/* Logo and Tagline */}
@@ -47,8 +47,8 @@ export default function Footer() {
       </div>
 
       {/* Gigantic Background Text */}
-      <div style={{ width: "100%", maxWidth: "100vw", overflowX: "clip", display: "flex", justifyContent: "center", marginTop: "2rem", pointerEvents: "none", userSelect: "none" }}>
-        <span style={{ fontSize: "min(24vw, 300px)", fontWeight: 900, lineHeight: 0.75, letterSpacing: "-0.06em", background: "linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+      <div style={{ width: "100%", overflow: "hidden", display: "flex", justifyContent: "center", marginTop: "2rem", pointerEvents: "none", userSelect: "none", position: "relative" }}>
+        <span style={{ fontSize: "clamp(2.5rem, 16vw, 240px)", fontWeight: 900, lineHeight: 0.75, letterSpacing: "-0.06em", background: "linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", textTransform: "uppercase", whiteSpace: "nowrap" }}>
           Autodrop
         </span>
       </div>
