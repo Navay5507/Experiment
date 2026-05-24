@@ -53,8 +53,8 @@
   --section-bg: transparent;
   --card-bg: #eaeaea;
   --price-pro-bg: linear-gradient(to bottom, #ffffff, #f1f1f0);
-  --feature-card-bg: #0a0b0d; /* Solid carbon-black in Light Mode to stay dark and punchy! */
-  --feature-card-border: rgba(255, 255, 255, 0.08);
+  --feature-card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 248, 247, 0.98) 100%);
+  --feature-card-border: rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] body {
@@ -90,9 +90,10 @@ body {
 }
 
 .glass-panel {
-  background: #121821;
-  border: 1px solid #1e2531;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 .text-gradient {

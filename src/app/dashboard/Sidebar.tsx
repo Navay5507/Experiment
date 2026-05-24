@@ -115,7 +115,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop: always-visible sidebar */}
-      <aside className={`${styles.sidebar} ${styles.desktopSidebar}`} style={{ background: '#0d1017', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+      <aside className={`${styles.sidebar} ${styles.desktopSidebar}`}>
         {navContent}
       </aside>
 
@@ -141,7 +141,6 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className={`${styles.sidebar} ${styles.mobileSidebar}`}
-              style={{ background: '#0d1017', borderRight: '1px solid rgba(255,255,255,0.07)' }}
             >
               {navContent}
             </motion.aside>
