@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  outputFileTracingExcludes: {
+    '/middleware': [
+      './node_modules/ioredis/**/*',
+      './node_modules/bullmq/**/*',
+    ],
+  },
 };
 
 export default nextConfig;
