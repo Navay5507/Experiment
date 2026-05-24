@@ -117,12 +117,12 @@ export default async function LeadsPage() {
                       </div>
                     </td>
                     <td>
-                      <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', display: 'inline-block' }}>
+                      <div style={{ background: 'var(--surface-hover)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)', display: 'inline-block' }}>
                         {Object.entries(data).map(([key, val]) => (
                           <div key={key} style={{ fontSize: '0.9rem', marginBottom: '3px' }}>
                             <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{key}</span>
                             <span style={{ color: 'var(--border)', margin: '0 8px' }}>|</span>
-                            <span style={{ color: '#fff', fontWeight: 500 }}>{val}</span>
+                            <span style={{ color: 'var(--text-heading)', fontWeight: 500 }}>{val}</span>
                           </div>
                         ))}
                       </div>
@@ -133,7 +133,7 @@ export default async function LeadsPage() {
                           <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#6366f1' }}></div>
                           {targetType}
                         </div>
-                        <div style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 500 }}>
+                        <div style={{ fontSize: '0.9rem', color: 'var(--text-heading)', fontWeight: 500 }}>
                           Keyword: <span style={{ color: 'var(--primary)' }}>"{kw}"</span>
                         </div>
                       </div>

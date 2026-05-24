@@ -155,8 +155,8 @@ export default async function AutomationsList({ searchParams }: PageProps) {
           gap: '0.75rem',
           marginBottom: '1.5rem',
           padding: '0.5rem',
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
+          background: 'var(--surface-hover)',
+          border: '1px solid var(--border)',
           borderRadius: '12px',
           backdropFilter: 'blur(10px)',
           overflowX: 'auto',
@@ -189,8 +189,9 @@ export default async function AutomationsList({ searchParams }: PageProps) {
                   display: 'inline-block',
                   width: 8,
                   height: 8,
-                  background: isSelected ? '#a855f7' : 'rgba(255, 255, 255, 0.2)',
+                  background: isSelected ? '#a855f7' : 'var(--text-muted)',
                   borderRadius: '50%',
+                  opacity: isSelected ? 1 : 0.4,
                 }}></span>
                 @{conn.instagram_handle}
               </Link>
@@ -232,22 +233,23 @@ export default async function AutomationsList({ searchParams }: PageProps) {
                 </div>
                 <div style={{ flex: '1 1 200px', minWidth: 'min-content' }}>
                   <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff' }}>
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-heading)' }}>
                       {auto.campaign_name || 'Unnamed Campaign'}
                     </h3>
                     <span style={{
-                      background: auto.is_active ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.05)',
+                      background: auto.is_active ? 'rgba(16,185,129,0.1)' : 'var(--surface-hover)',
                       color: auto.is_active ? '#10b981' : 'var(--text-muted)',
-                      padding: '0.2rem 0.75rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap'
+                      padding: '0.2rem 0.75rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap',
+                      border: auto.is_active ? 'none' : '1px solid var(--border)'
                     }}>
                       {auto.is_active ? 'Active' : 'Paused'}
                     </span>
                   </div>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                    Keywords: <span style={{ color: '#fff' }}>{keywords}</span>
+                    Keywords: <span style={{ color: 'var(--text-main)', fontWeight: 500 }}>{keywords}</span>
                   </p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.25rem' }}>
-                    Target: <span style={{ color: '#fff' }}>{postTargetText}</span>
+                    Target: <span style={{ color: 'var(--text-main)', fontWeight: 500 }}>{postTargetText}</span>
                   </p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <span style={{ display: 'inline-block', width: 8, height: 8, background: '#a855f7', borderRadius: '50%' }}></span>

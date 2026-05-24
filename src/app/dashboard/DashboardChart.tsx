@@ -131,7 +131,7 @@ export default function DashboardChart({
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, color: "#fff", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, color: "var(--text-heading)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <TrendingUp size={18} color="#8b5cf6" />
             Activity Overview
           </h3>
@@ -141,14 +141,14 @@ export default function DashboardChart({
         </div>
 
         {/* Timeframe Indicator */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", color: "var(--text-muted)", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", padding: "0.4rem 0.8rem", borderRadius: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", color: "var(--text-muted)", background: "var(--surface-hover)", border: "1px solid var(--border)", padding: "0.4rem 0.8rem", borderRadius: "8px" }}>
           <Calendar size={14} />
           <span>Last 7 Days</span>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: "0.5rem", borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "0.75rem", marginBottom: "1.5rem", overflowX: "auto", scrollbarWidth: "none" }}>
+      <div style={{ display: "flex", gap: "0.5rem", borderBottom: "1px solid var(--border)", paddingBottom: "0.75rem", marginBottom: "1.5rem", overflowX: "auto", scrollbarWidth: "none" }}>
         {(Object.keys(dataMap) as Array<keyof typeof dataMap>).map((key) => {
           const tab = dataMap[key];
           const isActive = activeTab === key;
@@ -160,15 +160,15 @@ export default function DashboardChart({
                 setHoveredIndex(null);
               }}
               style={{
-                background: isActive ? "rgba(255,255,255,0.05)" : "transparent",
-                border: "none",
+                background: isActive ? "var(--surface-hover)" : "transparent",
+                border: isActive ? "1px solid var(--border)" : "1px solid transparent",
                 outline: "none",
                 cursor: "pointer",
                 padding: "0.5rem 1rem",
                 borderRadius: "8px",
                 fontSize: "0.85rem",
                 fontWeight: 600,
-                color: isActive ? "#fff" : "var(--text-muted)",
+                color: isActive ? "var(--text-heading)" : "var(--text-muted)",
                 transition: "all 0.2s",
                 display: "flex",
                 alignItems: "center",
@@ -306,13 +306,13 @@ export default function DashboardChart({
       </div>
 
       {/* X Axis Labels */}
-      <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem 10px 0 10px", borderTop: "1px solid rgba(255,255,255,0.03)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "0.5rem 10px 0 10px", borderTop: "1px solid var(--border)" }}>
         {labels.map((label, idx) => (
           <span
             key={idx}
             style={{
               fontSize: "0.75rem",
-              color: hoveredIndex === idx ? "#fff" : "var(--text-muted)",
+              color: hoveredIndex === idx ? "var(--text-heading)" : "var(--text-muted)",
               fontWeight: hoveredIndex === idx ? 700 : 500,
               transition: "color 0.2s"
             }}
