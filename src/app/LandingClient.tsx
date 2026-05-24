@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence, useInView, useMotionValue } from "framer-motion";
 import { MessageCircle, Zap, ShieldCheck, ArrowRight, MousePointer2, Sparkles, RefreshCcw, Database, Tv, AtSign, Heart, Video, HandMetal, Send, Infinity as InfinityIcon, CheckCircle2, Loader2, Plus, Menu, X, ChevronDown, ShoppingBag } from "lucide-react";
 import styles from "./page.module.css";
 import Header from "./components/Header";
@@ -607,31 +607,35 @@ const TestimonialsSection = () => {
 
 
 export default function LandingClient({ userId }: { userId: string | null }) {
-   // Cursor tracking & Mobile state
-   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+   // High-performance cursor tracking & Mobile state using non-rendering motion values
+   const mouseX = useMotionValue(0);
+   const mouseY = useMotionValue(0);
+   const cursorX = useSpring(mouseX, { stiffness: 600, damping: 50, mass: 0.1 });
+   const cursorY = useSpring(mouseY, { stiffness: 600, damping: 50, mass: 0.1 });
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
    useEffect(() => {
       const updateMousePos = (e: MouseEvent) => {
-         setMousePosition({ x: e.clientX, y: e.clientY });
+         mouseX.set(e.clientX - 250);
+         mouseY.set(e.clientY - 250);
       };
       window.addEventListener("mousemove", updateMousePos);
       return () => window.removeEventListener("mousemove", updateMousePos);
-   }, []);
+   }, [mouseX, mouseY]);
 
    const { scrollYProgress } = useScroll();
    const yParallax = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
    return (
       <main className={styles.main}>
-         {/* Premium Cursor Glow */}
+         {/* Premium Cursor Glow - powered by hardware-accelerated motion values with zero React re-renders */}
          <motion.div
-            animate={{ x: mousePosition.x - 250, y: mousePosition.y - 250 }}
-            transition={{ type: "tween", ease: "linear", duration: 0 }}
             style={{
                position: 'fixed', top: 0, left: 0, width: 500, height: 500,
                background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 60%)',
-               pointerEvents: 'none', zIndex: 9999, borderRadius: '50%'
+               pointerEvents: 'none', zIndex: 9999, borderRadius: '50%',
+               x: cursorX,
+               y: cursorY
             }}
          />
 
