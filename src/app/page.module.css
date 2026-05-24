@@ -52,7 +52,7 @@
 }
 
 .navLink {
-  color: #9ca3af;
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -60,14 +60,18 @@
 }
 
 .navLink:hover {
-  color: #fff;
+  color: var(--text-heading);
+}
+
+.mobileControls {
+  display: none;
 }
 
 .mobileMenuToggle {
   display: none;
   background: none;
   border: none;
-  color: #fff;
+  color: var(--text-heading);
   cursor: pointer;
   z-index: 1001;
 }
@@ -608,6 +612,11 @@
   }
   .priceCard.pro {
     transform: none;
+  }
+  .mobileControls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
   }
   .mobileMenuToggle {
     display: flex;

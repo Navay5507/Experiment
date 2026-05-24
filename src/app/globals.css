@@ -48,8 +48,8 @@
   --glass: rgba(248, 248, 247, 0.8);
 
   /* Theme Switcher Solid overrides in Light Mode */
-  --navbar-bg: #050505;
-  --mobile-menu-bg: #050505;
+  --navbar-bg: rgba(248, 248, 247, 0.85);
+  --mobile-menu-bg: rgba(248, 248, 247, 0.95);
   --section-bg: transparent;
   --card-bg: #eaeaea;
   --price-pro-bg: linear-gradient(to bottom, #ffffff, #f1f1f0);
