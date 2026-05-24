@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
       './node_modules/ioredis/**/*',
       './node_modules/bullmq/**/*',
     ],
+    '/proxy': [
+      './node_modules/ioredis/**/*',
+      './node_modules/bullmq/**/*',
+    ],
   },
 };
 
