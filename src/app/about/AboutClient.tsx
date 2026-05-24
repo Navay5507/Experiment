@@ -14,7 +14,7 @@ import styles from "../page.module.css";
 import ThemeToggle from "../components/ThemeToggle";
 
 /* ── FadeIn wrapper ── */
-const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.ReactNode; delay?: number; direction?: "up"|"left"|"right" }) => (
+const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.ReactNode; delay?: number; direction?: "up" | "left" | "right" }) => (
   <motion.div
     initial={{ opacity: 0, y: direction === "up" ? 40 : 0, x: direction === "left" ? -40 : direction === "right" ? 40 : 0 }}
     whileInView={{ opacity: 1, y: 0, x: 0 }}
@@ -136,18 +136,6 @@ export default function AboutPage() {
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-60%)", width: "800px", height: "600px", background: "radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 70%)", pointerEvents: "none" }} />
 
         <div className={styles.container} style={{ position: "relative" }}>
-          <FadeIn>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.25)", padding: "6px 16px", borderRadius: "100px", marginBottom: "24px" }}
-            >
-              <Rocket size={16} color="#818cf8" />
-              <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#818cf8" }}>Our Story</span>
-            </motion.div>
-          </FadeIn>
-
           <FadeIn delay={0.1}>
             <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, color: "var(--text-heading)", margin: "0 0 1.5rem 0" }}>
               We're building the future<br />
@@ -202,9 +190,6 @@ export default function AboutPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "5rem", alignItems: "center" }}>
             <FadeIn direction="left">
               <div>
-                <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.3rem 0.9rem", borderRadius: "100px", marginBottom: "1.25rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                  Our Origin
-                </span>
                 <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 900, letterSpacing: "-0.03em", lineHeight: 1.15, color: "var(--text-heading)", margin: "0 0 1.5rem 0" }}>
                   A creator's problem.<br />An engineer's solution.
                 </h2>
@@ -236,7 +221,6 @@ export default function AboutPage() {
         <div className={styles.container}>
           <FadeIn>
             <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-              <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.3rem 0.9rem", borderRadius: "100px", marginBottom: "1rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>What We Stand For</span>
               <h2 style={{ fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "var(--text-heading)", margin: "0 0 1rem 0" }}>Built on real values,<br />not buzzwords.</h2>
               <p style={{ color: "#9ca3af", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>These aren't aspirational posts. They're the actual principles we use to make every product decision.</p>
             </div>
@@ -258,7 +242,6 @@ export default function AboutPage() {
 
             <FadeIn>
               <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
-                <span style={{ display: "inline-block", fontSize: "0.8rem", fontWeight: 700, color: "#818cf8", background: "rgba(129,140,248,0.1)", padding: "0.3rem 0.9rem", borderRadius: "100px", marginBottom: "1rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>Why AutoDrop</span>
                 <h2 style={{ fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, letterSpacing: "-0.03em", color: "var(--text-heading)", margin: 0 }}>The honest comparison</h2>
               </div>
             </FadeIn>
