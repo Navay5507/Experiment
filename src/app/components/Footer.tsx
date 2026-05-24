@@ -47,9 +47,9 @@ export default function Footer() {
       </div>
 
       {/* Gigantic Background Text */}
-      <div style={{ width: "100%", maxWidth: "100vw", overflowX: "clip", display: "flex", justifyContent: "center", marginTop: "3rem", pointerEvents: "none", userSelect: "none" }}>
-        <span style={{ fontSize: "clamp(3rem, 15vw, 240px)", fontWeight: 900, lineHeight: 0.75, letterSpacing: "-0.06em", background: "linear-gradient(180deg, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", textTransform: "uppercase", whiteSpace: "nowrap" }}>
-          AutoDrop
+      <div style={{ width: "100%", maxWidth: "100vw", overflowX: "clip", display: "flex", justifyContent: "center", marginTop: "2rem", pointerEvents: "none", userSelect: "none" }}>
+        <span style={{ fontSize: "clamp(3rem, 15vw, 300px)", fontWeight: 900, lineHeight: 0.75, letterSpacing: "-0.06em", background: "linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+          Autodrop
         </span>
       </div>
 
