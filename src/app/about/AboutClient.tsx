@@ -14,16 +14,10 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 /* ── FadeIn wrapper ── */
-const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.ReactNode; delay?: number; direction?: "up" | "left" | "right" }) => (
-  <motion.div
-    initial={{ opacity: 0, y: direction === "up" ? 40 : 0, x: direction === "left" ? -40 : direction === "right" ? 40 : 0 }}
-    whileInView={{ opacity: 1, y: 0, x: 0 }}
-    viewport={{ once: true, margin: "-60px" }}
-    transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
-  >
-    {children}
-  </motion.div>
-);
+const FadeIn = ({ children, delay = 0, direction = "up" }: { children: React.ReactNode; delay?: number; direction?: "up" | "left" | "right" }) => {
+  // Scrolling animation disabled as requested; return children directly without motion wrappers
+  return <>{children}</>;
+};
 
 /* ── Value card ── */
 function ValueCard({ icon: Icon, title, desc, delay }: { icon: any; title: string; desc: string; delay?: number }) {
