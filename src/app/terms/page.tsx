@@ -1,19 +1,15 @@
+"use client";
+
 import React from 'react';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function TermsOfService() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--foreground)', fontFamily: 'var(--font-inter)' }}>
-      <header style={{ padding: '1.5rem', borderBottom: '1px solid var(--border)', background: 'var(--surface)', position: 'sticky', top: 0, zIndex: 10 }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', fontWeight: 600 }}>
-             <ArrowLeft size={18} /> Back to Home
-          </Link>
-        </div>
-      </header>
+    <div style={{ minHeight: '100vh', background: 'var(--background)', color: 'var(--foreground)', fontFamily: 'var(--font-inter)', display: 'flex', flexDirection: 'column' }}>
+      <Header />
 
-      <main style={{ maxWidth: '800px', margin: '4rem auto', padding: '0 1.5rem', lineHeight: 1.7 }}>
+      <main style={{ maxWidth: '800px', margin: '0 auto', padding: '160px 1.5rem 4rem', lineHeight: 1.7, flex: 1 }}>
         <div style={{ display: 'inline-block', background: 'rgba(16,185,129,0.1)', color: '#10b981', padding: '0.4rem 1rem', borderRadius: '100px', fontWeight: 700, marginBottom: '1.5rem', border: '1px solid rgba(16,185,129,0.2)', fontSize: '0.85rem' }}>
            Usage Agreement
         </div>
@@ -52,12 +48,9 @@ export default function TermsOfService() {
              The service is provided on an "as is" and "as available" basis. Autodrop makes no warranties, expressed or implied, regarding the continuous availability of the Meta Graph API. API downtimes from Instagram's side are outside the control of Autodrop.
           </p>
         </section>
-
       </main>
 
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '2rem 0', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-         &copy; {new Date().getFullYear()} Autodrop. All rights reserved.
-      </footer>
+      <Footer />
     </div>
   );
 }

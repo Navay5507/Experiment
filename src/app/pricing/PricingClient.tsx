@@ -6,10 +6,11 @@ import Image from "next/image";
 import Script from "next/script";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { MessageCircle, Check, X, Minus, Loader2, ShieldCheck, Menu } from "lucide-react";
+import { MessageCircle, Check, X, Minus, Loader2, ShieldCheck } from "lucide-react";
 import styles from "./pricing.module.css";
 import pageStyles from "../page.module.css";
-import ThemeToggle from "../components/ThemeToggle";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 type Currency = "USD" | "INR" | "EUR" | "GBP" | "CAD" | "AUD" | "NZD" | "ZAR" | "SGD" | "NGN";
 
@@ -213,54 +214,7 @@ export default function PricingPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       {/* Navigation Header */}
-      <div className={pageStyles.navbarWrapper}>
-        <nav className={pageStyles.navbar}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <div className={pageStyles.logo} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={38} height={38} style={{ objectFit: 'contain' }} />
-              <div style={{ fontSize: '1.75rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
-                <span style={{ color: '#5b85ff' }}>Auto</span>
-                <span style={{ color: '#ffffff' }}>Drop</span>
-              </div>
-            </div>
-          </Link>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }} className={pageStyles.mobileControls}>
-             <div className={pageStyles.mobileThemeToggle}>
-                <ThemeToggle />
-             </div>
-             <button className={pageStyles.mobileMenuToggle} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X size={28} color="#fff" /> : <Menu size={28} color="#fff" />}
-             </button>
-          </div>
-
-          <div className={`${pageStyles.navLinks} ${isMobileMenuOpen ? pageStyles.mobileNavOpen : ''}`}>
-            <Link href="/#features" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
-            <Link href="/#how-it-works" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
-            <Link href="/pricing" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)} style={{ color: '#fff', fontWeight: 600 }}>Pricing</Link>
-            <Link href="/affiliates" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Partner Program</Link>
-            <Link href="/support" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>Book a Call</Link>
-            <Link href="/about" className={pageStyles.navLink} onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-            {isMobileMenuOpen && (
-               <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', alignItems: 'center', marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem', width: '100%' }}>
-                  {user ? (
-                     <Link href="/dashboard" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Dashboard</Link>
-                  ) : (
-                     <Link href="/sign-in" className="premium-btn" style={{ fontSize: '1rem', padding: '0.8rem 1.5rem', width: '100%', textAlign: 'center' }}>Sign In</Link>
-                  )}
-               </div>
-            )}
-          </div>
-          <div className={pageStyles.authCol}>
-            <ThemeToggle />
-            {user ? (
-               <Link href="/dashboard" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Dashboard</Link>
-            ) : (
-               <Link href="/sign-in" className="premium-btn" style={{ fontSize: '0.9rem', padding: '0.6rem 1.5rem' }}>Sign In</Link>
-            )}
-          </div>
-        </nav>
-      </div>
+      <Header activePath="pricing" />
 
       <main className={styles.pricingContainer} style={{ position: 'relative', flex: 1, paddingTop: '140px' }}>
         <div className={styles.blob} />
@@ -535,50 +489,7 @@ export default function PricingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '3rem 0 1.5rem', background: '#000000', width: '100%', marginTop: 'auto' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
-          {/* Logo + Tagline */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <Image src="/autodrop_icon_transparent.png" alt="AutoDrop Symbol" width={48} height={48} style={{ objectFit: 'contain' }} />
-              <div style={{ fontSize: '2.2rem', fontWeight: 900, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', lineHeight: 1 }}>
-                <span style={{ color: '#5b85ff' }}>Auto</span>
-                <span style={{ color: '#ffffff' }}>Drop</span>
-              </div>
-            </div>
-            <p style={{ color: '#9ca3af', fontSize: '0.85rem', opacity: 0.7 }}>Instagram DM Automation, Simplified.</p>
-          </div>
-
-          {/* Nav Links */}
-          <div style={{ display: 'flex', gap: '2rem', color: '#9ca3af', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link href="/#features" style={{ color: 'inherit', textDecoration: 'none' }}>Features</Link>
-            <Link href="/pricing" style={{ color: 'inherit', textDecoration: 'none' }}>Pricing</Link>
-            <Link href="/affiliates" style={{ color: 'inherit', textDecoration: 'none' }}>Partner Program</Link>
-            <a href="mailto:support@autodrop.in" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Us</a>
-            <Link href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</Link>
-            <Link href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</Link>
-            <Link href="/refund-policy" style={{ color: 'inherit', textDecoration: 'none' }}>Refund Policy</Link>
-          </div>
-
-          {/* Gradient Divider */}
-          <div style={{ width: '100%', maxWidth: '400px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent)' }} />
-
-          {/* Copyright + Small Text */}
-          <div style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', opacity: 0.5, lineHeight: 1.6 }}>
-            <p>&copy; {new Date().getFullYear()} AutoDrop. All rights reserved.</p>
-            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', color: '#9ca3af' }}>
-               <ShieldCheck size={14} color="#10b981" /> Official Meta Business Partner
-            </p>
-          </div>
-        </div>
-
-        {/* GIANT BACKGROUND WATERMARK */}
-        <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'clip', overflowY: 'hidden', display: 'flex', justifyContent: 'center', marginTop: '2rem', pointerEvents: 'none', userSelect: 'none' }}>
-          <span style={{ fontSize: 'clamp(3rem, 15vw, 300px)', fontWeight: 900, lineHeight: 0.75, letterSpacing: '-0.06em', background: 'linear-gradient(180deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>
-            AutoDrop
-          </span>
-        </div>
-      </footer>
+      <Footer />
       <Script
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
