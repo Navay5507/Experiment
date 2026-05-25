@@ -12,17 +12,18 @@ export default async function DashboardOverview() {
   const { data: user } = await supabase.from('users').select('id, instagramTokenExpiresAt, instagramAccessToken').eq('clerkId', userId).maybeSingle();
   
   if (!user) {
-     return <DashboardClient metrics={{ activeAutomations: 0, cyclesCompleted: 0, cyclesInProgress: 0, commentsMatched: 0, leadsCaptured: 0, storeRevenue: 0, productsSold: 0, hasConnectedIG: false, totalAutomations: 0, totalProducts: 0, activeProducts: 0 }} feed={[]} expiresAt={null} />;
+     return <DashboardClient metrics={{ activeAutomations: 0, cyclesCompleted: 0, cyclesInProgress: 0, commentsMatched: 0, leadsCaptured: 0, storeRevenue: 0, productsSold: 0, hasConnectedIG: false, totalAutomations: 0, totalProducts: 0, activeProducts: 0, followGateConversions: 0 }} feed={[]} expiresAt={null} />;
   }
 
   // Pure Promise.all for high performance zero-fake DB agg sweeps
-  const [automationsRes, leadsRes, conversationsRes, recentLogsRes, productsRes, commentsMatchedRes] = await Promise.all([
+  const [automationsRes, leadsRes, conversationsRes, recentLogsRes, productsRes, commentsMatchedRes, followGateRes] = await Promise.all([
     supabase.from('automations').select('id, is_active').eq('user_id', user.id),
     supabase.from('leads').select('id', { count: 'exact' }).eq('user_id', user.id),
     supabase.from('dm_conversations').select('state').eq('user_id', user.id),
     supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
     supabase.from('products').select('total_sales, total_revenue, is_active').eq('user_id', user.id),
-    supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'comment_matched')
+    supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'comment_matched'),
+    supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'follow_gate_sent')
   ]);
 
   let cyclesCompleted = 0;
@@ -65,6 +66,7 @@ export default async function DashboardOverview() {
     totalAutomations,
     totalProducts,
     activeProducts,
+    followGateConversions: followGateRes.count || 0,
   };
 
   // Convert raw DB logs rigidly to the feed map without ANY synthetic intervals

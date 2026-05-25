@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle, DollarSign, ShoppingBag, Check } from "lucide-react";
+import { Zap, MessageCircle, Send, Users, Activity, Clock, Terminal, ShieldAlert, AlertCircle, DollarSign, ShoppingBag, Check, UserCheck } from "lucide-react";
 import styles from "./dashboard.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -69,6 +69,7 @@ interface Metrics {
   totalAutomations?: number;
   totalProducts?: number;
   activeProducts?: number;
+  followGateConversions: number;
 }
 interface FeedItem { id: string; text: string; time: string; }
 
@@ -156,13 +157,13 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
 
         <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
-             <span className={styles.metricTitle}>DM</span>
+             <span className={styles.metricTitle}>DMs Replied</span>
              <Send color="#10b981" size={18} />
           </div>
           <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.cyclesCompleted} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
              {metrics.cyclesCompleted > 0 ? (
-               <span style={{ color: '#10b981' }}>DM link cycles completed</span>
+               <span style={{ color: '#10b981' }}>Full DM cycles completed</span>
              ) : <span style={{ color: "var(--text-muted)" }}>No DMs sent yet</span>}
           </div>
           {metrics.cyclesCompleted > 0 && <Sparkline color="#10b981" />}
@@ -210,6 +211,21 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
              ) : <span style={{ color: "var(--text-muted)" }}>No sales yet</span>}
           </div>
           {metrics.productsSold > 0 && <Sparkline color="#eab308" />}
+        </motion.div>
+
+        {/* Follow Gate Conversions */}
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(251,113,133,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+          <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
+             <span className={styles.metricTitle}>Follow Gate</span>
+             <UserCheck color="#fb7185" size={18} />
+          </div>
+          <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.followGateConversions} /></div>
+          <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
+             {metrics.followGateConversions > 0 ? (
+               <span style={{ color: '#fb7185' }}>People triggered follow gate</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No follow gates triggered yet</span>}
+          </div>
+          {metrics.followGateConversions > 0 && <Sparkline color="#fb7185" />}
         </motion.div>
       </div>
 
