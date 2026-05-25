@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "../dashboard.module.css";
-import { Zap, Play, Pause, Trash2 } from "lucide-react";
+import { Zap, Play, Pause, Trash2, AlertTriangle } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
@@ -225,6 +225,7 @@ export default async function AutomationsList({ searchParams }: PageProps) {
             }
             
             const matchedMedia = postIds.map((id: string) => recentMedia.find(m => m.id === id)).filter(Boolean);
+            const isAnyPostDeleted = recentMedia.length > 0 && !isAllPosts && matchedMedia.length < postIds.length;
 
             return (
               <div key={auto.id} className={styles.card} style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
@@ -248,8 +249,25 @@ export default async function AutomationsList({ searchParams }: PageProps) {
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                     Keywords: <span style={{ color: 'var(--text-main)', fontWeight: 500 }}>{keywords}</span>
                   </p>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.25rem' }}>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                     Target: <span style={{ color: 'var(--text-main)', fontWeight: 500 }}>{postTargetText}</span>
+                    {isAnyPostDeleted && (
+                      <span style={{
+                        background: 'rgba(239, 68, 68, 0.08)',
+                        color: '#ef4444',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem'
+                      }}>
+                        <AlertTriangle size={12} />
+                        {matchedMedia.length === 0 ? 'Target post deleted from Instagram' : 'Some target posts deleted'}
+                      </span>
+                    )}
                   </p>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                     <span style={{ display: 'inline-block', width: 8, height: 8, background: '#a855f7', borderRadius: '50%' }}></span>
