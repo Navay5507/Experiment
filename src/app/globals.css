@@ -179,3 +179,29 @@ a {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
+
+/* Premium Responsive Feature Cards with Hardware Acceleration */
+.feature-card {
+  background: var(--feature-card-bg);
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--feature-card-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transform: translate3d(0, 0, 0); /* Force GPU Layer */
+}
+
+/* Optimize cursor glow & backdrop filters on mobile for buttery-smooth scrolling */
+@media (max-width: 768px) {
+  .feature-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .desktop-only-cursor-glow {
+    display: none !important;
+  }
+}

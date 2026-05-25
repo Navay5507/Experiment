@@ -630,6 +630,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
       <main className={styles.main}>
          {/* Premium Cursor Glow - powered by hardware-accelerated motion values with zero React re-renders */}
          <motion.div
+            className="desktop-only-cursor-glow"
             style={{
                position: 'fixed', top: 0, left: 0, width: 500, height: 500,
                background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 60%)',
@@ -730,7 +731,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 1. Comment Magnet - Reel Comment Sheet Simulation */}
                      <FadeIn delay={0.1}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', borderBottom: '1px solid rgba(255,255,255,0.05)', justifyContent: 'flex-start', overflow: 'hidden' }}>
                               {/* Instagram Reel Header Mockup */}
                               <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
@@ -778,7 +779,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 2. Story Reply Booster - Story View UI Simulation */}
                      <FadeIn delay={0.2}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#0a0a0a', height: '220px', padding: '0', position: 'relative', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                               <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(180deg, #1f1f1f 0%, #0d0d0d 100%)' }}>
                                  {/* Story Progress Lines */}
@@ -834,7 +835,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 3. Inbox Auto-Replies - High Fidelity DM Simulation */}
                      <FadeIn delay={0.3}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                               {/* DM Chat Header */}
                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
@@ -876,7 +877,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 4. Follower Booster - Profile Gated Simulation */}
                      <FadeIn delay={0.4}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                               {/* Instagram Profile Simulation */}
                               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
@@ -919,7 +920,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 5. Revive Viral Posts - Reels Grid Simulation */}
                      <FadeIn delay={0.5}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '0.75rem', position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                               {/* Instagram Profile Post Grid Mockup */}
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px', height: '100%' }}>
@@ -964,7 +965,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 6. Grow Your Email List - In-Chat email capture */}
                      <FadeIn delay={0.6}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1rem 1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
 
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -1010,7 +1011,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 7. Custom AI Sales Agent - Organic typing simulation */}
                      <FadeIn delay={0.7}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1.25rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                  {/* Customer Question */}
@@ -1052,7 +1053,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                      {/* 8. Sleek Digital Store - Checkout overlay */}
                      <FadeIn delay={0.8}>
-                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} style={{ background: 'var(--feature-card-bg)', borderRadius: '28px', overflow: 'hidden', border: '1px solid var(--feature-card-border)', display: 'flex', flexDirection: 'column', height: '100%', boxShadow: '0 15px 40px rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)' }}>
+                        <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className="feature-card">
                            <div style={{ background: '#121212', height: '220px', padding: '1rem', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', overflow: 'hidden' }}>
 
                               {/* Digital Store checkout popup */}
