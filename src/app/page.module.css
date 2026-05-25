@@ -784,6 +784,14 @@
     grid-template-columns: 1fr;
     gap: 3.5rem; /* Generous gap so that one feature box is focused/visible at a time on phone */
   }
+  .instagramFeaturesGrid > div {
+    min-height: 82dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
   .featureCard {
     padding: 1.75rem;
     border-radius: 16px;

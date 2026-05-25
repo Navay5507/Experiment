@@ -429,6 +429,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
          cyclesCompleted={metrics.cyclesCompleted}
          leadsCaptured={metrics.leadsCaptured}
          storeRevenue={metrics.storeRevenue}
+         followGateConversions={metrics.followGateConversions}
       />
     </motion.div>
   );

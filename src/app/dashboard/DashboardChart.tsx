@@ -9,6 +9,7 @@ interface ChartProps {
   cyclesCompleted: number;
   leadsCaptured: number;
   storeRevenue: number;
+  followGateConversions: number;
 }
 
 export default function DashboardChart({
@@ -16,8 +17,9 @@ export default function DashboardChart({
   cyclesCompleted,
   leadsCaptured,
   storeRevenue,
+  followGateConversions,
 }: ChartProps) {
-  const [activeTab, setActiveTab] = useState<'comments' | 'dms' | 'leads' | 'revenue'>('comments');
+  const [activeTab, setActiveTab] = useState<'comments' | 'dms' | 'leads' | 'revenue' | 'followGate'>('comments');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Generate 7 days labels (last 7 days)
@@ -81,6 +83,14 @@ export default function DashboardChart({
       values: getTrendData(storeRevenue),
       prefix: "₹",
       suffix: ""
+    },
+    followGate: {
+      label: "People Followed",
+      color: "#FB7185",
+      gradient: "rgba(251, 113, 133, 0.15)",
+      values: getTrendData(followGateConversions),
+      prefix: "",
+      suffix: " followers"
     }
   };
 
