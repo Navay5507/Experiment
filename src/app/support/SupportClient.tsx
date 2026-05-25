@@ -21,14 +21,14 @@ export default function SupportPage() {
 
              <div className={styles.featureBox}>
                <div className={styles.feature}>
-                 <h3>✨ Live Screen-Share</h3>
+                 <h3>Live Screen-Share</h3>
                  <p>Our team will help you configure your dashboard and test your workflows via live screen-share.</p>
                </div>
              </div>
 
              <div className={styles.featureBox} style={{ marginTop: '1rem' }}>
                <div className={styles.feature} style={{ background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
-                 <h3 style={{ color: '#60a5fa' }}>✉️ Just need a quick answer?</h3>
+                 <h3 style={{ color: '#60a5fa' }}>Just need a quick answer?</h3>
                  <p style={{ marginTop: '0.5rem' }}>If you don&apos;t have time for a full video call, you can drop us a line via our priority support form.</p>
                  <a href="mailto:support@autodrop.in" className="premium-btn" style={{ display: 'inline-block', marginTop: '1.25rem', padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>
                    Open Support Form ↗

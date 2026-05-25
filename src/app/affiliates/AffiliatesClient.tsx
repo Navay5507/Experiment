@@ -30,12 +30,6 @@ export default function AffiliatesPage() {
       {/* Hero Section */}
       <section style={{ paddingTop: '150px', paddingBottom: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
          <div className={styles.container} style={{ maxWidth: '800px' }}>
-            <FadeIn>
-               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)', padding: '6px 16px', borderRadius: '100px', marginBottom: '24px' }}>
-                 <DollarSign size={16} color="#3b82f6" />
-                 <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#3b82f6' }}>AutoDrop Partner Program</span>
-               </motion.div>
-            </FadeIn>
             <FadeIn delay={0.1}>
                <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.04em', marginBottom: '1.5rem', color: 'var(--text-heading)' }}>
                   Earn <span style={{ color: '#10b981' }}>20% Recurring</span> Commission for 1 Year.

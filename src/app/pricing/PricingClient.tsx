@@ -299,7 +299,7 @@ export default function PricingPage() {
               <li>Connect up to 3 IG Accounts</li>
               <li>Everything in Free</li>
               <li>Post, Reel &amp; Story Automation</li>
-              <li>📩 DM Keyword Automation</li>
+              <li>DM Keyword Automation</li>
               <li>Lead Capture (Email / Phone / Name)</li>
               <li>Follow-Gate Links</li>
               <li>Unlimited Automations</li>
@@ -406,7 +406,7 @@ export default function PricingPage() {
                   <td><span className={styles.iconCheck}><Check size={20} /></span></td>
                 </tr>
                 <tr>
-                  <td>📩 DM Keyword Automation</td>
+                  <td>DM Keyword Automation</td>
                   <td><span className={styles.iconCross}><Minus size={20} /></span></td>
                   <td><span className={styles.iconCheck}><Check size={20} /></span></td>
                   <td><span className={styles.iconCheck}><Check size={20} /></span></td>
@@ -467,7 +467,7 @@ export default function PricingPage() {
       </main>
 
       {/* FAQ SECTION */}
-      <section style={{ width: '100%', background: 'var(--bg-primary)', padding: '6rem 2rem' }}>
+      <section style={{ width: '100%', background: 'transparent', padding: '6rem 2rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', color: 'var(--text-heading)' }}>Frequently Asked Questions</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
