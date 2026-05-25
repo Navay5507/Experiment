@@ -194,9 +194,16 @@ a {
 
 /* Optimize cursor glow & backdrop filters on mobile for buttery-smooth scrolling */
 @media (max-width: 768px) {
+  html, body {
+    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
+  }
+
   .feature-card {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
   }
   .desktop-only-cursor-glow {
     display: none !important;
