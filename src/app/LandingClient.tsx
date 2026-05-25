@@ -761,20 +761,17 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                        yourbrand
                                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981' }} title="Active" />
                                     </span>
-                                    <p style={{ fontSize: '0.75rem', color: '#3897f0', margin: 0, fontWeight: 600 }}>Sent! Check your DMs 🚀</p>
+                                    <p style={{ fontSize: '0.75rem', color: '#3897f0', margin: 0, fontWeight: 600 }}>Sent! Check your DMs</p>
                                  </div>
                               </div>
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Auto-Reply to Comments 💬
+                                 Auto-Reply to Comments
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  No more copy-pasting links in comments! When fans comment a keyword on your Reels or posts, AutoDrop instantly replies and slides into their DMs with your link automatically.
                               </p>
-                              <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: '#3897f0', fontWeight: 700 }}>
-                                 <Zap size={14} /> Official Meta API Instant Dispatch (0.5s)
-                              </div>
                            </div>
                         </motion.div>
                      </FadeIn>
@@ -806,7 +803,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                     >
                                        <span style={{ fontSize: '0.65rem', color: '#e1306c', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.15rem' }}>REPLY TO STORY</span>
                                        <span style={{ fontSize: '1.05rem', fontWeight: 900, color: '#000', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                          💬 "GROW" for playbook
+                                          "GROW" for playbook
                                        </span>
                                     </motion.div>
                                  </div>
@@ -823,7 +820,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Story Interactive Auto-DMs 📖
+                                 Story Interactive Auto-DMs
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Double Story link conversions! Simply post a Story asking followers to reply with a keyword. AutoDrop automatically reads Story replies and delivers DMs instantly.
@@ -860,7 +857,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                     <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.65rem 1rem', borderRadius: '18px 18px 4px 18px', fontSize: '0.8rem', color: '#fff', maxWidth: '80%', boxShadow: '0 4px 15px rgba(168,85,247,0.25)' }}>
                                        <div>Here is your exclusive link:</div>
                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.6rem', background: 'rgba(255,255,255,0.15)', borderRadius: '10px', marginTop: '0.4rem', fontWeight: 700, fontSize: '0.75rem', textAlign: 'center', backdropFilter: 'blur(5px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                          📘 drop.site/free-guide
+                                          drop.site/free-guide
                                        </div>
                                     </div>
                                  </div>
@@ -868,14 +865,11 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Inbox Secret Code Words 📩
+                                 Inbox Secret Code Words
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Create secret keywords (like 'VIP', 'OFFER', 'GUIDE') for your bio or offline flyers. When customers DM you that specific word, AutoDrop sends them links instantly.
                               </p>
-                              <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: '#a855f7', fontWeight: 700 }}>
-                                 <CheckCircle2 size={14} /> Dispatch speed: &lt; 0.5s (official webhook integration)
-                              </div>
                            </div>
                         </motion.div>
                      </FadeIn>
@@ -911,13 +905,13 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Follower Booster (Follow-Gate) 🔒
+                                 Follower Booster (Follow-Gate)
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Turn commenters into followers! AutoDrop automatically checks if a user is following your profile. If they aren't, it politely reminds them to follow you before delivering their link.
                               </p>
                               <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: '#f43f5e', fontWeight: 700 }}>
-                                 <ShieldCheck size={14} /> Boosts follower conversion by up to 2.4x
+                                 <ShieldCheck size={14} /> Boosts follower conversion
                               </div>
                            </div>
                         </motion.div>
@@ -956,7 +950,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Revive Old Viral Reels 🔄
+                                 Revive Old Viral Reels
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Maximize old organic traffic! Got an old post that's still getting views or just went viral? Toggle AutoDrop on historical Reels to convert late viewers into fans automatically.
@@ -977,7 +971,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                  {/* DM Prompt */}
                                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
                                     <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.45rem 0.85rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.75rem', color: '#fff', maxWidth: '85%' }}>
-                                       Where should I send the code? Reply with your Email! 📬
+                                       Where should I send the code? Reply with your Email!
                                     </div>
                                  </div>
 
@@ -1002,7 +996,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Grow Your Email List 📧
+                                 Grow Your Email List
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Forget slow, clunky web landing pages. Collect your customer's email directly inside the Instagram DM chat and automatically sync it straight to your email lists.
@@ -1030,7 +1024,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                  {/* AI Reply */}
                                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.5rem', alignSelf: 'flex-end', flexDirection: 'row-reverse' }}>
                                     <div style={{ background: 'linear-gradient(45deg, #3797f0, #a855f7)', padding: '0.55rem 0.95rem', borderRadius: '16px 16px 4px 16px', fontSize: '0.75rem', color: '#fff', maxWidth: '85%' }}>
-                                       Yes! It starts from absolute scratch. Here's a 10% coupon: <b>NOOB10</b> 🎁
+                                       Yes! It starts from absolute scratch. Here's a 10% coupon: <b>NOOB10</b>
                                     </div>
                                  </div>
 
@@ -1044,7 +1038,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Custom AI Sales Agent 🤖 <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border: '1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
+                                 Custom AI Sales Agent <span style={{ color: '#facc15', fontSize: '0.7rem', verticalAlign: 'middle', border: '1px solid #facc15', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Coming Soon</span>
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  Train an ultra-smart AI bot on your business files or FAQs. It chats organically with your customers, answers product questions, and overcomes purchase objections naturally 24/7.
@@ -1079,19 +1073,19 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                                     <span>Pay with UPI/Card/Apple Pay</span>
                                  </div>
                                  <div style={{ fontSize: '0.55rem', color: '#888', textAlign: 'center' }}>
-                                    🔒 Secured by Stripe. Standard Instagram Browser Sheet
+                                    Secured by Razorpay. Standard Instagram Browser Sheet
                                  </div>
                               </div>
                            </div>
                            <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                               <h3 style={{ fontSize: '1.25rem', color: 'var(--text-heading)', marginBottom: '0.5rem', fontWeight: 800 }}>
-                                 Sleek Digital Store 🛍️ <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border: '1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
+                                 Sleek Digital Store <span style={{ color: '#10b981', fontSize: '0.7rem', verticalAlign: 'middle', border: '1px solid #10b981', padding: '0.1rem 0.4rem', borderRadius: '4px', marginLeft: '0.5rem' }}>Included</span>
                               </h3>
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  No external website or Shopify account needed. Simply upload your PDF guides, masterclasses, or ebooks to your AutoDrop dashboard, and sell directly inside DMs.
                               </p>
                               <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: '#22d3ee', fontWeight: 700 }}>
-                                 <ShoppingBag size={14} /> Full Stripe & Payment Gateway integrations included
+                                 <ShoppingBag size={14} /> Full Razorpay & Payment Gateway integrations included
                               </div>
                            </div>
                         </motion.div>
