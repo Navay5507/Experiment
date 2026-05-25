@@ -21,6 +21,19 @@ const CURRENCY_OPTIONS = [
   { value: "NGN", label: "🇳🇬 Nigeria (NGN)" },
 ];
 
+const DESKTOP_CURRENCY_OPTIONS = [
+  { value: "INR", label: "🇮🇳 INR" },
+  { value: "USD", label: "🇺🇸 USD" },
+  { value: "EUR", label: "🇪🇺 EUR" },
+  { value: "GBP", label: "🇬🇧 GBP" },
+  { value: "CAD", label: "🇨🇦 CAD" },
+  { value: "AUD", label: "🇦🇺 AUD" },
+  { value: "NZD", label: "🇳🇿 NZD" },
+  { value: "ZAR", label: "🇿🇦 ZAR" },
+  { value: "SGD", label: "🇸🇬 SGD" },
+  { value: "NGN", label: "🇳🇬 NGN" },
+];
+
 interface HeaderProps {
   activePath?: string;
 }
@@ -211,19 +224,20 @@ export default function Header({ activePath }: HeaderProps) {
             value={currency} 
             onChange={(e) => handleCurrencyChange(e.target.value)}
             style={{
-              background: "rgba(255,255,255,0.05)",
+              background: "rgba(255,255,255,0.03)",
               border: "1px solid var(--border)",
               color: "var(--text-main)",
-              padding: "0.4rem 0.75rem",
-              borderRadius: "8px",
-              fontSize: "0.85rem",
+              padding: "0.3rem 0.5rem",
+              borderRadius: "6px",
+              fontSize: "0.8rem",
               fontWeight: 600,
               cursor: "pointer",
               outline: "none",
-              marginRight: "0.5rem"
+              marginRight: "0.75rem",
+              width: "auto"
             }}
           >
-            {CURRENCY_OPTIONS.map(opt => (
+            {DESKTOP_CURRENCY_OPTIONS.map(opt => (
               <option key={opt.value} value={opt.value} style={{ background: "var(--surface)", color: "var(--text-main)" }}>
                 {opt.label}
               </option>
