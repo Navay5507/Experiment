@@ -209,13 +209,4 @@ a {
   .desktop-only-cursor-glow {
     display: none !important;
   }
-  body::before {
-    position: absolute !important;
-    height: 100% !important;
-    will-change: auto !important;
-  }
-  #features, #how-it-works, #testimonials, #faq, #cta {
-    content-visibility: auto;
-    contain-intrinsic-size: 1px 1000px;
-  }
 }
