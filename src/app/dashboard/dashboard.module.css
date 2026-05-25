@@ -342,7 +342,7 @@
 @media (max-width: 900px) {
   .metricGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 }
 
@@ -395,9 +395,9 @@
   }
 
   .metricGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.25rem;
+    grid-template-columns: 1fr;
+    gap: 2.25rem; /* Generous gap so that one stat card is visible at one time on phone */
+    margin-bottom: 1.5rem;
   }
 
   .metricCard {
@@ -479,8 +479,8 @@
   }
 
   .metricGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 2.25rem; /* Generous gap so that one stat card is visible at one time on phone */
   }
 
   .metricCard {

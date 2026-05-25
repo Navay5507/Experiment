@@ -737,7 +737,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                {USE_NOOB_FRIENDLY_FEATURES ? (
                   /* NEW HIGH-FIDELITY INSTAGRAM-RESEMBLING FEATURES GRID */
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2.75rem' }}>
+                  <div className={styles.instagramFeaturesGrid}>
 
                      {/* 1. Comment Magnet - Reel Comment Sheet Simulation */}
                      <FadeIn delay={0.1}>
