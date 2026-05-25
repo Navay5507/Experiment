@@ -256,26 +256,32 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   const token = user.instagramAccessToken;
 
+  const isChainedFromComment = !!job.data.skipDedup || !!job.data.commentId;
+
   // RATE LIMIT (Plan-based monthly cap)
-  const rateCheck = await checkRateLimit(userId, user.plan);
-  if (!rateCheck.allowed) {
-    console.log(`[Worker] Rate limited user ${userId}: ${rateCheck.reason}`);
-    await supabase.from('analytics_events').insert({
-      user_id: userId, event_type: 'rate_limited',
-      metadata: { reason: rateCheck.reason, automation_id: automationId }
-    });
-    return { success: false, reason: rateCheck.reason };
+  if (!isChainedFromComment) {
+    const rateCheck = await checkRateLimit(userId, user.plan);
+    if (!rateCheck.allowed) {
+      console.log(`[Worker] Rate limited user ${userId}: ${rateCheck.reason}`);
+      await supabase.from('analytics_events').insert({
+        user_id: userId, event_type: 'rate_limited',
+        metadata: { reason: rateCheck.reason, automation_id: automationId }
+      });
+      return { success: false, reason: rateCheck.reason };
+    }
   }
 
   // ANTI-BAN: Hourly DM rate cap (Meta limit: 200/hr, we cap at 150)
-  const hourlyCheck = await checkHourlyDMLimit(userId);
-  if (!hourlyCheck.allowed) {
-    console.warn(`[Worker] ⚠️ Hourly DM cap reached for ${userId}: ${hourlyCheck.count}/${hourlyCheck.limit}`);
-    await supabase.from('analytics_events').insert({
-      user_id: userId, event_type: 'hourly_dm_cap_hit',
-      metadata: { count: hourlyCheck.count, limit: hourlyCheck.limit, automation_id: automationId }
-    });
-    return { success: false, reason: `Hourly DM cap reached (${hourlyCheck.count}/${hourlyCheck.limit})` };
+  if (!isChainedFromComment) {
+    const hourlyCheck = await checkHourlyDMLimit(userId);
+    if (!hourlyCheck.allowed) {
+      console.warn(`[Worker] ⚠️ Hourly DM cap reached for ${userId}: ${hourlyCheck.count}/${hourlyCheck.limit}`);
+      await supabase.from('analytics_events').insert({
+        user_id: userId, event_type: 'hourly_dm_cap_hit',
+        metadata: { count: hourlyCheck.count, limit: hourlyCheck.limit, automation_id: automationId }
+      });
+      return { success: false, reason: `Hourly DM cap reached (${hourlyCheck.count}/${hourlyCheck.limit})` };
+    }
   }
 
   // 24h per-user rate limiter has been disabled per user request. Proceeding straight to job dispatching.
@@ -309,6 +315,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
           event_type: 'dm_failed',
           metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
         });
+        if (isChainedFromComment) {
+          throw new Error(`Necessary DM Private Reply failed: ${result.error.message || JSON.stringify(result.error)}`);
+        }
         return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
 
@@ -334,6 +343,9 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
           event_type: 'dm_failed',
           metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
         });
+        if (isChainedFromComment) {
+          throw new Error(`Necessary DM send failed: ${result.error.message || JSON.stringify(result.error)}`);
+        }
         return { success: false, reason: result.error.message || 'DM send failed' };
       }
     }
@@ -802,7 +814,14 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         commenterUsername: commenterUsername || '',
         commentId,
         skipDedup: true, // Bypass check because commentWorker already claimed the lock!
-      }, { delay: getRandomDelay(5000, 3600000) });
+      }, { 
+        delay: getRandomDelay(5000, 3600000),
+        attempts: 5,
+        backoff: {
+          type: 'exponential',
+          delay: 10000,
+        }
+      });
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
       await supabase.from('analytics_events').insert({
