@@ -211,6 +211,10 @@ a {
     perspective: 1000px;
   }
 
+  .feature-card {
+    height: auto !important;
+  }
+
   /* Skip rendering offscreen sections until they enter the viewport to save CPU/GPU overhead */
   #how-it-works,
   #pricing,
