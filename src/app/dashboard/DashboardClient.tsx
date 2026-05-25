@@ -222,8 +222,8 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
           <div className={styles.metricValue} style={{ position: 'relative', zIndex: 2 }}><CountUpReal end={metrics.followGateConversions} /></div>
           <div className={styles.metricTrend} style={{ position: 'relative', zIndex: 2 }}>
              {metrics.followGateConversions > 0 ? (
-               <span style={{ color: '#fb7185' }}>People triggered follow gate</span>
-             ) : <span style={{ color: "var(--text-muted)" }}>No follow gates triggered yet</span>}
+               <span style={{ color: '#fb7185' }}>New followers gained via gate</span>
+             ) : <span style={{ color: "var(--text-muted)" }}>No follow gate conversions yet</span>}
           </div>
           {metrics.followGateConversions > 0 && <Sparkline color="#fb7185" />}
         </motion.div>

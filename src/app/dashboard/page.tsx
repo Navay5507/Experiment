@@ -23,7 +23,7 @@ export default async function DashboardOverview() {
     supabase.from('analytics_events').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
     supabase.from('products').select('total_sales, total_revenue, is_active').eq('user_id', user.id),
     supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'comment_matched'),
-    supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'follow_gate_sent')
+    supabase.from('analytics_events').select('id', { count: 'exact', head: true }).eq('user_id', user.id).eq('event_type', 'dm_delivered').filter('metadata->>type', 'eq', 'link_after_follow')
   ]);
 
   let cyclesCompleted = 0;
