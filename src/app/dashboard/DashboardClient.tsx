@@ -124,7 +124,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
       )}
 
       <div className={styles.metricGrid}>
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(99,102,241,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(99,102,241,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Active Automations</span>
              <Zap className={styles.metricIcon} size={18} />
@@ -140,7 +140,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
           {metrics.activeAutomations > 0 && <Sparkline color="#6366F1" />}
         </motion.div>
         
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(34,211,238,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(34,211,238,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Comments Matched</span>
              <MessageCircle color="#22D3EE" size={18} />
@@ -154,7 +154,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
           {metrics.commentsMatched > 0 && <Sparkline color="#22D3EE" />}
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>DMs Replied</span>
              <Send color="#10b981" size={18} />
@@ -171,7 +171,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
           {metrics.cyclesCompleted > 0 && <Sparkline color="#10b981" />}
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(168,85,247,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(168,85,247,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Leads Captured</span>
              <Users color="#a855f7" size={18} />
@@ -186,7 +186,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         </motion.div>
 
         {/* Store Revenue */}
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(16,185,129,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Store Revenue</span>
              <DollarSign color="#10b981" size={18} />
@@ -201,7 +201,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         </motion.div>
 
         {/* Products Sold */}
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(234,179,8,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(234,179,8,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Products Sold</span>
              <ShoppingBag color="#eab308" size={18} />
@@ -216,7 +216,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
         </motion.div>
 
         {/* Follow Gate Conversions */}
-        <motion.div whileHover={{ y: -4, borderColor: 'rgba(251,113,133,0.5)' }} className="glass-panel" style={{ padding: '1.25rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
+        <motion.div whileHover={{ y: -4, borderColor: 'rgba(251,113,133,0.5)' }} className="glass-panel" style={{ padding: '1.5rem', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1 }}>
           <div className={styles.metricHeader} style={{ position: 'relative', zIndex: 2 }}>
              <span className={styles.metricTitle}>Follow Gate</span>
              <UserCheck color="#fb7185" size={18} />
