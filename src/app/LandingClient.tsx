@@ -19,13 +19,13 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
    </div>
 );
 
-const HeroMockupElement = () => (
+const HeroMockupElement = ({ isMobile = false }: { isMobile?: boolean }) => (
    <FadeIn delay={0.4}>
       <div className={styles.heroMockupContainer}>
 
          <motion.div
-            animate={{ rotateY: [-5, 5, -5], rotateX: [2, -2, 2], y: [0, -10, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            animate={isMobile ? { y: [0, -8, 0] } : { rotateY: [-5, 5, -5], rotateX: [2, -2, 2], y: [0, -10, 0] }}
+            transition={{ duration: isMobile ? 6 : 8, repeat: Infinity, ease: "easeInOut" }}
             style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 5, padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
             <HeroUseCases />
@@ -553,7 +553,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
    return (
-      <section style={{ padding: '8rem 0', background: 'transparent', position: 'relative', overflow: 'hidden' }}>
+      <section id="testimonials" style={{ padding: '8rem 0', background: 'transparent', position: 'relative', overflow: 'hidden' }}>
          {/* Background Glows */}
          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', height: '80%', background: 'radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 60%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
@@ -613,6 +613,16 @@ export default function LandingClient({ userId }: { userId: string | null }) {
    const cursorX = useSpring(mouseX, { stiffness: 600, damping: 50, mass: 0.1 });
    const cursorY = useSpring(mouseY, { stiffness: 600, damping: 50, mass: 0.1 });
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+   const [isMobile, setIsMobile] = useState(false);
+
+   useEffect(() => {
+      const checkMobile = () => {
+         setIsMobile(window.innerWidth <= 768);
+      };
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+      return () => window.removeEventListener("resize", checkMobile);
+   }, []);
 
    useEffect(() => {
       const updateMousePos = (e: MouseEvent) => {
@@ -661,7 +671,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </FadeIn>
 
                      <div className={styles.mobileOnlyVisual}>
-                        <HeroMockupElement />
+                        {isMobile && <HeroMockupElement isMobile={true} />}
                      </div>
 
                      <FadeIn delay={0.2}>
@@ -701,7 +711,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   </div>
 
                   <div className={styles.desktopOnlyVisual}>
-                     <HeroMockupElement />
+                     {!isMobile && <HeroMockupElement isMobile={false} />}
                   </div>
                </div>
             </div>
@@ -1300,10 +1310,10 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             <HowItWorksInteractive />
          </section>
 
-         <TestimonialsSection />
+         <section id="testimonials"><TestimonialsSection /></section>
 
          {/* FAQ SECTION */}
-         <section style={{ padding: '8rem 0', background: 'transparent', borderTop: '1px solid var(--border)' }}>
+         <section id="faq" style={{ padding: '8rem 0', background: 'transparent', borderTop: '1px solid var(--border)' }}>
             <div className={styles.container} style={{ maxWidth: '800px' }}>
                <FadeIn>
                   <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.03em', color: 'var(--text-heading)', textAlign: 'center' }}>Frequently Asked Questions</h2>
@@ -1319,7 +1329,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
             </div>
          </section>
 
-         <section style={{ padding: '10rem 0', textAlign: 'center' }}>
+         <section id="cta" style={{ padding: '10rem 0', textAlign: 'center' }}>
             <div className={styles.container}>
                <FadeIn>
                   <h2 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.03em', color: 'var(--text-heading)' }}>Ready to Scale?</h2>

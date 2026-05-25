@@ -57,6 +57,10 @@
   --feature-card-border: rgba(0, 0, 0, 0.08);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   max-width: 100vw;
@@ -68,6 +72,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   position: relative;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Butter-smooth hardware-accelerated grid background with zero scroll repaint lag */
@@ -203,5 +208,14 @@ a {
   }
   .desktop-only-cursor-glow {
     display: none !important;
+  }
+  body::before {
+    position: absolute !important;
+    height: 100% !important;
+    will-change: auto !important;
+  }
+  #features, #how-it-works, #testimonials, #faq, #cta {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px;
   }
 }
