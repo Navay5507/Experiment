@@ -737,7 +737,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
                {USE_NOOB_FRIENDLY_FEATURES ? (
                   /* NEW HIGH-FIDELITY INSTAGRAM-RESEMBLING FEATURES GRID */
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2.75rem' }}>
 
                      {/* 1. Comment Magnet - Reel Comment Sheet Simulation */}
                      <FadeIn delay={0.1}>
@@ -783,6 +783,9 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                               <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>
                                  No more copy-pasting links in comments! When fans comment a keyword on your Reels or posts, AutoDrop instantly replies and slides into their DMs with your link automatically.
                               </p>
+                              <div style={{ marginTop: 'auto', paddingTop: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: '#3897f0', fontWeight: 700 }}>
+                                 <MessageCircle size={14} /> Runs across all your posts and Reels, even while you sleep
+                              </div>
                            </div>
                         </motion.div>
                      </FadeIn>

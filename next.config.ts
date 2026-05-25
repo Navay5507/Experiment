@@ -1,5 +1,38 @@
 import type { NextConfig } from "next";
 
+const securityHeaders = [
+  // Force HTTPS — tells browsers/Meta scanners this site always uses encrypted connections
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+  // Prevent MIME-type sniffing attacks
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff',
+  },
+  // Prevent clickjacking
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN',
+  },
+  // XSS protection for older browsers
+  {
+    key: 'X-XSS-Protection',
+    value: '1; mode=block',
+  },
+  // Control referrer info sent to other sites
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin',
+  },
+  // Restrict unnecessary browser features
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
+];
+
 const nextConfig: NextConfig = {
   serverExternalPackages: ['ioredis', 'bullmq'],
   images: {
@@ -19,6 +52,26 @@ const nextConfig: NextConfig = {
       './node_modules/ioredis/**/*',
       './node_modules/bullmq/**/*',
     ],
+  },
+  async headers() {
+    return [
+      {
+        // Apply security headers to ALL routes
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      // Redirect www → non-www for canonical domain consistency
+      {
+        source: '/(.*)',
+        has: [{ type: 'host', value: 'www.autodrop.in' }],
+        destination: 'https://autodrop.in/:path*',
+        permanent: true,
+      },
+    ];
   },
 };
 
