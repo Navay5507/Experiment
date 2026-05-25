@@ -79,6 +79,32 @@ interface DashboardProps {
 }
 
 export default function DashboardClient({ metrics, feed, expiresAt }: DashboardProps) {
+  const [currencySymbol, setCurrencySymbol] = useState("₹");
+
+  useEffect(() => {
+    const CURRENCY_SYMBOLS: Record<string, string> = {
+      INR: "₹",
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+      CAD: "$",
+      AUD: "$",
+      NZD: "$",
+      ZAR: "R",
+      SGD: "$",
+      NGN: "₦",
+    };
+
+    const saved = localStorage.getItem("selected-currency") || "INR";
+    setCurrencySymbol(CURRENCY_SYMBOLS[saved] || "₹");
+
+    const handleGlobalChange = () => {
+      const savedNew = localStorage.getItem("selected-currency") || "INR";
+      setCurrencySymbol(CURRENCY_SYMBOLS[savedNew] || "₹");
+    };
+    window.addEventListener("currency-change", handleGlobalChange);
+    return () => window.removeEventListener("currency-change", handleGlobalChange);
+  }, []);
 
   const daysLeft = expiresAt ? Math.ceil((new Date(expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : null;
 
@@ -189,11 +215,11 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))', gap: '1.25rem', marginTop: '1.5rem' }}>
          
-         {/* Roadmap to making ₹₹₹ Onboarding Card */}
+         {/* Roadmap to making onboarding Card */}
          <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', minHeight: '480px', position: 'relative', overflow: 'hidden' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-heading)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  Roadmap to making ₹₹₹
+                  Roadmap to making {currencySymbol}{currencySymbol}{currencySymbol}
                </h3>
                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>
                   {(() => {

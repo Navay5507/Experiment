@@ -44,6 +44,29 @@ export default function PricingPage() {
   const router = useRouter();
   const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState<Currency>("INR");
+
+  // Sync initial currency
+  useEffect(() => {
+    const saved = localStorage.getItem("selected-currency");
+    if (saved) {
+      setCurrency(saved as Currency);
+    } else if (user) {
+      setCurrency(detectCurrency(user));
+    }
+  }, [user]);
+
+  // Sync on global changes
+  useEffect(() => {
+    const handleGlobalChange = () => {
+      const savedNew = localStorage.getItem("selected-currency");
+      if (savedNew) {
+        setCurrency(savedNew as Currency);
+      }
+    };
+    window.addEventListener("currency-change", handleGlobalChange);
+    return () => window.removeEventListener("currency-change", handleGlobalChange);
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [userPlan, setUserPlan] = useState<string>("FREE");
   const [promoCodeInput, setPromoCodeInput] = useState("");
@@ -247,7 +270,12 @@ export default function PricingPage() {
               id="currency" 
               className={styles.currencySelect}
               value={currency} 
-              onChange={(e) => setCurrency(e.target.value as Currency)}
+              onChange={(e) => {
+                const val = e.target.value as Currency;
+                setCurrency(val);
+                localStorage.setItem("selected-currency", val);
+                window.dispatchEvent(new Event("currency-change"));
+              }}
             >
               <option value="INR">INR (₹) - India</option>
               <option value="USD">USD ($) - United States</option>

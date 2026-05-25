@@ -8,6 +8,19 @@ import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import styles from "../page.module.css";
 
+const CURRENCY_OPTIONS = [
+  { value: "INR", label: "🇮🇳 India (INR)" },
+  { value: "USD", label: "🇺🇸 United States (USD)" },
+  { value: "EUR", label: "🇪🇺 Europe (EUR)" },
+  { value: "GBP", label: "🇬🇧 United Kingdom (GBP)" },
+  { value: "CAD", label: "🇨🇦 Canada (CAD)" },
+  { value: "AUD", label: "🇦🇺 Australia (AUD)" },
+  { value: "NZD", label: "🇳🇿 New Zealand (NZD)" },
+  { value: "ZAR", label: "🇿🇦 South Africa (ZAR)" },
+  { value: "SGD", label: "🇸🇬 Singapore (SGD)" },
+  { value: "NGN", label: "🇳🇬 Nigeria (NGN)" },
+];
+
 interface HeaderProps {
   activePath?: string;
 }
@@ -16,6 +29,29 @@ export default function Header({ activePath }: HeaderProps) {
   const { userId, isLoaded } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [currency, setCurrency] = useState("INR");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("selected-currency");
+    if (saved) {
+      setCurrency(saved);
+    }
+
+    const handleGlobalChange = () => {
+      const savedNew = localStorage.getItem("selected-currency");
+      if (savedNew) {
+        setCurrency(savedNew);
+      }
+    };
+    window.addEventListener("currency-change", handleGlobalChange);
+    return () => window.removeEventListener("currency-change", handleGlobalChange);
+  }, []);
+
+  const handleCurrencyChange = (val: string) => {
+    setCurrency(val);
+    localStorage.setItem("selected-currency", val);
+    window.dispatchEvent(new Event("currency-change"));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -129,6 +165,34 @@ export default function Header({ activePath }: HeaderProps) {
           
           {isMobileMenuOpen && (
             <div style={{ display: "flex", gap: "1rem", flexDirection: "column", alignItems: "center", marginTop: "1.5rem", borderTop: "1px solid var(--border)", paddingTop: "1.5rem", width: "100%" }}>
+              {/* Mobile Currency Selector */}
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", width: "100%", justifyContent: "center", marginBottom: "0.5rem" }}>
+                <span style={{ fontSize: "0.9rem", color: "var(--text-muted)", fontWeight: 500 }}>Currency:</span>
+                <select 
+                  value={currency} 
+                  onChange={(e) => handleCurrencyChange(e.target.value)}
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid var(--border)",
+                    color: "var(--text-main)",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "10px",
+                    fontSize: "0.9rem",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    outline: "none",
+                    width: "180px",
+                    textAlign: "center"
+                  }}
+                >
+                  {CURRENCY_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value} style={{ background: "var(--surface)", color: "var(--text-main)" }}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {!isLoaded ? (
                 <div className="premium-btn" style={{ fontSize: "1rem", padding: "0.8rem 1.5rem", width: "100%", textAlign: "center", opacity: 0.5 }}>Loading...</div>
               ) : userId ? (
@@ -142,6 +206,29 @@ export default function Header({ activePath }: HeaderProps) {
 
         {/* Desktop actions */}
         <div className={styles.authCol}>
+          {/* Desktop Currency Selector */}
+          <select 
+            value={currency} 
+            onChange={(e) => handleCurrencyChange(e.target.value)}
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid var(--border)",
+              color: "var(--text-main)",
+              padding: "0.4rem 0.75rem",
+              borderRadius: "8px",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              outline: "none",
+              marginRight: "0.5rem"
+            }}
+          >
+            {CURRENCY_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value} style={{ background: "var(--surface)", color: "var(--text-main)" }}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
           <ThemeToggle />
           {!isLoaded ? (
             <div className="premium-btn" style={{ fontSize: "0.9rem", padding: "0.6rem 1.5rem", opacity: 0.5 }}>Loading...</div>
