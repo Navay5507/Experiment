@@ -354,7 +354,7 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'follower',
-                        }, { delay: baseDelay + getRandomDelay(5000, 7200000) });
+                        }, { delay: baseDelay + getRandomDelay(5000, 3600000) });
                         console.log(`[Webhook] ✅ Story DM job queued with delay (base: ${baseDelay}ms)`);
                       } catch (e) { console.error('[Webhook] Story DM queue error:', e); }
                       break;
@@ -556,7 +556,7 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'dm_user',
-                        }, { delay: baseDelay + getRandomDelay(5000, 7200000) });
+                        }, { delay: baseDelay + getRandomDelay(5000, 3600000) });
                         console.log(`[Webhook] ✅ DM keyword automation job queued (delay: ${baseDelay}ms)`);
                       } catch (e) { console.error('[Webhook] DM keyword queue error:', e); }
 

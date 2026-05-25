@@ -130,6 +130,6 @@ function getCurrentHourKey(): string {
  * @param maxMs Maximum delay in ms (default: 45000 = 45s)
  * @returns Random delay value in ms
  */
-export function getRandomDelay(minMs = 5000, maxMs = 7200000): number {
+export function getRandomDelay(minMs = 5000, maxMs = 3600000): number {
   return Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
 }

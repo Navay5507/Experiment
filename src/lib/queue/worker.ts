@@ -802,7 +802,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         commenterUsername: commenterUsername || '',
         commentId,
         skipDedup: true, // Bypass check because commentWorker already claimed the lock!
-      }, { delay: getRandomDelay(5000, 7200000) });
+      }, { delay: getRandomDelay(5000, 3600000) });
       console.log(`[Worker Comment] ✅ Comment replied → DM job chained with delay for ${recipientId}`);
 
       await supabase.from('analytics_events').insert({
