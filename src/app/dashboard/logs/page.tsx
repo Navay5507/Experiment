@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
 import { Activity, Zap } from "lucide-react";
 import ConfirmForm from "../ConfirmForm";
+import CommentQueuePanel from "./CommentQueuePanel";
 
 export const dynamic = 'force-dynamic';
 
@@ -45,6 +46,8 @@ export default async function LogsPage() {
            </span>
         </div>
       </div>
+
+      <CommentQueuePanel />
 
       <div className={styles.tableContainer}>
         {error ? (
