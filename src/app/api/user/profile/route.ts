@@ -13,7 +13,7 @@ export async function GET() {
 
     const { data: user, error } = await supabase
       .from("users")
-      .select("id, email, plan, instagramUserId, instagramHandle")
+      .select("id, email, plan, instagramUserId, instagramHandle, subscription_expires_at")
       .eq("clerkId", clerkId)
       .single();
 
@@ -21,7 +21,9 @@ export async function GET() {
       return new NextResponse("User not found", { status: 404 });
     }
 
-    return NextResponse.json({ data: user });
+    const has_purchased_before = user.subscription_expires_at !== null;
+
+    return NextResponse.json({ data: { ...user, has_purchased_before } });
   } catch (error: any) {
     console.error("[USER_PROFILE_GET_ERROR]:", error.message || error);
     return new NextResponse("Internal Server Error", { status: 500 });

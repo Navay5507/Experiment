@@ -279,7 +279,7 @@ export async function POST(req: Request) {
                       commentId: commentId,
                       recipientId: commenterId,
                       commenterUsername,
-                    }, { delay: baseDelay + getRandomDelay(5000, 25000) });
+                    }, { delay: baseDelay + getRandomDelay(5000, 3600000) });
                     console.log('[Webhook] ✅ Comment reply job queued with delay');
                   } catch (e) { console.error('[Webhook] Comment queue error:', e); }
 

@@ -74,6 +74,7 @@ export default function PricingPage() {
   const [promoLoading, setPromoLoading] = useState(false);
   const [promoMessage, setPromoMessage] = useState({ text: "", type: "" });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasPurchasedBefore, setHasPurchasedBefore] = useState<boolean>(true); // default to true to be safe
 
   // Sync the plan status if possible
   useEffect(() => {
@@ -83,6 +84,9 @@ export default function PricingPage() {
         if (res.ok) {
           const { data } = await res.json();
           if (data?.plan) setUserPlan(data.plan);
+          if (typeof data?.has_purchased_before === 'boolean') {
+            setHasPurchasedBefore(data.has_purchased_before);
+          }
         }
       } catch (e) {
         console.error("Failed to sync plan on pricing", e);
@@ -107,7 +111,7 @@ export default function PricingPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: checkoutBaseAmount,
+          // amount is now calculated securely on the backend.
           currency,
           receipt: `rcpt_${Date.now()}`,
           promoCode: activePromo ? activePromo.code : undefined,
@@ -182,6 +186,19 @@ export default function PricingPage() {
     NGN: { pro: 11900, elite: 148500 },
   };
 
+  const firstMonthRates: Record<Currency, number> = {
+    USD: 1.99,
+    GBP: 1.49,
+    CAD: 1.99,
+    AUD: 1.99,
+    NZD: 1.99,
+    EUR: 1.49,
+    ZAR: 29,
+    SGD: 1.99,
+    INR: 99,
+    NGN: 1990,
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -218,6 +235,11 @@ export default function PricingPage() {
   };
 
   const getPrice = (baseTierPrice: number, applyPromo = true) => {
+    // Check if eligible for first month trial
+    if (!hasPurchasedBefore && !isAnnual) {
+      // Return the introductory rate
+      baseTierPrice = firstMonthRates[currency] || 99;
+    }
     // Universal identical pricing parity based strictly on the India 599 -> 359 model (~40.07% discount)
     let price = isAnnual ? Math.round(baseTierPrice * (359 / 599)) : baseTierPrice;
     
@@ -313,15 +335,20 @@ export default function PricingPage() {
             <div className={styles.badge}>Most Popular</div>
             <h3 className={styles.planName}>Growth Pro</h3>
             <div className={styles.price}>
-              {activePromo && (
+              {activePromo || (!hasPurchasedBefore && !isAnnual) ? (
                 <span style={{ textDecoration: 'line-through', fontSize: '1.2rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
-                  {formatPrice(getPrice(currentRate.pro, false))}
+                  {formatPrice(currentRate.pro)}
                 </span>
-              )}
+              ) : null}
               {formatPrice(getPrice(currentRate.pro))}
               <span className={styles.period}>/mo</span>
             </div>
             {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
+            {!isAnnual && !hasPurchasedBefore && (
+              <div style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 600, marginTop: '0.25rem' }}>
+                First month introductory offer. Renews at regular price.
+              </div>
+            )}
             <p className={styles.description}>Full funnel automation to capture leads and scale.</p>
             <ul className={styles.features}>
               <li>Connect up to 3 IG Accounts</li>
