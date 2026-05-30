@@ -38,15 +38,10 @@ export async function POST(req: Request) {
       console.error("[RAZORPAY_FETCH_ORDER_ERROR]:", e);
     }
 
-    // Calculate subscription expiry based on billing cycle
-    const billingCycle = order?.notes?.billing_cycle || 'monthly';
+    // Calculate subscription expiry (monthly only — 30 days)
     const now = new Date();
     const expiresAt = new Date(now);
-    if (billingCycle === 'annual') {
-      expiresAt.setFullYear(expiresAt.getFullYear() + 1);
-    } else {
-      expiresAt.setDate(expiresAt.getDate() + 30);
-    }
+    expiresAt.setDate(expiresAt.getDate() + 30);
 
     // Update the user's plan in Supabase to PRO with expiry date
     const { error: updateError } = await supabase
@@ -114,7 +109,7 @@ export async function POST(req: Request) {
       const userName = purchaser?.name || '';
       if (userEmail) {
         const resend = new Resend(process.env.RESEND_API_KEY);
-        const planLabel = billingCycle === 'annual' ? 'Annual (1 Year)' : 'Monthly (30 Days)';
+        const planLabel = 'Monthly (30 Days)';
         const expiryFormatted = expiresAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
         await resend.emails.send({
           from: 'AutoDrop <noreply@autodrop.in>',

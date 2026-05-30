@@ -4,16 +4,16 @@ import { razorpay } from "@/lib/razorpay";
 import { supabase } from "@/lib/supabase";
 
 const rates: Record<string, { pro: number, elite: number }> = {
-  USD: { pro: 9, elite: 99 },
-  GBP: { pro: 7, elite: 79 },
-  CAD: { pro: 12, elite: 135 },
-  AUD: { pro: 13, elite: 149 },
-  NZD: { pro: 14, elite: 164 },
-  EUR: { pro: 9, elite: 89 },
-  ZAR: { pro: 167, elite: 1880 },
-  SGD: { pro: 12, elite: 133 },
-  INR: { pro: 599, elite: 8200 },
-  NGN: { pro: 11900, elite: 148500 },
+  USD: { pro: 4.99, elite: 99 },
+  GBP: { pro: 3.99, elite: 79 },
+  CAD: { pro: 6.99, elite: 135 },
+  AUD: { pro: 7.99, elite: 149 },
+  NZD: { pro: 8.99, elite: 164 },
+  EUR: { pro: 4.99, elite: 89 },
+  ZAR: { pro: 99, elite: 1880 },
+  SGD: { pro: 6.99, elite: 133 },
+  INR: { pro: 349, elite: 8200 },
+  NGN: { pro: 6990, elite: 148500 },
 };
 
 const firstMonthRates: Record<string, number> = {
@@ -50,16 +50,14 @@ export async function POST(req: Request) {
       .single();
 
     const hasPurchasedBefore = userData?.subscription_expires_at !== null;
-    const isAnnual = billingCycle === 'annual';
 
-    // Determine secure base amount
+    // Determine secure base amount (monthly only)
     let baseTierPrice = rates[currency]?.pro || rates["INR"].pro;
-    if (!hasPurchasedBefore && !isAnnual) {
+    if (!hasPurchasedBefore) {
       baseTierPrice = firstMonthRates[currency] || 99;
     }
 
-    // Apply annual discount if needed (annual gets 40.07% off, billed 12 months)
-    let finalAmount = isAnnual ? Math.round(baseTierPrice * (359 / 599)) * 12 : baseTierPrice;
+    let finalAmount = baseTierPrice;
 
     if (!finalAmount || finalAmount < 0) {
       return NextResponse.json({ error: "Invalid payment amount calculated." }, { status: 400 });

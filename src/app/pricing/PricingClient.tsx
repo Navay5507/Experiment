@@ -42,7 +42,6 @@ function detectCurrency(user: ReturnType<typeof useUser>['user']): Currency {
 export default function PricingPage() {
   const { user } = useUser();
   const router = useRouter();
-  const [isAnnual, setIsAnnual] = useState(false);
   const [currency, setCurrency] = useState<Currency>("INR");
 
   // Sync initial currency
@@ -103,10 +102,6 @@ export default function PricingPage() {
 
     setLoading(true);
     try {
-      // Don't calculate final discount here, backend does it, just pass base amount and promo
-      const monthlyAmount = getPrice(rates[currency].pro, false); // pass false so we don't apply discount twice in the fetch payload
-      const checkoutBaseAmount = isAnnual ? (monthlyAmount * 12) : monthlyAmount;
-      
       const response = await fetch("/api/billing/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -115,7 +110,7 @@ export default function PricingPage() {
           currency,
           receipt: `rcpt_${Date.now()}`,
           promoCode: activePromo ? activePromo.code : undefined,
-          billingCycle: isAnnual ? 'annual' : 'monthly',
+          billingCycle: 'monthly',
         }),
       });
 
@@ -129,7 +124,7 @@ export default function PricingPage() {
         amount: orderData.amount,
         currency: orderData.currency,
         name: "AutoDROP",
-        description: `Upgrade to Growth Pro (${isAnnual ? 'Annual' : 'Monthly'})`,
+        description: `Upgrade to Growth Pro (Monthly)`,
         image: "https://autodrop.framer.website/logo.png",
         order_id: orderData.id,
         handler: async function (response: any) {
@@ -174,16 +169,16 @@ export default function PricingPage() {
   };
 
   const rates: Record<Currency, { pro: number, elite: number }> = {
-    USD: { pro: 9, elite: 99 },
-    GBP: { pro: 7, elite: 79 },
-    CAD: { pro: 12, elite: 135 },
-    AUD: { pro: 13, elite: 149 },
-    NZD: { pro: 14, elite: 164 },
-    EUR: { pro: 9, elite: 89 },
-    ZAR: { pro: 167, elite: 1880 },
-    SGD: { pro: 12, elite: 133 },
-    INR: { pro: 599, elite: 8200 },
-    NGN: { pro: 11900, elite: 148500 },
+    USD: { pro: 4.99, elite: 99 },
+    GBP: { pro: 3.99, elite: 79 },
+    CAD: { pro: 6.99, elite: 135 },
+    AUD: { pro: 7.99, elite: 149 },
+    NZD: { pro: 8.99, elite: 164 },
+    EUR: { pro: 4.99, elite: 89 },
+    ZAR: { pro: 99, elite: 1880 },
+    SGD: { pro: 6.99, elite: 133 },
+    INR: { pro: 349, elite: 8200 },
+    NGN: { pro: 6990, elite: 148500 },
   };
 
   const firstMonthRates: Record<Currency, number> = {
@@ -236,19 +231,17 @@ export default function PricingPage() {
 
   const getPrice = (baseTierPrice: number, applyPromo = true) => {
     // Check if eligible for first month trial
-    if (!hasPurchasedBefore && !isAnnual) {
+    if (!hasPurchasedBefore) {
       // Return the introductory rate
       baseTierPrice = firstMonthRates[currency] || 99;
     }
-    // Universal identical pricing parity based strictly on the India 599 -> 359 model (~40.07% discount)
-    let price = isAnnual ? Math.round(baseTierPrice * (359 / 599)) : baseTierPrice;
+    let price = baseTierPrice;
     
     if (applyPromo && activePromo) {
       if (activePromo.type === 'percentage') {
         price = Math.max(0, Math.round(price - (price * (activePromo.value / 100))));
       } else if (activePromo.type === 'fixed') {
-        const effectiveDiscount = isAnnual ? (activePromo.value / 12) : activePromo.value;
-        price = Math.max(0, price - effectiveDiscount);
+        price = Math.max(0, price - activePromo.value);
       }
     }
     return price;
@@ -269,21 +262,6 @@ export default function PricingPage() {
         </header>
 
         <div className={styles.controlsRow}>
-          
-          {/* Billing Toggle */}
-          <div className={styles.toggleWrapper}>
-            <span className={`${styles.toggleLabel} ${!isAnnual ? styles.activeLabel : ''}`}>Monthly</span>
-            <button 
-              type="button" 
-              className={`${styles.toggleBtn} ${isAnnual ? styles.toggled : ''}`}
-              onClick={() => setIsAnnual(!isAnnual)}
-            >
-              <div className={styles.toggleThumb} />
-            </button>
-            <span className={`${styles.toggleLabel} ${isAnnual ? styles.activeLabel : ''}`}>
-              Annually <span className={styles.discountBadge}>-40%</span>
-            </span>
-          </div>
 
           {/* Currency Selector */}
           <div className={styles.currencyWrapper}>
@@ -335,7 +313,7 @@ export default function PricingPage() {
             <div className={styles.badge}>Most Popular</div>
             <h3 className={styles.planName}>Growth Pro</h3>
             <div className={styles.price}>
-              {activePromo || (!hasPurchasedBefore && !isAnnual) ? (
+              {activePromo || !hasPurchasedBefore ? (
                 <span style={{ textDecoration: 'line-through', fontSize: '1.2rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
                   {formatPrice(currentRate.pro)}
                 </span>
@@ -343,8 +321,7 @@ export default function PricingPage() {
               {formatPrice(getPrice(currentRate.pro))}
               <span className={styles.period}>/mo</span>
             </div>
-            {isAnnual && <div className={styles.billedYearly}>Billed {formatPrice(getPrice(currentRate.pro) * 12)} yearly</div>}
-            {!isAnnual && !hasPurchasedBefore && (
+            {!hasPurchasedBefore && (
               <div style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 600, marginTop: '0.25rem' }}>
                 First month introductory offer. Renews at regular price.
               </div>
