@@ -320,41 +320,57 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         }
         return { success: false, reason: result.error.message || 'Private Reply failed' };
       }
+      
+      // Await user's reply for comment triggers
+      const igUsername = job.data.commenterUsername || '';
+      await upsertConversation(userId, automationId, recipientId, 'awaiting_link_tap', {
+        collected_data: { ig_username: igUsername }
+      });
 
     } else {
-      // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers) =====
-      // Story replies open the 24-hour window, so Quick Replies work here.
-      const buttonTitle = automation.dm_message ? 'Send me the message' : 'Send me the link';
-      result = await sendQuickReplyDM(token, recipientId, dmText,
-        [{ content_type: 'text', title: buttonTitle, payload: 'GET_LINK' }]
-      );
-      if (result.error) {
-        console.warn(`[Worker DM] Quick reply failed, sending text fallback:`, result.error);
-        result = await sendTextDM(token, recipientId, `${dmText}\n\n👇 Reply "YES" to get the link/message!`);
-      }
+      // ===== DIRECT DM PATH (no comment_id — e.g., Story triggers or DM triggers) =====
+      // The 24-hour window is already open because they DMed us first!
+      if (!usesComplexFlow) {
+        console.log(`[Worker DM] Direct trigger with no complex flow. Delivering content instantly.`);
+        // Instantly deliver the final message and links
+        const hasLinks = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
+        const links: string[] = hasLinks
+          ? (Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link])
+          : [];
 
-      console.log(`[Worker DM] Send result:`, JSON.stringify(result));
+        if (automation.dm_message) {
+          await sendTextDM(token, recipientId, automation.dm_message);
+        } else if (links.length === 0) {
+          await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
+        }
 
-      if (result.error) {
-        console.error(`[Worker DM] FAILED:`, result.error.message || JSON.stringify(result.error));
+        if (links.length > 0) {
+          await sendFollowUpButtons(token, recipientId, automation, user);
+        }
+
+        await upsertConversation(userId, automationId, recipientId, 'completed');
         await supabase.from('analytics_events').insert({
           user_id: userId,
           automation_id: automationId,
-          event_type: 'dm_failed',
-          metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
+          event_type: 'dm_delivered',
+          metadata: { type: 'instant_dm', recipient_id: recipientId, automation_id: automationId }
         });
-        if (isChainedFromComment) {
-          throw new Error(`Necessary DM send failed: ${result.error.message || JSON.stringify(result.error)}`);
-        }
-        return { success: false, reason: result.error.message || 'DM send failed' };
+        return { success: true, stage: 'instant_delivery' };
+
+      } else {
+        // Complex flow (Lead Capture / Follow Gate)
+        // Just trigger the button-response flow directly since the window is open
+        // This avoids forcing the user to tap "Send me the link" first
+        console.log(`[Worker DM] Direct trigger with complex flow. Jumping to button-response (follow gate / lead capture).`);
+        await dmQueue.add('button-response', {
+          userId,
+          automationId,
+          recipientId,
+          quickReplyPayload: 'GET_LINK', // Mock the payload to jump straight into the flow
+        });
+        return { success: true, stage: 'bypassed_to_complex_flow' };
       }
     }
-
-    // ALL automations track state as awaiting_link_tap — content is delivered after user replies
-    const igUsername = job.data.commenterUsername || '';
-    await upsertConversation(userId, automationId, recipientId, 'awaiting_link_tap', {
-      collected_data: { ig_username: igUsername }
-    });
 
     await supabase.from('analytics_events').insert({
       user_id: userId,
