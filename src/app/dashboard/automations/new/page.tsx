@@ -329,49 +329,96 @@ export default function CreateAutomation() {
           {step === 3 && (
             <motion.div key="step3" variants={slideVariants} initial="initial" animate="enter" exit="exit" transition={{ duration: 0.3 }} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <h2 className={styles.stepTitle}>3. Public Reply Template</h2>
-              {targetType === 'dm' && (
-                <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(59,130,246,0.2)', background: 'rgba(59,130,246,0.06)', marginBottom: '1.5rem', display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                  <span style={{ fontSize: '1.5rem' }}>📩</span>
-                  <div>
-                    <p style={{ color: '#fff', fontWeight: 600, marginBottom: '0.25rem' }}>No public reply for DM automations</p>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>Since this automation is triggered by an incoming DM (not a comment on a post), there is no public comment to reply to. Skip this step — the DM response is fully configured in Step 4.</p>
+              
+              {targetType !== 'post' ? (
+                <div style={{ 
+                  padding: '2.5rem 2rem', 
+                  borderRadius: '24px', 
+                  border: '1px solid rgba(99, 102, 241, 0.15)', 
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(168, 85, 247, 0.03) 100%)', 
+                  backdropFilter: 'blur(10px)',
+                  textAlign: 'center', 
+                  margin: '1.5rem 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.1)'
+                }}>
+                  <div style={{ 
+                    fontSize: '2.5rem', 
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '0.5rem',
+                    border: '1px solid rgba(99, 102, 241, 0.2)'
+                  }}>
+                    📩
                   </div>
+                  <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '1.25rem', margin: 0 }}>
+                    No Public Reply Needed
+                  </h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '480px', margin: 0 }}>
+                    Since this automation is triggered in private by <strong style={{ color: '#fff' }}>{targetType === 'dm' ? 'an incoming DM' : 'a Story Reply'}</strong>, there is no public comment to reply to.
+                  </p>
+                  <div style={{ 
+                    marginTop: '0.5rem',
+                    padding: '0.6rem 1.2rem',
+                    borderRadius: '100px',
+                    background: 'rgba(16, 185, 129, 0.08)',
+                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    fontSize: '0.85rem',
+                    color: '#10b981',
+                    fontWeight: 600
+                  }}>
+                    ✨ You can safely skip this step!
+                  </div>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                    Click <strong>Continue</strong> below to configure your DM response flow in Step 4.
+                  </p>
                 </div>
-              )}
-              <div className={styles.formGroup}>
-                <label className={styles.label}>What should we publicly reply to their comment?</label>
-                <textarea className={styles.textarea} placeholder="Check your DM {{name}} 👀" value={replyTemplate} onChange={(e) => setReplyTemplate(e.target.value)} autoFocus />
-              </div>
-              
-              <div className={styles.formGroup} style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                   <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>👀 Anti-Ban Reply Preview</div>
-                   {isLoadingPreviews && <Loader2 size={16} className="animate-spin" style={{ color: 'var(--text-muted)' }} />}
-                </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
-                  Meta flags accounts that send the exact same reply repeatedly. We automatically <strong style={{color: '#a855f7'}}>spin</strong> your template to keep your account safe. Here are some examples of what we'll send:
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '0.5rem' }}>
-                  {spinPreviews.map((preview, i) => (
-                    <div key={i} style={{ padding: '0.75rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '12px', fontSize: '0.9rem', color: '#fff', display: 'inline-block', alignSelf: 'flex-start' }}>
-                      {preview}
+              ) : (
+                <>
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>What should we publicly reply to their comment?</label>
+                    <textarea className={styles.textarea} placeholder="Check your DM {{name}} 👀" value={replyTemplate} onChange={(e) => setReplyTemplate(e.target.value)} autoFocus />
+                  </div>
+                  
+                  <div className={styles.formGroup} style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'rgba(255, 255, 255, 0.02)', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                       <div style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>👀 Anti-Ban Reply Preview</div>
+                       {isLoadingPreviews && <Loader2 size={16} className="animate-spin" style={{ color: 'var(--text-muted)' }} />}
                     </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className={styles.formGroup} style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '16px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#c4b5fd', fontWeight: 600 }}>
-                     <Sparkles size={18} /> Use Elite AI Engine
-                     <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', marginLeft: '0.5rem' }}>Coming Soon</span>
-                   </div>
-                   <button disabled className={styles.btnBack} style={{ padding: '0.5rem 1.5rem', opacity: 0.5, cursor: 'not-allowed' }}>
-                      Coming Later
-                   </button>
-                </div>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Full AI integration with your Knowledge Base is currently in development.</p>
-              </div>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
+                      Meta flags accounts that send the exact same reply repeatedly. We automatically <strong style={{color: '#a855f7'}}>spin</strong> your template to keep your account safe. Here are some examples of what we'll send:
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                      {spinPreviews.map((preview, i) => (
+                        <div key={i} style={{ padding: '0.75rem 1rem', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '12px', fontSize: '0.9rem', color: '#fff', display: 'inline-block', alignSelf: 'flex-start' }}>
+                          {preview}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className={styles.formGroup} style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: '16px', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#c4b5fd', fontWeight: 600 }}>
+                         <Sparkles size={18} /> Use Elite AI Engine
+                         <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '4px', background: 'rgba(234, 179, 8, 0.15)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.3)', marginLeft: '0.5rem' }}>Coming Soon</span>
+                       </div>
+                       <button disabled className={styles.btnBack} style={{ padding: '0.5rem 1.5rem', opacity: 0.5, cursor: 'not-allowed' }}>
+                          Coming Later
+                       </button>
+                    </div>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Full AI integration with your Knowledge Base is currently in development.</p>
+                  </div>
+                </>
+              )}
             </motion.div>
           )}
 
