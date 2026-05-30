@@ -815,7 +815,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         commentId,
         skipDedup: true, // Bypass check because commentWorker already claimed the lock!
       }, { 
-        delay: getRandomDelay(5000, 3600000),
+        delay: getRandomDelay(5000, 30000),
         attempts: 5,
         backoff: {
           type: 'exponential',
