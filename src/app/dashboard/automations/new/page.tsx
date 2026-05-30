@@ -33,6 +33,7 @@ export default function CreateAutomation() {
     { key: 'name', label: 'Full Name', icon: '👤' },
     { key: 'company', label: 'Company Name', icon: '🏢' },
     { key: 'website', label: 'Website URL', icon: '🌐' },
+    { key: 'message', label: 'Custom Message', icon: '💬' },
   ];
 
   const toggleLeadField = (key: string) => {

@@ -116,6 +116,14 @@ export const LEAD_FIELDS: LeadFieldDef[] = [
     validate: validateWebsite,
     errorMessage: "That doesn't look like a valid URL. Please try again.",
   },
+  {
+    key: 'message',
+    label: 'Custom Message',
+    icon: '💬',
+    placeholder: 'e.g. Any message or notes',
+    validate: (value: string) => value.trim().length >= 1,
+    errorMessage: "Please reply with a valid message.",
+  },
 ];
 
 /**
@@ -148,6 +156,7 @@ export function getLeadPromptMessage(fieldKey: string, customMessage?: string): 
     name: "👤 Please reply with your full name to continue:",
     company: "🏢 Please reply with your company name:",
     website: "🌐 Please share your website URL:",
+    message: "💬 Please share any message or notes you have for us:",
   };
 
   return prompts[fieldKey] || `Please provide your ${field?.label || fieldKey}:`;
