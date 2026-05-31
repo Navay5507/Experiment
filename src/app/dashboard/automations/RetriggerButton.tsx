@@ -48,15 +48,18 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
   };
 
   return (
-    <button 
-      type="button"
-      onClick={handleRetrigger} 
-      className={styles.btnAction} 
-      title={targetType === 'dm' ? "Scan DMs for Missed Keywords" : targetType === 'post' ? "Sync Past Comments" : "Test Automation"} 
-      disabled={loading}
-      style={{ opacity: loading ? 0.5 : 1 }}
-    >
-      <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-    </button>
+    <>
+      <style>{`@keyframes retrigger-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <button 
+        type="button"
+        onClick={handleRetrigger} 
+        className={styles.btnAction} 
+        title={targetType === 'dm' ? "Scan DMs for Missed Keywords" : targetType === 'post' ? "Sync Past Comments" : "Test Automation"} 
+        disabled={loading}
+        style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+      >
+        <RefreshCw size={16} style={loading ? { animation: 'retrigger-spin 1s linear infinite' } : undefined} />
+      </button>
+    </>
   );
 }
