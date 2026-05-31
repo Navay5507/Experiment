@@ -14,12 +14,18 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
       return;
     }
 
-    if (targetType !== 'post') {
-      alert("To test this automation, use your personal Instagram account to reply to your page's story with the trigger keyword. The Instagram API does not allow pages to send test DMs to themselves.");
+    // Story automations cannot be retriggered (no API to fetch past story replies)
+    if (targetType === 'story') {
+      alert("Story automations cannot be retriggered. To test, reply to your story from a personal account with the trigger keyword.");
       return;
     }
 
-    if (!confirm("This will scan your selected posts for past comments and dispatch DMs to those who matched but haven't received one yet. Proceed?")) return;
+    // Confirmation message based on type
+    const confirmMsg = targetType === 'dm'
+      ? "This will scan your recent DM conversations for keyword matches that were missed and send them the automation reply. Proceed?"
+      : "This will scan your selected posts for past comments and dispatch DMs to those who matched but haven't received one yet. Proceed?";
+
+    if (!confirm(confirmMsg)) return;
 
     setLoading(true);
     try {
@@ -32,7 +38,8 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
         throw new Error(data.error || "Failed to retrigger");
       }
 
-      alert(`Success! Queued DMs for ${data.queuedCount} past comments.`);
+      const label = targetType === 'dm' ? 'DM conversations' : 'past comments';
+      alert(`Success! Queued automation for ${data.queuedCount} ${label}.`);
     } catch (err: any) {
       alert(`Error: ${err.message}`);
     } finally {
@@ -45,7 +52,7 @@ export default function RetriggerButton({ automationId, hasMediaId, targetType }
       type="button"
       onClick={handleRetrigger} 
       className={styles.btnAction} 
-      title={targetType === 'post' ? "Sync Past Comments" : "Send Test DM"} 
+      title={targetType === 'dm' ? "Scan DMs for Missed Keywords" : targetType === 'post' ? "Sync Past Comments" : "Test Automation"} 
       disabled={loading}
       style={{ opacity: loading ? 0.5 : 1 }}
     >
