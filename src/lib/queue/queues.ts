@@ -1,11 +1,11 @@
 import { Queue } from 'bullmq';
-import { redis } from './redis';
+import { createRedisConnection } from './redis';
 
 // Queue-only module: safe to import from API routes without triggering Worker boot.
-// Workers are defined separately in worker-boot.ts.
+// Workers are defined separately in worker.ts and imported by the webhook route.
 
 export const dmQueue = new Queue('autodrop-queue', { 
-  connection: redis,
+  connection: createRedisConnection(),
   defaultJobOptions: {
     attempts: 5,
     backoff: {
@@ -16,8 +16,9 @@ export const dmQueue = new Queue('autodrop-queue', {
     removeOnFail: false,
   }
 });
+
 export const commentQueue = new Queue('comment-reply', { 
-  connection: redis,
+  connection: createRedisConnection(),
   defaultJobOptions: {
     attempts: 5,
     backoff: {

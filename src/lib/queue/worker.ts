@@ -1,5 +1,5 @@
 import { Worker, Job } from 'bullmq';
-import { redis } from './redis';
+import { redis, createRedisConnection } from './redis';
 import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
@@ -719,7 +719,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-}, { connection: redis });
+}, { connection: createRedisConnection() });
 
 
 // =============================================
@@ -852,7 +852,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   }
 
   return { success: true, replyId: raw.id };
-}, { connection: redis });
+}, { connection: createRedisConnection() });
 
 // Error Logging
 dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));

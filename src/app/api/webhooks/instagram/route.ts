@@ -556,7 +556,7 @@ export async function POST(req: Request) {
                           automationId: automation.id,
                           recipientId: senderId,
                           commenterUsername: 'dm_user',
-                        }, { delay: baseDelay + getRandomDelay(5000, 30000) });
+                        }, { delay: baseDelay + getRandomDelay(2000, 8000) });
                         console.log(`[Webhook] ✅ DM keyword automation job queued (delay: ${baseDelay}ms)`);
                       } catch (e) { console.error('[Webhook] DM keyword queue error:', e); }
 
