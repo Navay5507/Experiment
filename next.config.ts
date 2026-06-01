@@ -62,17 +62,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      // Redirect www → non-www for canonical domain consistency
-      {
-        source: '/(.*)',
-        has: [{ type: 'host', value: 'www.autodrop.in' }],
-        destination: 'https://autodrop.in/:path*',
-        permanent: true,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
