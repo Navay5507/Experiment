@@ -78,36 +78,25 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Premium GPU-accelerated cinematic 3D grid background */
+/* Premium GPU-accelerated fixed grid background to avoid scroll paint overhead */
 body::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 200%;
-  height: 100%; /* Cover entire page height */
+  position: fixed;
+  inset: 0;
   z-index: -1;
   background-image:
-    linear-gradient(rgba(139, 92, 246, 0.25) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.25) 1px, transparent 1px);
-  background-size: 50px 50px;
-  
-  /* 3D Cinematic Perspective */
-  transform-origin: top center;
-  transform: perspective(1000px) rotateX(60deg) translateY(-100px);
-  
-  /* Smooth fade out into the horizon at the top */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
-  
+    linear-gradient(rgba(139, 92, 246, 0.20) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.20) 1px, transparent 1px);
+  background-size: 40px 40px;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
   pointer-events: none;
 }
 
 [data-theme="light"] body::before {
   background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
 }
 
 /* --- PREMIUM V2 VISUAL LAYER --- */
