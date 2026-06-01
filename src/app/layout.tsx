@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://autodrop.in"),
+  metadataBase: new URL("https://www.autodrop.in"),
   title: {
     default: "Autodrop | Automate Instagram Engagement & DMs",
     template: "%s | Autodrop"
@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://autodrop.in",
+    url: "https://www.autodrop.in",
     siteName: "Autodrop",
     title: "Autodrop | Automate Instagram Engagement & DMs",
     description: "The premier Instagram automation platform built for creators. Reply to every comment, send DMs instantly, and capture leads while you sleep.",
-    images: [{ url: "/autodrop_icon_transparent.png", width: 800, height: 800, alt: "Autodrop Logo" }],
+    images: [{ url: "https://www.autodrop.in/autodrop_icon_transparent.png", width: 800, height: 800, alt: "Autodrop Logo" }],
   },
   twitter: {
     card: "summary_large_image",
