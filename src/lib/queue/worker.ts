@@ -805,7 +805,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
     console.error(`[Worker Comment] FAILED: ${raw.error.message}`);
     await supabase.from('analytics_events').insert({
       user_id: userId, event_type: 'comment_reply_failed',
-      metadata: { error: raw.error.message, comment_id: commentId }
+      metadata: { error: raw.error.message, comment_id: commentId, commenter_username: commenterUsername }
     });
     // Release the lock so they aren't blocked from future tries due to API failure
     if (recipientId) await redis.del(`dm_sent:${userId}:${recipientId}`);
@@ -816,7 +816,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
 
   await supabase.from('analytics_events').insert({
     user_id: userId, event_type: 'comment_replied',
-    metadata: { reply_id: raw.id, comment_id: commentId }
+    metadata: { reply_id: raw.id, comment_id: commentId, commenter_username: commenterUsername }
   });
 
   // ANTI-BAN: Chain DM job ONLY after comment reply succeeds (Violation 7 fix)
@@ -844,7 +844,7 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
         user_id: userId,
         automation_id: automationId,
         event_type: 'dm_dispatched',
-        metadata: { automation_id: automationId, recipient_id: recipientId, source: 'comment_chain' }
+        metadata: { automation_id: automationId, recipient_id: recipientId, commenter_username: commenterUsername, source: 'comment_chain' }
       });
     } catch (e) {
       console.error(`[Worker Comment] Failed to chain DM job:`, e);
