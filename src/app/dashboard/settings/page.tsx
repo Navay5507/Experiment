@@ -169,6 +169,60 @@ export default async function SettingsPage({ searchParams }: PageProps) {
     redirect('/dashboard/settings?tab=maintenance');
   }
 
+  async function resubscribe() {
+    "use server";
+    const { userId: clerkId } = await auth();
+    if (!clerkId) return;
+
+    const { data: user } = await supabase
+      .from('users')
+      .select('id, instagramUserId, instagramAccessToken')
+      .eq('clerkId', clerkId)
+      .maybeSingle();
+
+    if (!user) return;
+
+    const { data: conns } = await supabase
+      .from('connected_accounts')
+      .select('instagram_access_token, instagram_user_id')
+      .eq('user_id', user.id);
+
+    const accounts = [];
+    if (user.instagramAccessToken && user.instagramUserId) {
+      accounts.push({
+        token: user.instagramAccessToken,
+        id: user.instagramUserId,
+      });
+    }
+    if (conns) {
+      for (const c of conns) {
+        if (!accounts.some(a => a.id === c.instagram_user_id)) {
+          accounts.push({
+            token: c.instagram_access_token,
+            id: c.instagram_user_id,
+          });
+        }
+      }
+    }
+
+    for (const acc of accounts) {
+      try {
+        const res = await fetch(
+          `https://graph.instagram.com/v21.0/me/subscribed_apps` +
+          `?subscribed_fields=comments,messages` +
+          `&access_token=${acc.token}`,
+          { method: 'POST' }
+        );
+        const json = await res.json();
+        console.log(`[Settings Resubscribe] Result for ${acc.id}:`, JSON.stringify(json));
+      } catch (err) {
+        console.error(`[Settings Resubscribe] Error for ${acc.id}:`, err);
+      }
+    }
+
+    redirect('/dashboard/settings?tab=maintenance&resubscribed=true');
+  }
+
   return (
     <div className={styles.content}>
       <div className={styles.titleArea}>
@@ -177,6 +231,24 @@ export default async function SettingsPage({ searchParams }: PageProps) {
            <p>Manage integrations, billing parameters, and security protocols.</p>
         </div>
       </div>
+
+      {resolvedSearchParams.resubscribed === 'true' && (
+        <div style={{
+          background: 'rgba(16, 185, 129, 0.1)',
+          border: '1px solid rgba(16, 185, 129, 0.3)',
+          color: '#10b981',
+          padding: '1rem',
+          borderRadius: '8px',
+          marginBottom: '1.5rem',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+        }}>
+          <CheckCircle2 size={16} /> Webhook subscription successfully activated! Real-time events will now work.
+        </div>
+      )}
 
       {/* Tabs Switcher Bar */}
       <div style={{
@@ -363,6 +435,17 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                       </button>
                     </ConfirmForm>
                  </div>
+              </div>              {/* Webhook Subscription Card */}
+              <div className={styles.card}>
+                 <div className={styles.sectionTitle} style={{ color: '#c084fc' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Activity size={18}/> Webhook Subscription</span></div>
+                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                    If real-time comment automation stops working, force a re-subscription of all connected accounts to the Instagram webhook.
+                 </p>
+                 <ConfirmForm message="Re-subscribe all connected accounts to webhook events?" action={resubscribe}>
+                    <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #c084fc', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                       <Activity size={18} /> Re-subscribe Webhooks
+                    </button>
+                 </ConfirmForm>
               </div>
 
               {/* Unlink Services Card */}
@@ -375,7 +458,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                     <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                        <Link2 size={18} /> Disconnect All Accounts
                     </button>
-                 </ConfirmForm>
+                  </ConfirmForm>
               </div>
             </div>
           </div>

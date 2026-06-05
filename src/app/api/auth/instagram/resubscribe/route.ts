@@ -11,30 +11,74 @@ export async function POST() {
 
   const { data: user } = await supabase
     .from('users')
-    .select('instagramUserId, instagramAccessToken')
+    .select('id, instagramUserId, instagramAccessToken')
     .eq('clerkId', clerkId)
     .maybeSingle();
 
-  if (!user?.instagramUserId || !user?.instagramAccessToken) {
-    return NextResponse.json({ error: 'No Instagram account connected' }, { status: 400 });
+  if (!user) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  try {
-    const res = await fetch(
-      `https://graph.facebook.com/v21.0/${user.instagramUserId}/subscribed_apps` +
-      `?subscribed_fields=comments,messages,live_comments,message_reactions,messaging_referral` +
-      `&access_token=${user.instagramAccessToken}`,
-      { method: 'POST' }
-    );
-    const json = await res.json();
-    console.log('[Resubscribe] Result:', JSON.stringify(json));
+  // Fetch all connected accounts
+  const { data: conns } = await supabase
+    .from('connected_accounts')
+    .select('instagram_access_token, instagram_user_id, instagram_handle')
+    .eq('user_id', user.id);
 
-    if (json.success) {
-      return NextResponse.json({ success: true, message: 'Webhook subscription active! Real-time events will now work.' });
-    } else {
-      return NextResponse.json({ success: false, error: json.error?.message || 'Unknown error', raw: json }, { status: 400 });
+  const accounts = [];
+  if (user.instagramAccessToken && user.instagramUserId) {
+    accounts.push({
+      token: user.instagramAccessToken,
+      id: user.instagramUserId,
+      handle: 'primary',
+    });
+  }
+  if (conns) {
+    for (const c of conns) {
+      if (!accounts.some(a => a.id === c.instagram_user_id)) {
+        accounts.push({
+          token: c.instagram_access_token,
+          id: c.instagram_user_id,
+          handle: c.instagram_handle,
+        });
+      }
     }
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
+
+  if (accounts.length === 0) {
+    return NextResponse.json({ error: 'No Instagram accounts connected' }, { status: 400 });
+  }
+
+  const results = [];
+  let overallSuccess = true;
+
+  for (const acc of accounts) {
+    try {
+      const res = await fetch(
+        `https://graph.instagram.com/v21.0/me/subscribed_apps` +
+        `?subscribed_fields=comments,messages` +
+        `&access_token=${acc.token}`,
+        { method: 'POST' }
+      );
+      const json = await res.json();
+      console.log(`[Resubscribe] Result for @${acc.handle} (${acc.id}):`, JSON.stringify(json));
+      if (json.success || json.data?.[0]?.success) {
+        results.push({ id: acc.id, handle: acc.handle, success: true });
+      } else {
+        overallSuccess = false;
+        results.push({ id: acc.id, handle: acc.handle, success: false, error: json.error?.message || 'Unknown error', raw: json });
+      }
+    } catch (err: any) {
+      overallSuccess = false;
+      results.push({ id: acc.id, handle: acc.handle, success: false, error: err.message });
+    }
+  }
+
+  return NextResponse.json({
+    success: overallSuccess,
+    message: overallSuccess
+      ? 'Webhook subscription active for all accounts! Real-time events will now work.'
+      : 'Some accounts failed to re-subscribe to webhooks.',
+    results,
+  }, { status: overallSuccess ? 200 : 400 });
 }
