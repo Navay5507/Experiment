@@ -257,7 +257,7 @@ export async function POST(req: Request) {
                     await supabase.from('analytics_events').insert({
                       user_id: user.id,
                       event_type: 'comment_matched',
-                      metadata: { comment_id: commentId, keyword: keywords.length === 0 ? '*' : keywords.find(kw => commentText.includes(kw.toLowerCase().trim())), commenter_id: commenterId, media_id: mediaId }
+                      metadata: { comment_id: commentId, keyword: keywords.length === 0 ? '*' : keywords.find(kw => commentText.includes(kw.toLowerCase().trim())), commenter_id: commenterId, commenter_username: commenterUsername, media_id: mediaId }
                     });
                   } catch (e) { console.error('[Webhook] Analytics insert error:', e); }
 

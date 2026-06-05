@@ -14,7 +14,7 @@ export default async function LogsPage() {
 
   const { data: user } = await supabase.from('users').select('id').eq('clerkId', clerkId).maybeSingle();
 
-  let events: { id: string; event_type: string; created_at: string; metadata?: { recipient_id?: string; comment_id?: string; success?: boolean; error?: string } }[] = [];
+  let events: { id: string; event_type: string; created_at: string; metadata?: { recipient_id?: string; comment_id?: string; success?: boolean; error?: string; commenter_username?: string; media_id?: string } }[] = [];
   let error = null;
 
   if (user) {
@@ -79,7 +79,14 @@ export default async function LogsPage() {
                     </span>
                   </td>
                   <td style={{ fontWeight: 500 }}>
-                     {evt.metadata?.recipient_id ? `User: ${String(evt.metadata.recipient_id).slice(0,12)}…` : evt.metadata?.comment_id ? `Comment` : 'System'}
+                    {evt.metadata?.commenter_username ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span>@{evt.metadata.commenter_username}</span>
+                        {evt.metadata.media_id && (
+                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Post: {String(evt.metadata.media_id).slice(0,12)}…</span>
+                        )}
+                      </div>
+                    ) : evt.metadata?.recipient_id ? `User: ${String(evt.metadata.recipient_id).slice(0,12)}…` : evt.metadata?.comment_id ? `Comment` : 'System'}
                   </td>
                   <td>
                     {evt.metadata?.success === false ? (
