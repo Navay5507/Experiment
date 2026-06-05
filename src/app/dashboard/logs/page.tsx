@@ -81,12 +81,26 @@ export default async function LogsPage() {
                   <td style={{ fontWeight: 500 }}>
                     {evt.metadata?.commenter_username ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span>@{evt.metadata.commenter_username}</span>
+                        <span style={{ fontWeight: 700, color: 'var(--text-heading)' }}>@{evt.metadata.commenter_username}</span>
                         {evt.metadata.media_id && (
                           <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Post ID: {evt.metadata.media_id}</span>
                         )}
                       </div>
-                    ) : evt.metadata?.recipient_id ? `User ID: ${evt.metadata.recipient_id}` : evt.metadata?.comment_id ? `Comment ID: ${evt.metadata.comment_id}` : 'System'}
+                    ) : evt.metadata?.recipient_id ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Instagram User</span>
+                        <span title={String(evt.metadata.recipient_id)} style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                          {String(evt.metadata.recipient_id).slice(0, 8)}…{String(evt.metadata.recipient_id).slice(-4)}
+                        </span>
+                      </div>
+                    ) : evt.metadata?.comment_id ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Comment</span>
+                        <span title={String(evt.metadata.comment_id)} style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                          {String(evt.metadata.comment_id).slice(0, 8)}…{String(evt.metadata.comment_id).slice(-4)}
+                        </span>
+                      </div>
+                    ) : 'System'}
                   </td>
                   <td>
                     {evt.metadata?.success === false ? (
