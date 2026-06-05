@@ -188,11 +188,10 @@ export async function GET(req: Request) {
     }
 
     try {
-      // Must use Facebook Graph API (not Instagram Graph API) to subscribe
-      // the Instagram account to receive webhook events for comments + messages
+      // Subscribe the Instagram account to receive webhook events
       const subRes = await fetch(
-        `https://graph.facebook.com/v21.0/${igUserId}/subscribed_apps` +
-        `?subscribed_fields=comments,messages,live_comments,message_reactions,messaging_referral` +
+        `https://graph.instagram.com/v21.0/me/subscribed_apps` +
+        `?subscribed_fields=comments,messages` +
         `&access_token=${finalToken}`,
         { method: 'POST' }
       );
