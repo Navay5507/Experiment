@@ -83,10 +83,10 @@ export default async function LogsPage() {
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         <span>@{evt.metadata.commenter_username}</span>
                         {evt.metadata.media_id && (
-                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Post: {String(evt.metadata.media_id).slice(0,12)}…</span>
+                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Post ID: {evt.metadata.media_id}</span>
                         )}
                       </div>
-                    ) : evt.metadata?.recipient_id ? `User: ${String(evt.metadata.recipient_id).slice(0,12)}…` : evt.metadata?.comment_id ? `Comment` : 'System'}
+                    ) : evt.metadata?.recipient_id ? `User ID: ${evt.metadata.recipient_id}` : evt.metadata?.comment_id ? `Comment ID: ${evt.metadata.comment_id}` : 'System'}
                   </td>
                   <td>
                     {evt.metadata?.success === false ? (
