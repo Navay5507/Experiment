@@ -188,13 +188,19 @@ export async function GET(req: Request) {
     }
 
     try {
-      await fetch(
-        `https://graph.instagram.com/v21.0/me/subscribed_apps` +
-        `?subscribed_fields=comments,messages` +
+      // Must use Facebook Graph API (not Instagram Graph API) to subscribe
+      // the Instagram account to receive webhook events for comments + messages
+      const subRes = await fetch(
+        `https://graph.facebook.com/v21.0/${igUserId}/subscribed_apps` +
+        `?subscribed_fields=comments,messages,live_comments,message_reactions,messaging_referral` +
         `&access_token=${finalToken}`,
         { method: 'POST' }
       );
-    } catch (subErr) { /* non-blocking */ }
+      const subJson = await subRes.json();
+      console.log('[IG Callback] Webhook subscription result:', JSON.stringify(subJson));
+    } catch (subErr) { 
+      console.error('[IG Callback] Webhook subscription failed:', subErr);
+    }
 
     return NextResponse.redirect(new URL('?success=instagram_connected', FRONTEND_DASHBOARD));
   } catch (err) {
