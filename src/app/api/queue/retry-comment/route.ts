@@ -3,8 +3,6 @@ import { auth } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue } from '@/lib/queue/queues';
 import { getRandomDelay } from '@/lib/queue/dedup';
-// Boot workers so the retried job is consumed in this invocation
-import '@/lib/queue/worker';
 import { after } from 'next/server';
 
 export const dynamic = 'force-dynamic';

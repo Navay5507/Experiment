@@ -2,7 +2,6 @@ import { NextResponse, after } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
-import '@/lib/queue/worker';
 
 export async function POST(
   request: Request,

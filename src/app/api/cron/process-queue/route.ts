@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-// Import the worker to boot it up inside this serverless instance
-import '@/lib/queue/worker';
 
 export const dynamic = 'force-dynamic';
 

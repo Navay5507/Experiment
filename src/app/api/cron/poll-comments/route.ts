@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
-// Boot workers so cron-triggered jobs are consumed in this same process
-import '@/lib/queue/worker';
 
 /**
  * GET /api/cron/poll-comments
