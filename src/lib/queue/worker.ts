@@ -211,7 +211,7 @@ function delay(ms: number) {
 // =============================================
 // TODO: Once Render worker is deployed and confirmed running, wrap this in `if (!process.env.VERCEL)`
 // to stop booting workers inside Vercel serverless containers.
-export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJob>) => {
+export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async (job: Job<AutomationJob>) => {
   console.log(`[Worker] Processing DM Job: ${job.name} | ${job.id}`);
   const { userId, recipientId, automationId, commentId } = job.data;
   console.log(`[Worker DM] Data: userId=${userId}, recipientId=${recipientId}, automationId=${automationId}, commentId=${commentId}`);
@@ -717,14 +717,14 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-}, { connection: createRedisConnection() });
+}, { connection: createRedisConnection() }) : null as any;
 
 
 // =============================================
 // 2. COMMENT REPLY WORKER (Anti-Ban Shield)
 // =============================================
 // TODO: Once Render worker is deployed and confirmed running, wrap this in `if (!process.env.VERCEL)`
-export const commentWorker = new Worker('comment-reply', async (job: Job<AutomationJob>) => {
+export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', async (job: Job<AutomationJob>) => {
   console.log(`[Worker] Processing Comment Reply: ${job.id}`);
   const { userId, commentId, automationId, recipientId, commenterUsername } = job.data;
 
@@ -850,8 +850,12 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
   }
 
   return { success: true, replyId: raw.id };
-}, { connection: createRedisConnection() });
+}, { connection: createRedisConnection() }) : null as any;
 
 // Error Logging
-dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));
-commentWorker.on('failed', (job, err) => console.error(`[Worker Comment] Failed: ${err.message}`));
+if (dmWorker) {
+  dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));
+}
+if (commentWorker) {
+  commentWorker.on('failed', (job, err) => console.error(`[Worker Comment] Failed: ${err.message}`));
+}
