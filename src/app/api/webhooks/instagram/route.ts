@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
+import { getUserFromIGCache, setUserIGCache } from '@/lib/queue/user_cache';
 import '@/lib/queue/worker';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
@@ -28,6 +29,13 @@ export async function GET(req: Request) {
 
 // Helper: Find user by any Instagram ID format
 async function findUserByInstagramId(igId: string) {
+  // 0. Fast path: check Redis cache first
+  const cachedUser = await getUserFromIGCache(igId);
+  if (cachedUser) {
+    console.log(`[Webhook] Fast lookup: Found IG ID ${igId} in Redis cache (User: ${cachedUser.id})`);
+    return cachedUser;
+  }
+
   // 1. Fetch all primary credentials from users table
   const { data: users } = await supabase
     .from('users')
@@ -90,13 +98,15 @@ async function findUserByInstagramId(igId: string) {
         String(data.id) === igId
       ) {
         console.log(`[Webhook] Verified user ${acc.userId} owns IG ID ${igId} via Graph API connection (@${acc.instagramUserId})`);
-        return {
+        const resolvedUser = {
           id: acc.userId,
           instagramUserId: acc.instagramUserId, // This is the app-scoped ID of the matched connection!
           instagramAccessToken: acc.instagramAccessToken,
           plan: acc.plan,
           primaryInstagramUserId: acc.primaryInstagramUserId,
         };
+        await setUserIGCache(igId, resolvedUser as any);
+        return resolvedUser;
       }
     } catch (e) {
       console.warn(`[Webhook] Failed to verify token for connection ${acc.instagramUserId}:`, e);
@@ -106,22 +116,26 @@ async function findUserByInstagramId(igId: string) {
   // 4. Fallback: if we couldn't verify, try exact match on ID
   const exactUser = users?.find(u => u.instagramUserId === igId);
   if (exactUser) {
-    return {
+    const resolvedUser = {
       ...exactUser,
       primaryInstagramUserId: exactUser.instagramUserId,
     };
+    await setUserIGCache(igId, resolvedUser as any);
+    return resolvedUser;
   }
 
   const exactConn = conns?.find(c => c.instagram_user_id === igId);
   if (exactConn) {
     const parentUser = users?.find(u => u.id === exactConn.user_id);
-    return {
+    const resolvedUser = {
       id: exactConn.user_id,
       instagramUserId: exactConn.instagram_user_id,
       instagramAccessToken: exactConn.instagram_access_token,
       plan: parentUser?.plan || 'FREE',
       primaryInstagramUserId: parentUser?.instagramUserId || null,
     };
+    await setUserIGCache(igId, resolvedUser as any);
+    return resolvedUser;
   }
 
   return null;
