@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
+import '@/lib/queue/worker';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
 const APP_SECRET = process.env.INSTAGRAM_APP_SECRET;
