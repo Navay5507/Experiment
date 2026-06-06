@@ -37,6 +37,12 @@ async function sendPrivateReply(token: string, commentId: string, text: string) 
   return InstagramAPI.sendPrivateReply(commentId, text, token);
 }
 
+function getRedirectUrl(automationId: string, index?: number): string {
+  const envUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://autodrop.in';
+  const baseUrl = envUrl.includes('ngrok-free.dev') ? 'https://autodrop.in' : envUrl;
+  return `${baseUrl}/r/${automationId}${index !== undefined ? `?i=${index}` : ''}`;
+}
+
 async function sendQuickReplyDM(
   token: string,
   recipientId: string,
@@ -203,6 +209,8 @@ function delay(ms: number) {
 // =============================================
 // 1. DM WORKER (STATE MACHINE)
 // =============================================
+// TODO: Once Render worker is deployed and confirmed running, wrap this in `if (!process.env.VERCEL)`
+// to stop booting workers inside Vercel serverless containers.
 export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJob>) => {
   console.log(`[Worker] Processing DM Job: ${job.name} | ${job.id}`);
   const { userId, recipientId, automationId, commentId } = job.data;
@@ -311,7 +319,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         console.error(`[Worker DM] Private Reply FAILED:`, result.error.message || JSON.stringify(result.error));
         await supabase.from('analytics_events').insert({
           user_id: userId,
-          automation_id: automationId,
           event_type: 'dm_failed',
           metadata: { error: result.error.message || JSON.stringify(result.error), recipient_id: recipientId, comment_id: commentId, automation_id: automationId }
         });
@@ -351,7 +358,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         await upsertConversation(userId, automationId, recipientId, 'completed');
         await supabase.from('analytics_events').insert({
           user_id: userId,
-          automation_id: automationId,
           event_type: 'dm_delivered',
           metadata: { type: 'instant_dm', recipient_id: recipientId, automation_id: automationId }
         });
@@ -374,7 +380,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     await supabase.from('analytics_events').insert({
       user_id: userId,
-      automation_id: automationId,
       event_type: 'dm_delivered',
       metadata: { type: commentId ? 'private_reply' : 'direct_dm', message_id: result?.message_id, recipient_id: recipientId, automation_id: automationId }
     });
@@ -417,7 +422,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       await upsertConversation(userId, automationId, recipientId, 'awaiting_follow');
       await supabase.from('analytics_events').insert({
         user_id: userId,
-        automation_id: automationId,
         event_type: 'follow_gate_sent',
         metadata: { recipient_id: recipientId, automation_id: automationId }
       });
@@ -444,7 +448,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
       await supabase.from('analytics_events').insert({
         user_id: userId,
-        automation_id: automationId,
         event_type: 'lead_capture_started',
         metadata: { field: firstField, recipient_id: recipientId, automation_id: automationId }
       });
@@ -464,14 +467,13 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     }
 
     if (links.length > 0) {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://autodrop.in';
       // Send one Generic Template card per link (up to 10)
       for (let i = 0; i < Math.min(links.length, 10); i++) {
         const rawLink = links[i];
         const customName = rawLink.includes('|||') ? rawLink.split('|||')[0] : null;
 
         // Route through branded redirect page instead of direct URL
-        const redirectUrl = `${appUrl}/r/${automation.id}${links.length > 1 ? `?i=${i}` : ''}`;
+        const redirectUrl = getRedirectUrl(automation.id, links.length > 1 ? i : undefined);
         
         const buttonText = customName ? customName : '🔗 Open Link';
         const cardTitle = links.length > 1 ? `🔗 Link ${i + 1}` : '🎁 Here\'s your link!';
@@ -493,7 +495,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
     await upsertConversation(userId, automationId, recipientId, 'completed');
     await supabase.from('analytics_events').insert({
       user_id: userId,
-      automation_id: automationId,
       event_type: 'dm_delivered',
       metadata: { type: 'link_delivered', recipient_id: recipientId, automation_id: automationId }
     });
@@ -533,12 +534,11 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       }
 
       // Send one card per link — routed through branded redirect page
-      const appUrlF = process.env.NEXT_PUBLIC_APP_URL || 'https://autodrop.in';
       for (let i = 0; i < Math.min(linksF.length, 10); i++) {
         const rawLink = linksF[i];
         const customName = rawLink.includes('|||') ? rawLink.split('|||')[0] : null;
 
-        const redirectUrl = `${appUrlF}/r/${automation.id}${linksF.length > 1 ? `?i=${i}` : ''}`;
+        const redirectUrl = getRedirectUrl(automation.id, linksF.length > 1 ? i : undefined);
         
         const buttonText = customName ? customName : '🔗 Open Link';
         const cardTitle = linksF.length > 1 ? `🔗 Link ${i + 1}` : `🎁 Here's your link!`;
@@ -555,7 +555,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       await upsertConversation(userId, automationId, recipientId, 'completed');
       await supabase.from('analytics_events').insert({
         user_id: userId,
-        automation_id: automationId,
         event_type: 'dm_delivered',
         metadata: { type: 'link_after_follow', recipient_id: recipientId, automation_id: automationId }
       });
@@ -618,7 +617,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
         await sendTextDM(token, recipientId, automation.dm_message);
       } else if (hasLinksLC) {
         const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-        const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+        const redirectUrl = getRedirectUrl(automation.id);
         await sendTextDM(token, recipientId, links.length === 1 ? `🚀 Here's your link:\n${redirectUrl}` : `🚀 Here are your links:\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
@@ -668,7 +667,6 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 
     await supabase.from('analytics_events').insert({
       user_id: userId,
-      automation_id: automationId,
       event_type: 'lead_captured',
       metadata: { lead_data: updatedLeadData, recipient_id: recipientId, automation_id: automationId }
     });
@@ -682,7 +680,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
       await sendTextDM(token, recipientId, `🎉 ${automation.dm_message}`);
     } else if (hasLinksEnd) {
       const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-      const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/r/${automation.id}`;
+      const redirectUrl = getRedirectUrl(automation.id);
       await sendTextDM(token, recipientId, links.length === 1 ? `🎉 Thank you! Here's your link ⬇\n${redirectUrl}` : `🎉 Thank you! Here are your links ⬇\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
@@ -725,6 +723,7 @@ export const dmWorker = new Worker('autodrop-queue', async (job: Job<AutomationJ
 // =============================================
 // 2. COMMENT REPLY WORKER (Anti-Ban Shield)
 // =============================================
+// TODO: Once Render worker is deployed and confirmed running, wrap this in `if (!process.env.VERCEL)`
 export const commentWorker = new Worker('comment-reply', async (job: Job<AutomationJob>) => {
   console.log(`[Worker] Processing Comment Reply: ${job.id}`);
   const { userId, commentId, automationId, recipientId, commenterUsername } = job.data;
@@ -842,7 +841,6 @@ export const commentWorker = new Worker('comment-reply', async (job: Job<Automat
 
       await supabase.from('analytics_events').insert({
         user_id: userId,
-        automation_id: automationId,
         event_type: 'dm_dispatched',
         metadata: { automation_id: automationId, recipient_id: recipientId, commenter_username: commenterUsername, source: 'comment_chain' }
       });

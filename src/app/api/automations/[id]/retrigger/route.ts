@@ -111,9 +111,9 @@ export async function POST(
 
             await supabase.from('analytics_events').insert({
               user_id: user.id,
-              automation_id: automation.id,
               event_type: 'dm_keyword_matched',
               metadata: {
+                automation_id: automation.id,
                 sender_id: senderId,
                 keyword: keywords.length > 0 ? keywords.find(kw => messageText.includes(kw.toLowerCase().trim())) : '*',
                 source: 'retrigger_manual',

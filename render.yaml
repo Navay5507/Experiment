@@ -1,0 +1,19 @@
+services:
+  - type: worker
+    name: autodrop-worker
+    runtime: node
+    region: singapore
+    plan: starter
+    buildCommand: npm install && npx tsc --skipLibCheck --esModuleInterop --module commonjs --moduleResolution node --outDir dist workers/server.ts src/lib/queue/worker.ts src/lib/queue/queues.ts src/lib/queue/redis.ts src/lib/queue/dedup.ts src/lib/supabase.ts src/lib/instagram/api.ts src/lib/instagram/reply-spinner.ts src/lib/ai/openai.ts src/lib/validators.ts
+    startCommand: node dist/workers/server.js
+    envVars:
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://autodrop.in
+      - key: OPENAI_API_KEY
+        sync: false
