@@ -27,97 +27,99 @@ export async function GET(req: Request) {
 
 // Helper: Find user by any Instagram ID format
 async function findUserByInstagramId(igId: string) {
-  // Try exact match first on users table
-  const { data: user } = await supabase
-    .from('users')
-    .select('id, instagramUserId, instagramAccessToken, plan')
-    .eq('instagramUserId', igId)
-    .maybeSingle();
-
-  if (user) {
-    return {
-      ...user,
-      primaryInstagramUserId: user.instagramUserId,
-    };
-  }
-
-  // Try exact match in connected_accounts table
-  const { data: conn } = await supabase
-    .from('connected_accounts')
-    .select('user_id, instagram_user_id, instagram_access_token')
-    .eq('instagram_user_id', igId)
-    .maybeSingle();
-
-  if (conn) {
-    const { data: userFromConn } = await supabase
-      .from('users')
-      .select('id, instagramUserId, instagramAccessToken, plan')
-      .eq('id', conn.user_id)
-      .maybeSingle();
-
-    if (userFromConn) {
-      console.log(`[Webhook] Matched user ${userFromConn.id} via connected_accounts for IG ID ${igId}`);
-      return {
-        id: userFromConn.id,
-        instagramUserId: conn.instagram_user_id,
-        instagramAccessToken: conn.instagram_access_token,
-        plan: userFromConn.plan,
-        primaryInstagramUserId: userFromConn.instagramUserId,
-      };
-    }
-  }
-
-  // If no exact match, the webhook might send a different ID format.
-  // Try fetching ALL users with an instagram connection and see if any match.
-  // This handles the case where:
-  //   - webhook sends Business Account ID (17841...)  
-  //   - DB stores Instagram Login API user ID (26360...)
-  // In a small user base, this is fine. For scale, we'd store both IDs.
-  console.log(`[Webhook] No exact match for IG ID ${igId}, trying all connected users...`);
-  
+  // 1. Fetch all primary credentials from users table
   const { data: users } = await supabase
     .from('users')
     .select('id, instagramUserId, instagramAccessToken, plan')
     .not('instagramAccessToken', 'is', null);
 
-  if (users && users.length > 0) {
-    // For dev/small scale: if there's exactly one connected user, use them
-    // For production: we'd verify by calling the Graph API with their token
-    if (users.length === 1) {
-      console.log(`[Webhook] Found single connected user: ${users[0].id} (IG: ${users[0].instagramUserId})`);
-      return {
-        ...users[0],
-        primaryInstagramUserId: users[0].instagramUserId,
-      };
-    }
+  // 2. Fetch all extra credentials from connected_accounts table
+  const { data: conns } = await supabase
+    .from('connected_accounts')
+    .select('user_id, instagram_user_id, instagram_access_token');
 
-    // Multiple users: try to verify which user owns this webhook event
-    // by checking if the igId matches their page/business account
+  // Build a list of unique account credentials to check
+  const accountsToVerify = [];
+
+  if (users) {
     for (const u of users) {
-      try {
-        const res = await fetch(
-          `https://graph.instagram.com/v21.0/me?fields=user_id,id&access_token=${u.instagramAccessToken}`
-        );
-        const data = await res.json();
-        // The /me endpoint returns the user's app-scoped ID; check if the
-        // webhook's entry.id matches either the user_id or id from /me
-        if (data.user_id === igId || data.id === igId || String(data.user_id) === igId || String(data.id) === igId) {
-          console.log(`[Webhook] Verified user ${u.id} owns IG ID ${igId} via Graph API`);
-          return {
-            ...u,
-            primaryInstagramUserId: u.instagramUserId,
-          };
-        }
-      } catch (e) {
-        console.warn(`[Webhook] Failed to verify user ${u.id}:`, e);
-      }
+      accountsToVerify.push({
+        userId: u.id,
+        instagramUserId: u.instagramUserId,
+        instagramAccessToken: u.instagramAccessToken,
+        plan: u.plan,
+        primaryInstagramUserId: u.instagramUserId,
+        source: 'primary'
+      });
     }
+  }
 
-    // Last resort for development: use the most recently connected user
-    console.warn(`[Webhook] Could not verify owner of IG ID ${igId}, using first connected user as fallback`);
+  if (conns) {
+    for (const c of conns) {
+      const userPlan = users?.find(u => u.id === c.user_id)?.plan || 'FREE';
+      const primaryId = users?.find(u => u.id === c.user_id)?.instagramUserId || null;
+
+      accountsToVerify.push({
+        userId: c.user_id,
+        instagramUserId: c.instagram_user_id,
+        instagramAccessToken: c.instagram_access_token,
+        plan: userPlan,
+        primaryInstagramUserId: primaryId,
+        source: 'connected_account'
+      });
+    }
+  }
+
+  console.log(`[Webhook] Verifying owners for IG ID ${igId} across ${accountsToVerify.length} connected accounts...`);
+
+  // 3. Try to verify which token owns the webhook's igId (Business ID)
+  // by calling Graph API /me endpoint for each token
+  for (const acc of accountsToVerify) {
+    try {
+      const res = await fetch(
+        `https://graph.instagram.com/v21.0/me?fields=user_id,id&access_token=${acc.instagramAccessToken}`
+      );
+      const data: any = await res.json();
+      
+      // If the webhook's entry.id matches either the user_id (Business ID) or id (App-scoped ID)
+      if (
+        data.user_id === igId || 
+        data.id === igId || 
+        String(data.user_id) === igId || 
+        String(data.id) === igId
+      ) {
+        console.log(`[Webhook] Verified user ${acc.userId} owns IG ID ${igId} via Graph API connection (@${acc.instagramUserId})`);
+        return {
+          id: acc.userId,
+          instagramUserId: acc.instagramUserId, // This is the app-scoped ID of the matched connection!
+          instagramAccessToken: acc.instagramAccessToken,
+          plan: acc.plan,
+          primaryInstagramUserId: acc.primaryInstagramUserId,
+        };
+      }
+    } catch (e) {
+      console.warn(`[Webhook] Failed to verify token for connection ${acc.instagramUserId}:`, e);
+    }
+  }
+
+  // 4. Fallback: if we couldn't verify, try exact match on ID
+  const exactUser = users?.find(u => u.instagramUserId === igId);
+  if (exactUser) {
     return {
-      ...users[0],
-      primaryInstagramUserId: users[0].instagramUserId,
+      ...exactUser,
+      primaryInstagramUserId: exactUser.instagramUserId,
+    };
+  }
+
+  const exactConn = conns?.find(c => c.instagram_user_id === igId);
+  if (exactConn) {
+    const parentUser = users?.find(u => u.id === exactConn.user_id);
+    return {
+      id: exactConn.user_id,
+      instagramUserId: exactConn.instagram_user_id,
+      instagramAccessToken: exactConn.instagram_access_token,
+      plan: parentUser?.plan || 'FREE',
+      primaryInstagramUserId: parentUser?.instagramUserId || null,
     };
   }
 
@@ -220,8 +222,8 @@ export async function POST(req: Request) {
               for (const automation of automations) {
                 // Ensure the automation belongs to the correct account
                 const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
-                if (targetAccount && targetAccount !== igUserId) {
-                  console.log(`[Webhook] Skipping automation ${automation.id}: belongs to account ${targetAccount}, event is for ${igUserId}`);
+                if (targetAccount && targetAccount !== user.instagramUserId) {
+                  console.log(`[Webhook] Skipping automation ${automation.id}: belongs to account ${targetAccount}, event is for matched connection ${user.instagramUserId}`);
                   continue;
                 }
 
@@ -330,7 +332,7 @@ export async function POST(req: Request) {
                   for (const automation of storyAutomations) {
                     // Ensure the automation belongs to the correct account
                     const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
-                    if (targetAccount && targetAccount !== igUserId) {
+                    if (targetAccount && targetAccount !== user.instagramUserId) {
                       continue;
                     }
 
@@ -523,7 +525,7 @@ export async function POST(req: Request) {
                   for (const automation of dmKeywordAutomations) {
                     // Ensure the automation belongs to the correct account
                     const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
-                    if (targetAccount && targetAccount !== igUserId) {
+                    if (targetAccount && targetAccount !== user.instagramUserId) {
                       continue;
                     }
 
@@ -594,7 +596,7 @@ export async function POST(req: Request) {
                 if (aiAutomations && aiAutomations.length > 0) {
                   const matchingAiAutomation = aiAutomations.find(automation => {
                     const targetAccount = automation.instagram_user_id || (user as any).primaryInstagramUserId || user.instagramUserId;
-                    return !targetAccount || targetAccount === igUserId;
+                    return !targetAccount || targetAccount === user.instagramUserId;
                   });
 
                   if (matchingAiAutomation) {
