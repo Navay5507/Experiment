@@ -717,7 +717,12 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
 
   throw new Error(`Unknown job type: ${job.name}`);
 
-}, { connection: createRedisConnection() }) : null as any;
+}, {
+  connection: createRedisConnection(),
+  stalledInterval: 300000,  // Check for stalled jobs every 5 min instead of 30s (saves ~5,500 cmds/day)
+  drainDelay: 15,           // Fallback poll every 15s instead of 5s (saves ~15,000 cmds/day)
+  concurrency: 5,           // Process up to 5 DM jobs in parallel for speed during spikes
+}) : null as any;
 
 
 // =============================================
@@ -850,7 +855,12 @@ export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', a
   }
 
   return { success: true, replyId: raw.id };
-}, { connection: createRedisConnection() }) : null as any;
+}, {
+  connection: createRedisConnection(),
+  stalledInterval: 300000,  // Check for stalled jobs every 5 min instead of 30s
+  drainDelay: 15,           // Fallback poll every 15s instead of 5s
+  concurrency: 5,           // Process up to 5 comment jobs in parallel for speed during spikes
+}) : null as any;
 
 // Error Logging
 if (dmWorker) {
