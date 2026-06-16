@@ -13,7 +13,7 @@ export const dmQueue = new Queue('autodrop-queue', {
       delay: 10000,
     },
     removeOnComplete: true,
-    removeOnFail: false,
+    removeOnFail: true,
   }
 });
 
@@ -26,6 +26,6 @@ export const commentQueue = new Queue('comment-reply', {
       delay: 10000,
     },
     removeOnComplete: true,
-    removeOnFail: false,
+    removeOnFail: true,
   }
 });

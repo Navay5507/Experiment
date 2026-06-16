@@ -32,6 +32,7 @@ export default function Footer() {
           <Link href="/terms" style={{ color: "inherit", textDecoration: "none", transition: "color 0.2s" }} className="hover-theme-heading">Terms of Service</Link>
           <Link href="/privacy" style={{ color: "inherit", textDecoration: "none", transition: "color 0.2s" }} className="hover-theme-heading">Privacy Policy</Link>
           <Link href="/refund-policy" style={{ color: "inherit", textDecoration: "none", transition: "color 0.2s" }} className="hover-theme-heading">Refund Policy</Link>
+          <Link href="/shipping-policy" style={{ color: "inherit", textDecoration: "none", transition: "color 0.2s" }} className="hover-theme-heading">Shipping Policy</Link>
         </div>
 
         {/* Decorative Divider */}

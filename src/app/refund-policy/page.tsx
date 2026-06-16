@@ -29,11 +29,12 @@ export default function RefundPolicy() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>Conditions for Refunds</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-             We only issue full or partial refunds under the following strictly defined conditions:
+             We strictly follow these rules regarding refunds:
           </p>
           <ul style={{ color: 'var(--text-muted)', paddingLeft: '1.5rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
-            <li>If there is a catastrophic technical failure directly attributable to Autodrop that prevents the service from operating for more than 7 consecutive days.</li>
-            <li>If you were charged accidentally due to a system glitch in our Razorpay integration.</li>
+            <li><strong>First Month Payment:</strong> No refunds are provided for the first month of any paid subscription tier.</li>
+            <li><strong>Subsequent Months:</strong> If a recurring payment is made for the second month (or later) by mistake, the user has <strong>3 days</strong> from the date of the charge to report the problem and request a refund. Refunds initiated within this period will be processed back to the original payment method.</li>
+            <li>Refunds typically take 5-7 business days to reflect in your account once initiated via Razorpay.</li>
           </ul>
         </section>
         

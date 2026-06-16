@@ -4,6 +4,7 @@ import { Zap, Play, Pause, Trash2, AlertTriangle } from "lucide-react";
 import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
+import { safeDecrypt } from "@/lib/crypto";
 import RetriggerButton from "./RetriggerButton";
 import ConfirmForm from "../ConfirmForm";
 
@@ -36,7 +37,7 @@ async function toggleAutomation(formData: FormData) {
     }
   }
 
-  await supabase.from('automations').update({ is_active: !currentState }).eq('id', id);
+  await supabase.from('automations').update({ is_active: !currentState }).eq('id', id).eq('user_id', user.id);
   redirect(activeAccount ? `/dashboard/automations?account=${activeAccount}` : '/dashboard/automations');
 }
 
@@ -44,7 +45,11 @@ async function deleteAutomation(formData: FormData) {
   "use server";
   const id = formData.get('automationId') as string;
   const activeAccount = formData.get('activeAccount') as string;
-  await supabase.from('automations').delete().eq('id', id);
+  const { userId } = await auth();
+  if (!userId) return;
+  const { data: user } = await supabase.from('users').select('id').eq('clerkId', userId).single();
+  if (!user) return;
+  await supabase.from('automations').delete().eq('id', id).eq('user_id', user.id);
   redirect(activeAccount ? `/dashboard/automations?account=${activeAccount}` : '/dashboard/automations');
 }
 
@@ -113,7 +118,8 @@ export default async function AutomationsList({ searchParams }: PageProps) {
   let recentMedia: any[] = [];
   if (user?.plan && automations.length > 0 && selectedAccountId) {
     const activeAccount = connectedAccounts.find(c => c.instagram_user_id === selectedAccountId);
-    const activeToken = activeAccount ? activeAccount.instagram_access_token : user.instagramAccessToken;
+    const rawToken = activeAccount ? activeAccount.instagram_access_token : user.instagramAccessToken;
+    const activeToken = safeDecrypt(rawToken);
 
     if (activeToken) {
       try {

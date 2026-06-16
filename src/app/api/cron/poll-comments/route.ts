@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
+import { safeDecrypt } from '@/lib/crypto';
 
 /**
  * GET /api/cron/poll-comments
@@ -17,7 +18,13 @@ import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/q
  */
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(req: Request) {
+  // Secure the cron endpoint — only allow Vercel Cron or calls with the service role key
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
   console.log('[Poll] 🔄 Starting comment poll cycle...');
 
   try {
@@ -48,7 +55,7 @@ export async function GET() {
         continue;
       }
 
-      const token = user.instagramAccessToken;
+      const token = safeDecrypt(user.instagramAccessToken);
 
       // 3. Get media IDs from this automation
       const mediaIds = automation.instagram_media_id

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
+import { safeDecrypt } from '@/lib/crypto';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ media: [], isConnected: false, error: 'User not found' }, { status: 404 });
     }
 
-    let token = user.instagramAccessToken;
+    let token = safeDecrypt(user.instagramAccessToken);
     let igUserId = user.instagramUserId;
 
     if (accountId && accountId !== user.instagramUserId) {
@@ -37,7 +38,7 @@ export async function GET(req: Request) {
         .maybeSingle();
 
       if (conn) {
-        token = conn.instagram_access_token;
+        token = safeDecrypt(conn.instagram_access_token);
         igUserId = conn.instagram_user_id;
       }
     }

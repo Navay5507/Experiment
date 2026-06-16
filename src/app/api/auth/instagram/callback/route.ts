@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import crypto from 'crypto';
+import { encrypt } from '@/lib/crypto';
 
 export async function GET(req: Request) {
   const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
@@ -122,13 +123,15 @@ export async function GET(req: Request) {
       .eq('instagram_user_id', igUserId)
       .maybeSingle();
 
+    const encryptedToken = encrypt(finalToken);
+
     if (isPrimary || existingConn) {
       // Update existing connection
       if (isPrimary) {
         await supabase
           .from('users')
           .update({
-            instagramAccessToken: finalToken,
+            instagramAccessToken: encryptedToken,
             instagramTokenExpiresAt: expiresAt,
             instagramHandle: igHandle,
           })
@@ -139,7 +142,7 @@ export async function GET(req: Request) {
         .from('connected_accounts')
         .upsert({
           user_id: user.id,
-          instagram_access_token: finalToken,
+          instagram_access_token: encryptedToken,
           instagram_user_id: igUserId,
           instagram_handle: igHandle || '',
           instagram_token_expires_at: expiresAt,
@@ -166,7 +169,7 @@ export async function GET(req: Request) {
         await supabase
           .from('users')
           .update({
-            instagramAccessToken: finalToken,
+            instagramAccessToken: encryptedToken,
             instagramUserId: igUserId,
             instagramHandle: igHandle,
             instagramTokenExpiresAt: expiresAt,
@@ -180,7 +183,7 @@ export async function GET(req: Request) {
         .from('connected_accounts')
         .insert({
           user_id: user.id,
-          instagram_access_token: finalToken,
+          instagram_access_token: encryptedToken,
           instagram_user_id: igUserId,
           instagram_handle: igHandle || '',
           instagram_token_expires_at: expiresAt,

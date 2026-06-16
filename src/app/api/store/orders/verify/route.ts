@@ -13,13 +13,26 @@ export async function POST(req: Request) {
     }
 
     // Verify signature
-    const secret = process.env.RAZORPAY_KEY_SECRET || '';
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    if (!secret) {
+      console.error('[Store Verify] ❌ RAZORPAY_KEY_SECRET is not configured');
+      return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+    }
     const generated = crypto
       .createHmac('sha256', secret)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest('hex');
 
-    if (generated !== razorpay_signature) {
+    let signatureValid = false;
+    try {
+      const sigBuffer = Buffer.from(razorpay_signature, 'utf8');
+      const genBuffer = Buffer.from(generated, 'utf8');
+      signatureValid = sigBuffer.length === genBuffer.length && crypto.timingSafeEqual(sigBuffer, genBuffer);
+    } catch {
+      signatureValid = false;
+    }
+
+    if (!signatureValid) {
       console.error('[Store Verify] Signature mismatch!');
 
       // Mark order as failed

@@ -48,6 +48,13 @@ export default function TermsOfService() {
              The service is provided on an "as is" and "as available" basis. Autodrop makes no warranties, expressed or implied, regarding the continuous availability of the Meta Graph API. API downtimes from Instagram's side are outside the control of Autodrop.
           </p>
         </section>
+
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>5. Contact Us</h2>
+          <p style={{ color: 'var(--text-muted)' }}>
+            If you have any questions about these Terms, please contact us at support@autodrop.in or call us at 8053070528.
+          </p>
+        </section>
       </main>
 
       <Footer />

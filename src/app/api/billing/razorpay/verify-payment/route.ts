@@ -18,7 +18,11 @@ export async function POST(req: Request) {
       return new NextResponse("Invalid payment data", { status: 400 });
     }
 
-    const secret = process.env.RAZORPAY_KEY_SECRET || "mock_secret";
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    if (!secret) {
+      console.error('[Razorpay] ❌ RAZORPAY_KEY_SECRET is not configured');
+      return new NextResponse("Server misconfigured", { status: 500 });
+    }
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     const expectedSignature = crypto
@@ -26,7 +30,13 @@ export async function POST(req: Request) {
       .update(body.toString())
       .digest("hex");
 
-    if (expectedSignature !== razorpay_signature) {
+    try {
+      const sigBuffer = Buffer.from(razorpay_signature, 'utf8');
+      const expectedBuffer = Buffer.from(expectedSignature, 'utf8');
+      if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        return new NextResponse("Invalid signature", { status: 400 });
+      }
+    } catch {
       return new NextResponse("Invalid signature", { status: 400 });
     }
 

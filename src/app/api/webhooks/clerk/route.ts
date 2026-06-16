@@ -17,19 +17,22 @@ export async function POST(req: Request) {
   const body = await req.text();
   const payload = JSON.parse(body);
 
-  // Verify via Svix if secret is set, otherwise accept (dev mode)
-  if (CLERK_WEBHOOK_SECRET) {
-    try {
-      const svixId = req.headers.get('svix-id') || '';
-      const svixTimestamp = req.headers.get('svix-timestamp') || '';
-      const svixSignature = req.headers.get('svix-signature') || '';
+  // Verify via Svix — MANDATORY (never skip in production)
+  if (!CLERK_WEBHOOK_SECRET) {
+    console.error('[Clerk Webhook] ❌ CLERK_WEBHOOK_SECRET is not configured — rejecting');
+    return new NextResponse('Server misconfigured', { status: 500 });
+  }
 
-      const wh = new Webhook(CLERK_WEBHOOK_SECRET);
-      wh.verify(body, { 'svix-id': svixId, 'svix-timestamp': svixTimestamp, 'svix-signature': svixSignature });
-    } catch (err) {
-      console.error('[Clerk Webhook] Signature verification failed:', err);
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
+  try {
+    const svixId = req.headers.get('svix-id') || '';
+    const svixTimestamp = req.headers.get('svix-timestamp') || '';
+    const svixSignature = req.headers.get('svix-signature') || '';
+
+    const wh = new Webhook(CLERK_WEBHOOK_SECRET);
+    wh.verify(body, { 'svix-id': svixId, 'svix-timestamp': svixTimestamp, 'svix-signature': svixSignature });
+  } catch (err) {
+    console.error('[Clerk Webhook] Signature verification failed:', err);
+    return new NextResponse('Unauthorized', { status: 401 });
   }
 
   const eventType = payload.type;

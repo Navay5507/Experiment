@@ -31,7 +31,7 @@ export default function PrivacyPolicy() {
             <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Autodrop.</li>
             <li><strong>Cookies</strong> are small files that are placed on Your computer or mobile device.</li>
             <li><strong>Personal Data</strong> is any information that relates to an identified or identifiable individual.</li>
-            <li><strong>Service</strong> refers to the Website accessible at autodrop.co.</li>
+            <li><strong>Service</strong> refers to the Website accessible at autodrop.in.</li>
             <li><strong>Third-party Social Media Service</strong> refers to Instagram and Facebook via Meta Platforms, Inc.</li>
           </ul>
         </section>
@@ -70,7 +70,7 @@ export default function PrivacyPolicy() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>Contact Us</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-            If you have questions or comments, email us at support@autodrop.in.
+            If you have questions or comments, email us at support@autodrop.in or call us at 8053070528.
           </p>
         </section>
       </main>

@@ -1,6 +1,7 @@
 import { NextResponse, after } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
+import { safeDecrypt } from '@/lib/crypto';
 import { commentQueue, dmQueue } from '@/lib/queue/queues';
 
 export async function POST(
@@ -38,7 +39,7 @@ export async function POST(
       return NextResponse.json({ error: 'Automation not found.' }, { status: 404 });
     }
 
-    const token = user.instagramAccessToken;
+    const token = safeDecrypt(user.instagramAccessToken);
 
     // ---- DM AUTOMATIONS: Scan recent conversations for missed keyword matches ----
     if (automation.target_type === 'dm') {

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
+import { safeDecrypt } from '@/lib/crypto';
 
 // POST /api/auth/instagram/resubscribe
 // Re-subscribes the current user's Instagram account to receive webhooks.
@@ -28,7 +29,7 @@ export async function POST() {
   const accounts = [];
   if (user.instagramAccessToken && user.instagramUserId) {
     accounts.push({
-      token: user.instagramAccessToken,
+      token: safeDecrypt(user.instagramAccessToken),
       id: user.instagramUserId,
       handle: 'primary',
     });
@@ -37,7 +38,7 @@ export async function POST() {
     for (const c of conns) {
       if (!accounts.some(a => a.id === c.instagram_user_id)) {
         accounts.push({
-          token: c.instagram_access_token,
+          token: safeDecrypt(c.instagram_access_token),
           id: c.instagram_user_id,
           handle: c.instagram_handle,
         });

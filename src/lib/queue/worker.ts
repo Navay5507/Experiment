@@ -3,6 +3,7 @@ import { redis, createRedisConnection } from './redis';
 import { supabase } from '../supabase';
 import { OpenAIProvider } from '../ai/openai';
 import { validateLeadField, getLeadPromptMessage } from '../validators';
+import { safeDecrypt } from '../crypto';
 import { InstagramAPI } from '../instagram/api';
 import { spinCommentReply, spinDMGreeting } from '../instagram/reply-spinner';
 import { isDMSentToUser, checkHourlyDMLimit, checkHourlyCommentLimit, getRandomDelay, getDMRestrictionTTL } from './dedup';
@@ -220,8 +221,12 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
   const { data: user, error: userError } = await supabase
     .from('users')
     .select('instagramAccessToken, instagramUserId, plan, instagramHandle, knowledgeBase')
-    .eq('id', userId)
+    .eq('id', job.data.userId)
     .single();
+
+  if (user && user.instagramAccessToken) {
+    user.instagramAccessToken = safeDecrypt(user.instagramAccessToken);
+  }
 
   console.log(`[Worker DM] User lookup: found=${!!user}, hasToken=${!!user?.instagramAccessToken}, error=${userError?.message || 'none'}`);
 
@@ -248,7 +253,7 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
       .maybeSingle();
 
     if (conn) {
-      user.instagramAccessToken = conn.instagram_access_token;
+      user.instagramAccessToken = safeDecrypt(conn.instagram_access_token);
       user.instagramHandle = conn.instagram_handle;
       user.instagramUserId = conn.instagram_user_id;
       console.log(`[Worker DM] Switched to connected account: @${conn.instagram_handle} (${conn.instagram_user_id})`);
@@ -719,9 +724,10 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
 
 }, {
   connection: createRedisConnection(),
-  stalledInterval: 300000,  // Check for stalled jobs every 5 min instead of 30s (saves ~5,500 cmds/day)
-  drainDelay: 15,           // Fallback poll every 15s instead of 5s (saves ~15,000 cmds/day)
+  stalledInterval: 600000,  // 10 mins (saves ~11,000 cmds/day)
+  drainDelay: 30,           // Fallback poll every 30s instead of 15s (saves ~15,000 cmds/day)
   concurrency: 5,           // Process up to 5 DM jobs in parallel for speed during spikes
+  metrics: undefined,       // Disable metrics completely
 }) : null as any;
 
 
@@ -738,6 +744,10 @@ export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', a
     .select('instagramAccessToken, instagramUserId, plan')
     .eq('id', userId)
     .single();
+
+  if (user && user.instagramAccessToken) {
+    user.instagramAccessToken = safeDecrypt(user.instagramAccessToken);
+  }
 
   const { data: automation } = await supabase
     .from('automations')
@@ -757,7 +767,7 @@ export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', a
       .maybeSingle();
 
     if (conn) {
-      user.instagramAccessToken = conn.instagram_access_token;
+      user.instagramAccessToken = safeDecrypt(conn.instagram_access_token);
       user.instagramUserId = conn.instagram_user_id;
       console.log(`[Worker Comment] Switched to connected account token for ${automation.instagram_user_id}`);
     } else {
@@ -857,15 +867,16 @@ export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', a
   return { success: true, replyId: raw.id };
 }, {
   connection: createRedisConnection(),
-  stalledInterval: 300000,  // Check for stalled jobs every 5 min instead of 30s
-  drainDelay: 15,           // Fallback poll every 15s instead of 5s
-  concurrency: 5,           // Process up to 5 comment jobs in parallel for speed during spikes
+  stalledInterval: 600000,
+  drainDelay: 30,
+  concurrency: 5,
+  metrics: undefined,
 }) : null as any;
 
 // Error Logging
 if (dmWorker) {
-  dmWorker.on('failed', (job, err) => console.error(`[Worker DM] Failed: ${err.message}`));
+  dmWorker.on('failed', (job: Job | undefined, err: Error) => console.error(`[Worker DM] Failed: ${err.message}`));
 }
 if (commentWorker) {
-  commentWorker.on('failed', (job, err) => console.error(`[Worker Comment] Failed: ${err.message}`));
+  commentWorker.on('failed', (job: Job | undefined, err: Error) => console.error(`[Worker Comment] Failed: ${err.message}`));
 }

@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { dmQueue, commentQueue } from '@/lib/queue/queues';
 import { isCommentProcessed, getRandomDelay, getDMRestrictionTTL } from '@/lib/queue/dedup';
 import { getUserFromIGCache, setUserIGCache } from '@/lib/queue/user_cache';
+import { safeDecrypt } from '@/lib/crypto';
 import '@/lib/queue/worker';
 
 const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN;
@@ -55,7 +56,7 @@ async function findUserByInstagramId(igId: string) {
       accountsToVerify.push({
         userId: u.id,
         instagramUserId: u.instagramUserId,
-        instagramAccessToken: u.instagramAccessToken,
+        instagramAccessToken: safeDecrypt(u.instagramAccessToken),
         plan: u.plan,
         primaryInstagramUserId: u.instagramUserId,
         source: 'primary'
@@ -71,7 +72,7 @@ async function findUserByInstagramId(igId: string) {
       accountsToVerify.push({
         userId: c.user_id,
         instagramUserId: c.instagram_user_id,
-        instagramAccessToken: c.instagram_access_token,
+        instagramAccessToken: safeDecrypt(c.instagram_access_token),
         plan: userPlan,
         primaryInstagramUserId: primaryId,
         source: 'connected_account'
@@ -118,22 +119,23 @@ async function findUserByInstagramId(igId: string) {
   if (exactUser) {
     const resolvedUser = {
       ...exactUser,
+      instagramAccessToken: safeDecrypt(exactUser.instagramAccessToken),
       primaryInstagramUserId: exactUser.instagramUserId,
     };
     await setUserIGCache(igId, resolvedUser as any);
     return resolvedUser;
   }
 
-  const exactConn = conns?.find(c => c.instagram_user_id === igId);
-  if (exactConn) {
-    const parentUser = users?.find(u => u.id === exactConn.user_id);
-    const resolvedUser = {
-      id: exactConn.user_id,
-      instagramUserId: exactConn.instagram_user_id,
-      instagramAccessToken: exactConn.instagram_access_token,
-      plan: parentUser?.plan || 'FREE',
-      primaryInstagramUserId: parentUser?.instagramUserId || null,
-    };
+    const exactConn = conns?.find(c => c.instagram_user_id === igId);
+    if (exactConn) {
+      const parentUser = users?.find(u => u.id === exactConn.user_id);
+      const resolvedUser = {
+        id: exactConn.user_id,
+        instagramUserId: exactConn.instagram_user_id,
+        instagramAccessToken: safeDecrypt(exactConn.instagram_access_token),
+        plan: parentUser?.plan || 'FREE',
+        primaryInstagramUserId: parentUser?.instagramUserId || null,
+      };
     await setUserIGCache(igId, resolvedUser as any);
     return resolvedUser;
   }
@@ -168,19 +170,29 @@ export async function POST(req: Request) {
       }
     } catch { /* parsing for debug only */ }
 
-    // Verify payload signature
-    if (APP_SECRET && signature) {
-      const expectedSignature = `sha256=${crypto
-        .createHmac('sha256', APP_SECRET)
-        .update(bodyText)
-        .digest('hex')}`;
-      
-      if (signature !== expectedSignature) {
+    // Verify payload signature — MANDATORY (never skip)
+    if (!APP_SECRET || !signature) {
+      console.error('[Webhook] ❌ Missing APP_SECRET or signature header — rejecting');
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+
+    const expectedSignature = `sha256=${crypto
+      .createHmac('sha256', APP_SECRET)
+      .update(bodyText)
+      .digest('hex')}`;
+
+    try {
+      const sigBuffer = Buffer.from(signature, 'utf8');
+      const expectedBuffer = Buffer.from(expectedSignature, 'utf8');
+      if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
         console.error('[Webhook] ❌ Signature mismatch');
         return new NextResponse('Unauthorized', { status: 401 });
       }
-      console.log('[Webhook] ✅ Signature verified');
+    } catch {
+      console.error('[Webhook] ❌ Signature comparison error');
+      return new NextResponse('Unauthorized', { status: 401 });
     }
+    console.log('[Webhook] ✅ Signature verified');
 
     const payload = JSON.parse(bodyText);
 
