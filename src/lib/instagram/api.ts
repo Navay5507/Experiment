@@ -108,11 +108,18 @@ export class InstagramAPI {
   }
 
   /**
+   * Retrieves a user's Instagram profile (username) and their following status.
+   */
+  static async getUserProfile(recipientId: string, token: string): Promise<{ username?: string, is_user_follow_business?: boolean }> {
+    const res = await fetch(`https://graph.instagram.com/v21.0/${recipientId}?fields=username,is_user_follow_business&access_token=${token}`);
+    return await res.json();
+  }
+
+  /**
    * Checks if a specific Instagram user follows the business account.
    */
   static async isUserFollowingBusiness(recipientId: string, token: string): Promise<boolean> {
-    const res = await fetch(`https://graph.instagram.com/v21.0/${recipientId}?fields=is_user_follow_business&access_token=${token}`);
-    const data = await res.json();
+    const data = await this.getUserProfile(recipientId, token);
     return data.is_user_follow_business === true;
   }
   /**

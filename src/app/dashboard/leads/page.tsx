@@ -109,8 +109,16 @@ export default async function LeadsPage() {
                 return (
                   <tr key={lead.id}>
                     <td>
-                      <div style={{ fontWeight: 600, color: 'var(--primary)', fontSize: '1.05rem', marginBottom: '4px' }}>
-                        @{lead.instagram_username}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
+                        <div style={{ fontWeight: 600, color: 'var(--primary)', fontSize: '1.05rem' }}>
+                          {lead.instagram_username.startsWith('@') ? lead.instagram_username : `@${lead.instagram_username}`}
+                        </div>
+                        {data.is_following === true && (
+                          <span style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.1rem 0.4rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 700 }}>FOLLOWS YOU</span>
+                        )}
+                        {data.is_following === false && (
+                          <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '0.1rem 0.4rem', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 600 }}>NOT FOLLOWING</span>
+                        )}
                       </div>
                       <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                         {new Date(lead.captured_at).toLocaleDateString([], { hour: '2-digit', minute: '2-digit' })}
@@ -118,11 +126,11 @@ export default async function LeadsPage() {
                     </td>
                     <td>
                       <div style={{ background: 'var(--surface-hover)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)', display: 'inline-block' }}>
-                        {Object.entries(data).map(([key, val]) => (
+                        {Object.entries(data).filter(([k]) => k !== 'is_following').map(([key, val]) => (
                           <div key={key} style={{ fontSize: '0.9rem', marginBottom: '3px' }}>
                             <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{key}</span>
                             <span style={{ color: 'var(--border)', margin: '0 8px' }}>|</span>
-                            <span style={{ color: 'var(--text-heading)', fontWeight: 500 }}>{val}</span>
+                            <span style={{ color: 'var(--text-heading)', fontWeight: 500 }}>{String(val)}</span>
                           </div>
                         ))}
                       </div>

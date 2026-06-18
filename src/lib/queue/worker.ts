@@ -90,11 +90,21 @@ async function sendFollowUpButtons(
     // Add link buttons (max 2 to leave room for profile)
     if (links.length > 0) {
       const linkButtons = links.slice(0, 2).map((l: string, i: number) => {
-        let url = l.trim();
+        let rawUrl = l.trim();
+        let customTitle = '';
+        
+        if (rawUrl.includes('|||')) {
+          const parts = rawUrl.split('|||');
+          customTitle = parts[0].trim();
+          rawUrl = parts[1].trim();
+        }
+
+        let url = rawUrl;
         if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+        
         return {
           type: 'web_url' as const,
-          title: links.length > 1 ? `🔗 Link ${i + 1}` : '🔗 Open Link',
+          title: customTitle || (links.length > 1 ? `🔗 Link ${i + 1}` : '🔗 Open Link'),
           url,
         };
       });
@@ -616,14 +626,25 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
       const hasLinksLC = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
       if (automation.dm_message && hasLinksLC) {
         const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-        const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+        const linksText = links.map((l: string, i: number) => {
+          let str = l;
+          if (l.includes('|||')) {
+            const parts = l.split('|||');
+            str = `${parts[0].trim()} - ${parts[1].trim()}`;
+          }
+          return links.length > 1 ? `${i + 1}. ${str}` : str;
+        }).join('\n');
         await sendTextDM(token, recipientId, `${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
       } else if (automation.dm_message) {
         await sendTextDM(token, recipientId, automation.dm_message);
       } else if (hasLinksLC) {
         const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
         const redirectUrl = getRedirectUrl(automation.id);
-        await sendTextDM(token, recipientId, links.length === 1 ? `🚀 Here's your link:\n${redirectUrl}` : `🚀 Here are your links:\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
+        await sendTextDM(token, recipientId, links.length === 1 ? `🚀 Here's your link:\n${redirectUrl}` : `🚀 Here are your links:\n${links.map((l: string, i: number) => {
+          let str = l;
+          if (l.includes('|||')) { const parts = l.split('|||'); str = `${parts[0].trim()} - ${parts[1].trim()}`; }
+          return `${i+1}. ${str}`;
+        }).join('\n')}`);
       } else {
         await sendTextDM(token, recipientId, `🚀 Thank you for connecting!`);
       }
@@ -660,13 +681,20 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
     }
 
     // All fields collected! Save lead and send link
-    const actualUsername = (convo.collected_data as {ig_username?: string})?.ig_username || recipientId;
+    let actualUsername = (convo.collected_data as {ig_username?: string})?.ig_username || recipientId;
+    let isFollowing = false;
+    try {
+      const profileInfo = await InstagramAPI.getUserProfile(recipientId, token);
+      if (profileInfo.username) actualUsername = `@${profileInfo.username}`;
+      isFollowing = profileInfo.is_user_follow_business === true;
+    } catch (e) { console.error('[Worker] Failed to fetch profile info for lead', e); }
+
     await supabase.from('leads').insert({
       user_id: userId,
       automation_id: automationId,
       instagram_username: actualUsername,
       lead_type: captureFields[0], // Primary field type
-      lead_value: JSON.stringify(updatedLeadData),
+      lead_value: JSON.stringify({ ...updatedLeadData, is_following: isFollowing }),
       captured_at: new Date().toISOString(),
     });
 
@@ -679,14 +707,22 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
     const hasLinksEnd = (Array.isArray(automation.dm_links) && automation.dm_links.length > 0) || automation.dm_link;
     if (automation.dm_message && hasLinksEnd) {
       const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
-      const linksText = links.map((l: string, i: number) => links.length > 1 ? `${i + 1}. ${l}` : l).join('\n');
+      const linksText = links.map((l: string, i: number) => {
+        let str = l;
+        if (l.includes('|||')) { const parts = l.split('|||'); str = `${parts[0].trim()} - ${parts[1].trim()}`; }
+        return links.length > 1 ? `${i + 1}. ${str}` : str;
+      }).join('\n');
       await sendTextDM(token, recipientId, `🎉 ${automation.dm_message}\n\n🔗 ${links.length > 1 ? 'Links' : 'Link'}:\n${linksText}`);
     } else if (automation.dm_message) {
       await sendTextDM(token, recipientId, `🎉 ${automation.dm_message}`);
     } else if (hasLinksEnd) {
       const links = Array.isArray(automation.dm_links) && automation.dm_links.length > 0 ? automation.dm_links : [automation.dm_link];
       const redirectUrl = getRedirectUrl(automation.id);
-      await sendTextDM(token, recipientId, links.length === 1 ? `🎉 Thank you! Here's your link ⬇\n${redirectUrl}` : `🎉 Thank you! Here are your links ⬇\n${links.map((l: string, i: number) => `${i+1}. ${l}`).join('\n')}`);
+      await sendTextDM(token, recipientId, links.length === 1 ? `🎉 Thank you! Here's your link ⬇\n${redirectUrl}` : `🎉 Thank you! Here are your links ⬇\n${links.map((l: string, i: number) => {
+        let str = l;
+        if (l.includes('|||')) { const parts = l.split('|||'); str = `${parts[0].trim()} - ${parts[1].trim()}`; }
+        return `${i+1}. ${str}`;
+      }).join('\n')}`);
     } else {
       await sendTextDM(token, recipientId, `🎉 Thank you! We have received your info.`);
     }
