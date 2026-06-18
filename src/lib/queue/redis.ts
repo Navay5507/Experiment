@@ -12,7 +12,7 @@ const globalForRedis = global as unknown as { redis: Redis };
 const redisOptions = {
   maxRetriesPerRequest: null, // Required by BullMQ
   enableReadyCheck: false,
-  keepAlive: 10000, // Required for Upstash to prevent silent connection drops
+  keepAlive: 240000, // 4 mins (Upstash drops at 5 mins). Saves massive amounts of cmds.
   family: 0,
 };
 
