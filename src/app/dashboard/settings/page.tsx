@@ -436,13 +436,15 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                     </ConfirmForm>
                  </div>
               </div>              <div className={styles.card}>
-                 <div className={styles.sectionTitle} style={{ color: '#c084fc' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Activity size={18}/> Reconnect Instagram</span></div>
+                 <div className={styles.sectionTitle} style={{ color: '#c084fc' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Activity size={18}/> Webhook Subscription</span></div>
                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                    If real-time comment automation stops working, force a reconnection of all connected accounts to the Instagram webhook.
+                    <strong>What is a Webhook?</strong> This is the invisible connection that tells Instagram to instantly send new comments to your Autodrop dashboard. 
+                    <br/><br/>
+                    <em>Do I need to click this?</em> Only click this button if your Instagram account is connected and healthy, but your comments are completely failing to show up in the Logs. This button forces Instagram to refresh the connection pipe.
                  </p>
-                 <ConfirmForm message="Reconnect all connected accounts to webhook events?" action={resubscribe}>
+                 <ConfirmForm message="Re-subscribe all connected accounts to webhook events?" action={resubscribe}>
                     <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #c084fc', color: '#c084fc', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                       <Activity size={18} /> Reconnect Instagram!
+                       <Activity size={18} /> Re-subscribe Webhooks
                     </button>
                  </ConfirmForm>
               </div>

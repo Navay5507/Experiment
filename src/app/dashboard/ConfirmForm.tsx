@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 
 interface ConfirmFormProps {
   message: string;
@@ -11,11 +11,20 @@ interface ConfirmFormProps {
 
 export default function ConfirmForm({ message, promptText, action, children }: ConfirmFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const [isPending, setIsPending] = useState(false);
   
   return (
     <form
       ref={formRef}
-      action={action}
+      action={async (formData) => {
+        setIsPending(true);
+        try {
+          await action(formData);
+        } finally {
+          setIsPending(false);
+        }
+      }}
+      style={{ opacity: isPending ? 0.5 : 1, pointerEvents: isPending ? 'none' : 'auto' }}
       onSubmit={(e) => {
         if (promptText) {
           const input = prompt(message);
