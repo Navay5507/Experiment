@@ -119,7 +119,7 @@ export default function DashboardClient({ metrics, feed, expiresAt }: DashboardP
               <AlertCircle size={20} />
               <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>Action Required: Your Instagram Connection permanently expires in {daysLeft} days.</span>
            </div>
-           <Link href="/dashboard/settings?tab=connections" style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>Reconnect Instagram</Link>
+           <Link href="/dashboard/settings?tab=maintenance" style={{ background: '#ef4444', color: '#fff', padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>Reconnect Instagram</Link>
         </motion.div>
       )}
 
