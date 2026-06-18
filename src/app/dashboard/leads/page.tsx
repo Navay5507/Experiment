@@ -47,10 +47,10 @@ export default async function LeadsPage() {
   }
 
   // Helper to parse lead_value which could be JSON or plain text
-  function parseLeadValue(lead: LeadRow): Record<string, string> {
+  function parseLeadValue(lead: LeadRow): Record<string, any> {
     try {
       const parsed = JSON.parse(lead.lead_value);
-      if (typeof parsed === 'object' && parsed !== null) return parsed as Record<string, string>;
+      if (typeof parsed === 'object' && parsed !== null) return parsed as Record<string, any>;
       return { [lead.lead_type || 'data']: lead.lead_value };
     } catch {
       return { [lead.lead_type || 'data']: lead.lead_value };
