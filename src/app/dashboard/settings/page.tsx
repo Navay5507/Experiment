@@ -449,17 +449,15 @@ export default async function SettingsPage({ searchParams }: PageProps) {
                  </ConfirmForm>
               </div>
 
-              {/* Unlink Services Card */}
+              {/* Connection Refresh Card */}
               <div className={styles.card}>
-                 <div className={styles.sectionTitle} style={{ color: '#ef4444' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Link2 size={18}/> Services Reset</span></div>
+                 <div className={styles.sectionTitle} style={{ color: '#3b82f6' }}><span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><Link2 size={18}/> Refresh Instagram Login</span></div>
                  <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                    Instantly disconnect and revoke credentials for all unlinked Instagram accounts.
+                    If you received a warning that your Instagram connection is expiring, click below to re-authenticate with Meta and generate a fresh 60-day token.
                  </p>
-                 <ConfirmForm message="Disconnect all Instagram accounts? All automations will stop working." action={disconnectInstagram}>
-                    <button type="submit" className={styles.btnAction} style={{ width: '100%', background: 'transparent', border: '1px solid #ef4444', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                       <Link2 size={18} /> Disconnect All Accounts
-                    </button>
-                  </ConfirmForm>
+                 <a href="/api/auth/instagram" className={styles.btnAction} style={{ width: '100%', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: 'transparent', border: '1px solid #3b82f6', color: '#3b82f6', textDecoration: 'none' }}>
+                    <Link2 size={18} /> Refresh Connection
+                 </a>
               </div>
             </div>
           </div>
