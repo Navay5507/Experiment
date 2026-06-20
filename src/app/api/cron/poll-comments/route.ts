@@ -28,10 +28,15 @@ export async function GET(req: Request) {
   console.log('[Poll] 🔄 Starting comment poll cycle...');
 
   try {
-    // 1. Get all active automations with their user data
+    // 1. Get all active automations with their user data using a JOIN to prevent N+1 queries
     const { data: automations, error: autoErr } = await supabase
       .from('automations')
-      .select('id, user_id, keywords, instagram_media_id, reply_template, dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields')
+      .select(`
+        id, user_id, keywords, instagram_media_id, reply_template, 
+        dm_link, dm_message, dm_links, initial_dm_text, follow_gate_enabled, 
+        ai_enabled, ai_prompt, lead_capture_type, lead_capture_ask, lead_capture_fields,
+        user:users(id, instagramAccessToken, instagramUserId, plan)
+      `)
       .eq('is_active', true);
 
     if (autoErr || !automations || automations.length === 0) {
@@ -43,12 +48,8 @@ export async function GET(req: Request) {
     let totalMatched = 0;
 
     for (const automation of automations) {
-      // 2. Get the user's Instagram access token
-      const { data: user } = await supabase
-        .from('users')
-        .select('id, instagramAccessToken, instagramUserId, plan')
-        .eq('id', automation.user_id)
-        .maybeSingle();
+      // 2. Extract joined user data
+      const user = Array.isArray(automation.user) ? automation.user[0] : automation.user;
 
       if (!user || !user.instagramAccessToken) {
         console.log(`[Poll] ⚠️ No token for user ${automation.user_id}, skipping.`);

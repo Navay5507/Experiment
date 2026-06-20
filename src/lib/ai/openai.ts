@@ -38,7 +38,7 @@ Your goal is to be helpful, concise (under 3 sentences), and sound like a natura
 
     try {
       const completion = await this.client.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages,
         temperature: 0.3, // Strict temp to prevent hallucinated offers
         max_tokens: 200, // Instagram DMs should be quick
