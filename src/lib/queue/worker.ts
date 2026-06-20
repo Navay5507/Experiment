@@ -760,6 +760,7 @@ export const dmWorker = !process.env.VERCEL ? new Worker('autodrop-queue', async
 
 }, {
   connection: createRedisConnection(),
+  blockingConnection: false,
   stalledInterval: 86400000,       // Disabled to save commands (was 600000)
   drainDelay: 60,           // Fallback poll every 60s (saves ~25,000 cmds/day)
   concurrency: 5,           // Process up to 5 DM jobs in parallel for speed during spikes
@@ -903,6 +904,7 @@ export const commentWorker = !process.env.VERCEL ? new Worker('comment-reply', a
   return { success: true, replyId: raw.id };
 }, {
   connection: createRedisConnection(),
+  blockingConnection: false,
   stalledInterval: 86400000,
   drainDelay: 60,
   concurrency: 5,

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import '@/lib/queue/worker';
 
 export const dynamic = 'force-dynamic';
 
