@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import styles from "../dashboard.module.css";
 import { Link2, Activity, CreditCard, AlertTriangle, Trash, Zap, CheckCircle2 } from "lucide-react";
 import ConfirmForm from "../ConfirmForm";
+import { safeDecrypt } from "@/lib/crypto";
 
 export const dynamic = 'force-dynamic';
 
@@ -190,7 +191,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
     const accounts = [];
     if (user.instagramAccessToken && user.instagramUserId) {
       accounts.push({
-        token: user.instagramAccessToken,
+        token: safeDecrypt(user.instagramAccessToken),
         id: user.instagramUserId,
       });
     }
@@ -198,7 +199,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
       for (const c of conns) {
         if (!accounts.some(a => a.id === c.instagram_user_id)) {
           accounts.push({
-            token: c.instagram_access_token,
+            token: safeDecrypt(c.instagram_access_token),
             id: c.instagram_user_id,
           });
         }

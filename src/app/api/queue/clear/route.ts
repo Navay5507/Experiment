@@ -16,6 +16,12 @@ export async function POST() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Ensure only the admin can clear the queues
+  const adminId = process.env.ADMIN_CLERK_ID;
+  if (!adminId || userId !== adminId) {
+    return NextResponse.json({ error: 'Forbidden: Admin only' }, { status: 403 });
+  }
+
   try {
     // Drain removes all jobs that are waiting or delayed
     await dmQueue.drain();

@@ -6,9 +6,22 @@ export default function RedirectClient({ targetUrl }: { targetUrl: string }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       let finalUrl = targetUrl.trim();
-      if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^[a-z]+:\/\//i)) {
-        finalUrl = 'https://' + finalUrl;
+      
+      try {
+        // If it lacks a scheme, assume https
+        if (!/^https?:\/\//i.test(finalUrl)) {
+          finalUrl = 'https://' + finalUrl;
+        }
+        
+        const parsed = new URL(finalUrl);
+        // Strictly enforce http/https
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+          finalUrl = 'https://autodrop.in'; // Fallback for malicious schemes
+        }
+      } catch (e) {
+        finalUrl = 'https://autodrop.in'; // Fallback on parse error
       }
+      
       window.location.href = finalUrl;
     }, 2000);
     return () => clearTimeout(timer);

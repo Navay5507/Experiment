@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import crypto from 'crypto';
-import { encrypt } from '@/lib/crypto';
+import { encrypt, safeDecrypt } from '@/lib/crypto';
 
 export async function GET(req: Request) {
   const INSTAGRAM_APP_ID = (process.env.INSTAGRAM_APP_ID || '').trim();
@@ -26,7 +26,7 @@ export async function GET(req: Request) {
 
   const code = searchParams.get('code');
   const errorParam = searchParams.get('error');
-  const clerkId = searchParams.get('state');
+  const rawState = searchParams.get('state');
 
   if (errorParam) {
     console.log('[IG Callback] User denied or error:', errorParam);
@@ -37,8 +37,10 @@ export async function GET(req: Request) {
     return new NextResponse('Missing authorization code', { status: 400 });
   }
 
+  const clerkId = safeDecrypt(rawState);
+
   if (!clerkId) {
-    return new NextResponse('Missing session state', { status: 401 });
+    return new NextResponse('Missing or invalid state parameter (CSRF attempt blocked)', { status: 400 });
   }
 
   try {

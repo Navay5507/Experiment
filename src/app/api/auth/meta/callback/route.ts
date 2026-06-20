@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import crypto from 'crypto';
 
 /**
  * POST /api/auth/meta/callback
@@ -16,8 +17,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing signed_request' }, { status: 400 });
     }
 
-    // Parse the signed request to get user_id
-    const [, payload] = signedRequest.split('.');
+    const [encodedSig, payload] = signedRequest.split('.');
+    
+    // Verify signature
+    const appSecret = process.env.INSTAGRAM_APP_SECRET || '';
+    if (!appSecret) {
+      return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 });
+    }
+
+    const sigBuffer = Buffer.from(encodedSig.replace(/-/g, '+').replace(/_/g, '/'), 'base64');
+    const expectedSigBuffer = crypto.createHmac('sha256', appSecret).update(payload).digest();
+
+    if (sigBuffer.length !== expectedSigBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedSigBuffer)) {
+      console.error('[Meta Callback] ❌ Invalid signature');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+    }
+
     const decoded = JSON.parse(
       Buffer.from(payload.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString()
     );

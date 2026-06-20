@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { encrypt } from '@/lib/crypto';
 
 export async function GET() {
   // Read env vars at REQUEST TIME, not module load time
@@ -47,7 +48,7 @@ export async function GET() {
     `&response_type=code` +
     `&scope=${scopes}` +
     `&force_authentication=1` +
-    `&state=${userId}`;
+    `&state=${encodeURIComponent(encrypt(userId))}`;
 
   console.log("REDIRECT_URI:", REDIRECT_URI);
   console.log("FINAL AUTH URL:", authUrl);
