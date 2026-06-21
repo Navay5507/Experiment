@@ -36,7 +36,7 @@ export default function ShippingPolicy() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>Contact Support</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-             If you experience any delay or issues accessing your premium features after payment, please contact us at support@autodrop.in or call us at 8053070528.
+             If you experience any delay or issues accessing your premium features after payment, please contact us at support@autodrop.in or call us at 9050997755.
           </p>
         </section>
       </main>

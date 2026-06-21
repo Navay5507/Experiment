@@ -52,7 +52,7 @@ export default function TermsOfService() {
         <section style={{ marginBottom: '3rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>5. Contact Us</h2>
           <p style={{ color: 'var(--text-muted)' }}>
-            If you have any questions about these Terms, please contact us at support@autodrop.in or call us at 8053070528.
+            If you have any questions about these Terms, please contact us at support@autodrop.in or call us at 9050997755.
           </p>
         </section>
       </main>
