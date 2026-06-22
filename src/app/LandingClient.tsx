@@ -93,87 +93,6 @@ const HeroMockupElement = ({ isMobile = false }: { isMobile?: boolean }) => (
    </FadeIn>
 );
 
-const HeroDashboardVisual = ({ isMobile = false }: { isMobile?: boolean }) => (
-   <FadeIn delay={0.4}>
-      <div className={styles.heroMockupContainer} style={{ perspective: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-         
-         {/* Main Dashboard Window */}
-         <motion.div
-            animate={isMobile ? { y: [0, -8, 0] } : { rotateY: [-4, 4, -4], rotateX: [2, -2, 2], y: [0, -10, 0] }}
-            transition={{ duration: isMobile ? 6 : 8, repeat: Infinity, ease: "easeInOut" }}
-            style={{ width: '400px', background: 'rgba(15, 17, 21, 0.85)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', zIndex: 5, boxShadow: '0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)' }}>
-            
-            {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1rem' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ef4444' }} />
-                  <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#eab308' }} />
-                  <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#22c55e' }} />
-               </div>
-               <div style={{ fontSize: '0.75rem', color: '#888', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} /> Live Metrics
-               </div>
-            </div>
-
-            {/* Metrics Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '12px', padding: '1rem' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Auto DMs</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>14,208</div>
-                  <div style={{ fontSize: '0.7rem', color: '#10b981', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '4px' }}>↑ 12% today</div>
-               </div>
-               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)', borderRadius: '12px', padding: '1rem' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Revenue</div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>$4,192</div>
-                  <div style={{ fontSize: '0.7rem', color: '#10b981', marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '4px' }}>↑ 8% today</div>
-               </div>
-            </div>
-
-            {/* Live Feed */}
-            <div style={{ marginTop: '0.5rem' }}>
-               <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: '0.75rem', fontWeight: 600 }}>Real-time Feed</div>
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {[
-                     { user: '@sarah_jane', action: 'Captured email', time: 'Just now', color: '#3b82f6' },
-                     { user: '@mike_builder', action: 'Clicked pricing link', time: '2m ago', color: '#eab308' },
-                     { user: '@emily_design', action: 'Received DM', time: '5m ago', color: '#10b981' }
-                  ].map((item, i) => (
-                     <motion.div key={i} animate={{ opacity: [0.6, 1, 0.6], background: ['rgba(255,255,255,0.02)', 'rgba(255,255,255,0.05)', 'rgba(255,255,255,0.02)'] }} transition={{ duration: 3, delay: i * 0.8, repeat: Infinity }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.03)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                           <div style={{ width: 8, height: 8, borderRadius: '50%', background: item.color, boxShadow: `0 0 10px ${item.color}` }} />
-                           <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <span style={{ fontSize: '0.8rem', color: '#e2e8f0', fontWeight: 600 }}>{item.user}</span>
-                              <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{item.action}</span>
-                           </div>
-                        </div>
-                        <span style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 500 }}>{item.time}</span>
-                     </motion.div>
-                  ))}
-               </div>
-            </div>
-         </motion.div>
-
-         {/* Floating Elements */}
-         <motion.div
-            animate={{ y: [15, -15], opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: 'absolute', top: '15%', left: '-5%', background: 'linear-gradient(135deg, rgba(59,130,246,0.9), rgba(139,92,246,0.9))', backdropFilter: 'blur(12px)', padding: '0.75rem 1rem', borderRadius: '16px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.6rem', boxShadow: '0 10px 30px rgba(59,130,246,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <Database size={16} color="#fff" />
-            <span style={{ color: '#fff', fontSize: '0.8rem', fontWeight: 600 }}>Syncing to CRM</span>
-         </motion.div>
-
-         <motion.div
-            animate={{ y: [-15, 15], opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 5, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: 'absolute', bottom: '25%', right: '-8%', background: 'linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9))', backdropFilter: 'blur(12px)', padding: '0.75rem 1rem', borderRadius: '16px', zIndex: 10, display: 'flex', alignItems: 'center', gap: '0.6rem', boxShadow: '0 10px 30px rgba(16,185,129,0.4)', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <Zap size={16} color="#fff" />
-            <span style={{ color: '#fff', fontSize: '0.8rem', fontWeight: 600 }}>Trigger Executed</span>
-         </motion.div>
-
-      </div>
-   </FadeIn>
-);
-
 const CountUpMetric = ({ target, prefix = '', suffix = '', decimals = 0 }: { target: number, prefix?: string, suffix?: string, decimals?: number }) => {
    const ref = useRef(null);
    const isInView = useInView(ref, { once: false, amount: 0.5 });
@@ -773,7 +692,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                      </FadeIn>
 
                      <div className={styles.mobileOnlyVisual}>
-                        {isMobile && <HeroDashboardVisual isMobile={true} />}
+                        {isMobile && <HeroMockupElement isMobile={true} />}
                      </div>
 
                      <FadeIn delay={0.2}>
@@ -813,7 +732,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   </div>
 
                   <div className={styles.desktopOnlyVisual}>
-                     {!isMobile && <HeroDashboardVisual isMobile={false} />}
+                     {!isMobile && <HeroMockupElement isMobile={false} />}
                   </div>
                </div>
             </div>
