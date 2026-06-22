@@ -255,7 +255,15 @@ export default function SafetyClient() {
     }
   }, []);
 
-  useEffect(() => { load(); const t = setInterval(load, 30_000); return () => clearInterval(t); }, [load]);
+  useEffect(() => { 
+    load(); 
+    const t = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        load();
+      }
+    }, 120_000); 
+    return () => clearInterval(t); 
+  }, [load]);
 
   if (loading) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "55vh", gap: "0.6rem", color: "var(--text-muted)", fontSize: "0.84rem" }}>
