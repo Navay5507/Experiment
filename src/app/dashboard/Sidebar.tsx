@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag, GraduationCap } from "lucide-react";
+import { LucideIcon, MessageCircle, LayoutDashboard, Zap, Users, Activity, Settings, Headphones, BookOpen, Gift, X, ShoppingBag, GraduationCap, Shield } from "lucide-react";
 import styles from "./dashboard.module.css";
 import { useState, useEffect } from "react";
 
@@ -97,6 +97,7 @@ export default function Sidebar({ isMobileOpen, onClose }: SidebarProps) {
       <nav className={styles.nav} style={{ padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.25rem', flex: 1 }}>
         <NavItem href="/dashboard" icon={LayoutDashboard} label="Overview" isActive={isActive('/dashboard')} onNavigate={onClose} />
         <NavItem href="/dashboard/automations" icon={Zap} label="Automations" isActive={isActive('/dashboard/automations')} onNavigate={onClose} />
+        <NavItem href="/dashboard/safety" icon={Shield} label="Safety Shield" isActive={isActive('/dashboard/safety')} onNavigate={onClose} />
         <NavItem href="/dashboard/leads" icon={Users} label="CRM Leads" isActive={isActive('/dashboard/leads')} onNavigate={onClose} />
         <NavItem href="/dashboard/store" icon={ShoppingBag} label="Digital Store" isActive={false} isComingSoon={true} badgeText="Under Maintenance" />
         <NavItem href="/dashboard/knowledge-base" icon={BookOpen} label="AI Knowledge Base" isActive={false} isComingSoon={true} />
