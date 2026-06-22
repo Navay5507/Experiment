@@ -245,40 +245,64 @@
 
 .ambientBubbleLeft, .ambientBubbleRight, .ambientBubbleTopLeft, .ambientBubbleTopRight {
   position: absolute;
-  background: linear-gradient(135deg, rgba(225,48,108,0.65), rgba(253,29,29,0.65));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
   padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #fff;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   z-index: 10;
-  box-shadow: 0 10px 30px rgba(225,48,108,0.3);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+.ambientCommentAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ambientCommentContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ambientCommentUser {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.ambientCommentText {
+  font-size: 0.85rem;
+  color: var(--text-heading);
+  font-weight: 600;
+  line-height: 1;
 }
 
 .ambientBubbleLeft {
-  left: -30px;
-  bottom: 0;
-  border-radius: 16px 16px 16px 0;
+  left: -40px;
+  bottom: 10%;
 }
 
 .ambientBubbleRight {
-  right: -10px;
-  bottom: 20%;
-  border-radius: 16px 16px 0 16px;
+  right: -20px;
+  bottom: 25%;
 }
 
 .ambientBubbleTopLeft {
-  left: -10px;
-  top: 15%;
-  border-radius: 16px 16px 16px 0;
+  left: -20px;
+  top: 20%;
 }
 
 .ambientBubbleTopRight {
-  right: -20px;
-  top: 5%;
-  border-radius: 16px 16px 0 16px;
+  right: -40px;
+  top: 10%;
 }
 
 .ambientDmPopup {

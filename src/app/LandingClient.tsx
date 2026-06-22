@@ -33,39 +33,60 @@ const HeroMockupElement = ({ isMobile = false }: { isMobile?: boolean }) => (
          </motion.div>
 
          <motion.div
-            animate={{ y: [100, -200], opacity: [0, 0.95, 0] }}
+            animate={{ y: [40, -40], opacity: [0, 1, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             className={styles.ambientBubbleLeft}>
-            &quot;Send me the link! 😍&quot;
-         </motion.div>
-         <motion.div
-            animate={{ y: [150, -150], opacity: [0, 0.95, 0] }}
-            transition={{ duration: 4.5, delay: 1.5, repeat: Infinity, ease: "linear" }}
-            className={styles.ambientBubbleRight}>
-            &quot;price pls&quot;
-         </motion.div>
-         <motion.div
-            animate={{ y: [80, -180], opacity: [0, 0.95, 0] }}
-            transition={{ duration: 5, delay: 0.8, repeat: Infinity, ease: "linear" }}
-            className={styles.ambientBubbleTopLeft}>
-            &quot;DESK&quot;
-         </motion.div>
-         <motion.div
-            animate={{ y: [120, -120], opacity: [0, 0.95, 0] }}
-            transition={{ duration: 4.2, delay: 2.5, repeat: Infinity, ease: "linear" }}
-            className={styles.ambientBubbleTopRight}>
-            &quot;details? 🔥&quot;
+            <div className={styles.ambientCommentAvatar} style={{ background: 'linear-gradient(45deg, #f09433, #dc2743)' }}></div>
+            <div className={styles.ambientCommentContent}>
+               <span className={styles.ambientCommentUser}>@sarah_jane</span>
+               <span className={styles.ambientCommentText}>Send me the link! 😍</span>
+            </div>
          </motion.div>
 
          <motion.div
-            animate={{ scale: [0.8, 1, 0.8], opacity: [0, 0.95, 0], y: [-20, -40, -20] }}
-            transition={{ duration: 3, delay: 2, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [60, -60], opacity: [0, 1, 0] }}
+            transition={{ duration: 4.5, delay: 1.5, repeat: Infinity, ease: "linear" }}
+            className={styles.ambientBubbleRight}>
+            <div className={styles.ambientCommentAvatar} style={{ background: 'linear-gradient(45deg, #3b82f6, #8b5cf6)' }}></div>
+            <div className={styles.ambientCommentContent}>
+               <span className={styles.ambientCommentUser}>@mike_builder</span>
+               <span className={styles.ambientCommentText}>price pls 💰</span>
+            </div>
+         </motion.div>
+
+         <motion.div
+            animate={{ y: [50, -50], opacity: [0, 1, 0] }}
+            transition={{ duration: 5, delay: 0.8, repeat: Infinity, ease: "linear" }}
+            className={styles.ambientBubbleTopLeft}>
+            <div className={styles.ambientCommentAvatar} style={{ background: 'linear-gradient(45deg, #10b981, #3b82f6)' }}></div>
+            <div className={styles.ambientCommentContent}>
+               <span className={styles.ambientCommentUser}>@tech_guru</span>
+               <span className={styles.ambientCommentText}>DESK</span>
+            </div>
+         </motion.div>
+
+         <motion.div
+            animate={{ y: [70, -70], opacity: [0, 1, 0] }}
+            transition={{ duration: 4.2, delay: 2.5, repeat: Infinity, ease: "linear" }}
+            className={styles.ambientBubbleTopRight}>
+            <div className={styles.ambientCommentAvatar} style={{ background: 'linear-gradient(45deg, #8b5cf6, #ec4899)' }}></div>
+            <div className={styles.ambientCommentContent}>
+               <span className={styles.ambientCommentUser}>@emily_design</span>
+               <span className={styles.ambientCommentText}>details? 🔥</span>
+            </div>
+         </motion.div>
+
+         <motion.div
+            animate={{ scale: [0.9, 1, 0.9], opacity: [0, 1, 0], y: [-10, -20, -10] }}
+            transition={{ duration: 4, delay: 2, repeat: Infinity, ease: "easeInOut" }}
             className={`${styles.ambientDmPopup} glass-panel`}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-               <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)' }} />
-               <span style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600 }}>DM Delivered</span>
+               <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(45deg, #f09433, #dc2743, #bc1888)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Send size={12} color="#fff" style={{ marginLeft: '-2px' }} />
+               </div>
+               <span style={{ fontSize: '0.8rem', color: '#fff', fontWeight: 600 }}>DM Sent Successfully</span>
             </div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>&quot;Here is your exclusive link: https://drop.site 🚀&quot;</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>AutoDrop delivered your exclusive link instantly. 🚀</div>
          </motion.div>
 
       </div>
