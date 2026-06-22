@@ -719,7 +719,7 @@ export default function LandingClient({ userId }: { userId: string | null }) {
 
 
          {/* ── Safety Shield USP Band ─────────────────────────────────────── */}
-         <section style={{ padding: '5rem 0', background: 'rgba(0,0,0,0.4)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+         <section style={{ padding: '5rem 0', background: 'var(--section-bg)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
             <div className={styles.container}>
                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                    <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.75rem)', fontWeight: 800, color: 'var(--text-heading)', letterSpacing: '-0.02em', marginBottom: '1rem', lineHeight: 1.2 }}>
@@ -784,8 +784,8 @@ export default function LandingClient({ userId }: { userId: string | null }) {
                   ].map(s => (
                      <div key={s.label} style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-heading)', fontVariantNumeric: 'tabular-nums' }}>{s.value}</div>
-                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
-                        <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.28)' }}>{s.sub}</div>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', opacity: 0.6 }}>{s.sub}</div>
                      </div>
                   ))}
                </div>
