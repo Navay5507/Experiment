@@ -18,7 +18,7 @@ export default function SidebarWrapper({ isConnected, children }: SidebarWrapper
   return (
     <div className={styles.layout}>
       <Sidebar isMobileOpen={isMobileOpen} onClose={() => setIsMobileOpen(false)} />
-      <main className={styles.mainContent}>
+      <main className={styles.mainContent} style={{ background: 'var(--bg-primary)' }}>
         <header className={styles.header}>
           {/* Hamburger — mobile only */}
           <button

@@ -718,8 +718,87 @@ export default function LandingClient({ userId }: { userId: string | null }) {
          </section>
 
 
+         {/* ── Safety Shield USP Band ─────────────────────────────────────── */}
+         <section style={{ padding: '5rem 0', background: 'rgba(0,0,0,0.4)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className={styles.container}>
+               <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.35rem 1rem', borderRadius: 99, background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)', marginBottom: '1rem' }}>
+                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                     <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#6366f1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Safety Shield</span>
+                  </div>
+                  <h2 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.75rem)', fontWeight: 800, color: 'var(--text-heading)', letterSpacing: '-0.02em', marginBottom: '1rem', lineHeight: 1.2 }}>
+                     The Only DM Tool Built to<br /><span style={{ color: '#6366f1' }}>Never Get You Banned</span>
+                  </h2>
+                  <p style={{ fontSize: '1rem', color: 'var(--text-muted)', maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>
+                     Influencers get banned because they use tools that spam identical messages at full speed. AutoDrop was engineered from the ground up to prevent exactly that.
+                  </p>
+               </div>
+
+               {/* 3-col protection pillars */}
+               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginBottom: '2.5rem' }}>
+                  {[
+                     {
+                        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+                        accent: '#6366f1',
+                        title: 'Official Meta API',
+                        body: 'We never scrape Instagram. Every action goes through Meta\'s official Business API — the same one used by Shopify and Mailchimp. Zero ban risk from the infrastructure layer.',
+                     },
+                     {
+                        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                        accent: '#10b981',
+                        title: 'Smart Throttle',
+                        body: 'We cap DMs at 150/hr (Meta\'s limit is 200) and inject random 5–30 second delays between messages. When your Reel goes viral, we safely drip the queue instead of blasting.',
+                     },
+                     {
+                        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+                        accent: '#f59e0b',
+                        title: 'Humanizer Engine',
+                        body: 'Our spintax randomiser generates a unique message variation for every single DM. Instagram\'s spam classifier never sees the same text twice from your account.',
+                     },
+                  ].map(p => (
+                     <div key={p.title} style={{
+                        padding: '1.75rem',
+                        background: 'var(--surface)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 16,
+                        display: 'flex', flexDirection: 'column', gap: '0.85rem',
+                     }}>
+                        <div style={{ width: 40, height: 40, borderRadius: 10, background: `${p.accent}12`, border: `1px solid ${p.accent}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                           {p.icon}
+                        </div>
+                        <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-heading)' }}>{p.title}</div>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.65 }}>{p.body}</div>
+                     </div>
+                  ))}
+               </div>
+
+               {/* Bottom trust bar */}
+               <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2.5rem',
+                  padding: '1.25rem 2rem',
+                  background: 'rgba(99,102,241,0.05)',
+                  border: '1px solid rgba(99,102,241,0.15)',
+                  borderRadius: 12, flexWrap: 'wrap',
+               }}>
+                  {[
+                     { label: 'DM rate cap', value: '150 / hr', sub: 'Meta allows 200' },
+                     { label: 'Min message delay', value: '5 seconds', sub: 'randomised up to 30s' },
+                     { label: 'Spam filter evasion', value: '100%', sub: 'unique per message' },
+                     { label: 'API layer', value: 'Official', sub: 'Meta Graph API v21+' },
+                  ].map(s => (
+                     <div key={s.label} style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-heading)', fontVariantNumeric: 'tabular-nums' }}>{s.value}</div>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
+                        <div style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.28)' }}>{s.sub}</div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
          {/* Advanced 8-Grid Features Section */}
          <section id="features" style={{ padding: '8rem 0' }}>
+
             <div className={styles.container}>
                <FadeIn>
                   <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
