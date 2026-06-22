@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Shield, MessageCircle, MessageSquare,
   CheckCircle2, AlertTriangle, RefreshCw,
-  Cpu, Layers, ChevronRight, Lock
+  Cpu, Layers, ChevronRight
 } from "lucide-react";
 
 interface SafetyData {
@@ -41,7 +41,7 @@ function ScoreRing({ score }: { score: number }) {
       <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
         <svg width={size} height={size} style={{ transform: "rotate(-90deg)", display: "block" }}>
           <circle cx={size / 2} cy={size / 2} r={R}
-            fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={sw} />
+            fill="none" stroke="var(--border)" strokeWidth={sw} />
           <circle cx={size / 2} cy={size / 2} r={R}
             fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round"
             strokeDasharray={circ} strokeDashoffset={dash}
@@ -55,7 +55,7 @@ function ScoreRing({ score }: { score: number }) {
           <span style={{ fontSize: "2rem", fontWeight: 800, color, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
             {score}
           </span>
-          <span style={{ fontSize: "0.58rem", color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em", marginTop: 1 }}>/100</span>
+          <span style={{ fontSize: "0.58rem", color: "var(--text-muted)", letterSpacing: "0.06em", marginTop: 1 }}>/100</span>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ function ScoreRing({ score }: { score: number }) {
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
           <span style={{ fontSize: "0.72rem", fontWeight: 700, color }}>{label}</span>
         </div>
-        <span style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.35)", lineHeight: 1.55, maxWidth: 190 }}>
+        <span style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.55, maxWidth: 190 }}>
           Based on hourly usage, message randomisation, and queue health.
         </span>
       </div>
@@ -84,21 +84,21 @@ function Chip({ label, value, sub, icon: Icon, valueColor }: {
   return (
     <div style={{
       padding: "1rem 1.1rem",
-      background: "#161b27",
-      border: "1px solid rgba(255,255,255,0.08)",
+      background: "var(--surface-hover)",
+      border: "1px solid var(--border)",
       borderRadius: 10,
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", marginBottom: "0.5rem" }}>
-        <Icon size={12} color="rgba(255,255,255,0.3)" />
-        <span style={{ fontSize: "0.67rem", fontWeight: 600, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+        <Icon size={12} color="var(--text-muted)" />
+        <span style={{ fontSize: "0.67rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
           {label}
         </span>
       </div>
       <div style={{ display: "flex", alignItems: "baseline", gap: "0.3rem" }}>
-        <span style={{ fontSize: "1.4rem", fontWeight: 800, color: valueColor || "#e2e8f0", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>
+        <span style={{ fontSize: "1.4rem", fontWeight: 800, color: valueColor || "var(--text-heading)", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>
           {value}
         </span>
-        {sub && <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.22)", fontWeight: 500 }}>{sub}</span>}
+        {sub && <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 500 }}>{sub}</span>}
       </div>
     </div>
   );
@@ -116,18 +116,18 @@ function RateBar({ label, count, limit, icon: Icon }: {
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.6rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
-          <Icon size={13} color="rgba(255,255,255,0.3)" />
-          <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#cbd5e1" }}>{label}</span>
+          <Icon size={13} color="var(--text-muted)" />
+          <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--text-main)" }}>{label}</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
           <span style={{ fontSize: "0.82rem", fontVariantNumeric: "tabular-nums" }}>
             <span style={{ color, fontWeight: 700 }}>{fmt(count)}</span>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}> / {fmt(limit)}</span>
+            <span style={{ color: "var(--text-muted)" }}> / {fmt(limit)}</span>
           </span>
           <span style={{
             fontSize: "0.67rem", fontWeight: 700,
             padding: "0.18rem 0.55rem", borderRadius: 99,
-            background: `${color}14`, color, border: `1px solid ${color}25`,
+            background: `${color}14`, color, border: `1px solid ${color}30`,
           }}>
             {status}
           </span>
@@ -135,7 +135,7 @@ function RateBar({ label, count, limit, icon: Icon }: {
       </div>
 
       {/* track */}
-      <div style={{ position: "relative", height: 7, borderRadius: 99, background: "rgba(255,255,255,0.06)", overflow: "visible" }}>
+      <div style={{ position: "relative", height: 7, borderRadius: 99, background: "var(--border)", overflow: "visible" }}>
         <div style={{
           height: "100%", borderRadius: 99,
           width: `${Math.max(pct, pct > 0 ? 0.8 : 0)}%`,
@@ -146,11 +146,12 @@ function RateBar({ label, count, limit, icon: Icon }: {
         <div style={{
           position: "absolute", left: "75%", top: -3,
           width: 1, height: 13,
-          background: "rgba(255,255,255,0.12)",
+          background: "var(--text-muted)",
+          opacity: 0.3,
         }} />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.4rem", fontSize: "0.67rem", color: "rgba(255,255,255,0.2)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.4rem", fontSize: "0.67rem", color: "var(--text-muted)", opacity: 0.6 }}>
         <span>0</span>
         <span>Safe cap: {fmt(Math.round(limit * 0.75))}</span>
         <span>Hard limit: {fmt(limit)}</span>
@@ -166,15 +167,15 @@ function AutoRow({ name, isActive, hasSpintax, variantCount }: {
   const accent = hasSpintax ? "#22c55e" : "#f59e0b";
   return (
     <tr>
-      <td style={{ padding: "0.8rem 0.75rem 0.8rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <div style={{ fontSize: "0.84rem", fontWeight: 600, color: isActive ? "#e2e8f0" : "rgba(255,255,255,0.28)" }}>
+      <td style={{ padding: "0.8rem 0.75rem 0.8rem 0", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ fontSize: "0.84rem", fontWeight: 600, color: isActive ? "var(--text-heading)" : "var(--text-muted)" }}>
           {name}
         </div>
-        <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.2)", marginTop: 2 }}>
+        <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", marginTop: 2 }}>
           {isActive ? "Active" : "Paused"}
         </div>
       </td>
-      <td style={{ padding: "0.8rem 0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)", whiteSpace: "nowrap" }}>
+      <td style={{ padding: "0.8rem 0.75rem", borderBottom: "1px solid var(--border)", whiteSpace: "nowrap" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
           {hasSpintax
             ? <CheckCircle2 size={13} color="#22c55e" />
@@ -184,11 +185,11 @@ function AutoRow({ name, isActive, hasSpintax, variantCount }: {
           </span>
         </div>
       </td>
-      <td style={{ padding: "0.8rem 0 0.8rem 0.75rem", borderBottom: "1px solid rgba(255,255,255,0.05)", textAlign: "right" }}>
+      <td style={{ padding: "0.8rem 0 0.8rem 0.75rem", borderBottom: "1px solid var(--border)", textAlign: "right" }}>
         <span style={{
           display: "inline-block", fontSize: "0.67rem", fontWeight: 700,
           padding: "0.18rem 0.6rem", borderRadius: 99,
-          background: `${accent}12`, color: accent, border: `1px solid ${accent}22`,
+          background: `${accent}12`, color: accent, border: `1px solid ${accent}25`,
         }}>
           {hasSpintax ? "Safe" : "Review"}
         </span>
@@ -201,8 +202,8 @@ function AutoRow({ name, isActive, hasSpintax, variantCount }: {
 function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div style={{
-      background: "#111827",
-      border: "1px solid rgba(255,255,255,0.08)",
+      background: "var(--surface)",
+      border: "1px solid var(--border)",
       borderRadius: 14,
       padding: "1.5rem",
       ...style,
@@ -215,7 +216,7 @@ function Card({ children, style }: { children: React.ReactNode; style?: React.CS
 function SectionLabel({ text, right }: { text: string; right?: React.ReactNode }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-      <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.09em" }}>
+      <span style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.09em" }}>
         {text}
       </span>
       {right}
@@ -226,11 +227,11 @@ function SectionLabel({ text, right }: { text: string; right?: React.ReactNode }
 /* ─── Pillar ──────────────────────────────────────────────────────────────── */
 function Pillar({ n, title, body }: { n: string; title: string; body: string }) {
   return (
-    <div style={{ display: "flex", gap: "1rem", padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-      <span style={{ flexShrink: 0, fontSize: "0.6rem", fontWeight: 800, color: "rgba(255,255,255,0.18)", width: 20, paddingTop: "0.2rem" }}>{n}</span>
+    <div style={{ display: "flex", gap: "1rem", padding: "0.9rem 0", borderBottom: "1px solid var(--border)" }}>
+      <span style={{ flexShrink: 0, fontSize: "0.6rem", fontWeight: 800, color: "var(--text-muted)", opacity: 0.5, width: 20, paddingTop: "0.2rem" }}>{n}</span>
       <div>
-        <div style={{ fontSize: "0.84rem", fontWeight: 700, color: "#e2e8f0", marginBottom: "0.25rem" }}>{title}</div>
-        <div style={{ fontSize: "0.77rem", color: "rgba(255,255,255,0.33)", lineHeight: 1.6 }}>{body}</div>
+        <div style={{ fontSize: "0.84rem", fontWeight: 700, color: "var(--text-heading)", marginBottom: "0.25rem" }}>{title}</div>
+        <div style={{ fontSize: "0.77rem", color: "var(--text-muted)", lineHeight: 1.6 }}>{body}</div>
       </div>
     </div>
   );
@@ -238,10 +239,10 @@ function Pillar({ n, title, body }: { n: string; title: string; body: string }) 
 
 /* ─── Main ────────────────────────────────────────────────────────────────── */
 export default function SafetyClient() {
-  const [data, setData]     = useState<SafetyData | null>(null);
+  const [data, setData]       = useState<SafetyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [spinning, setSpinning] = useState(false);
-  const [ts, setTs]         = useState<Date | null>(null);
+  const [ts, setTs]           = useState<Date | null>(null);
 
   const load = useCallback(async (manual = false) => {
     if (manual) setSpinning(true);
@@ -257,7 +258,7 @@ export default function SafetyClient() {
   useEffect(() => { load(); const t = setInterval(load, 30_000); return () => clearInterval(t); }, [load]);
 
   if (loading) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "55vh", gap: "0.6rem", color: "rgba(255,255,255,0.3)", fontSize: "0.84rem" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "55vh", gap: "0.6rem", color: "var(--text-muted)", fontSize: "0.84rem" }}>
       <RefreshCw size={15} style={{ animation: "spin 1s linear infinite" }} />
       Running diagnostics…
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
@@ -265,7 +266,7 @@ export default function SafetyClient() {
   );
 
   if (!data) return (
-    <div style={{ textAlign: "center", padding: "4rem", color: "rgba(255,255,255,0.25)", fontSize: "0.84rem" }}>
+    <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-muted)", fontSize: "0.84rem" }}>
       Could not load safety data.
     </div>
   );
@@ -278,28 +279,30 @@ export default function SafetyClient() {
     <>
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
-        .refbtn:hover { background: #1e293b !important; }
+        .refbtn:hover { background: var(--surface-hover) !important; }
       `}</style>
 
       {/* ── Header ───────────────────────────────────────────────────────── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.75rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
           <Shield size={18} color="#6366f1" />
-          <h1 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#f8fafc" }}>
+          <h1 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em", color: "var(--text-heading)" }}>
             Safety Shield
           </h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
           {ts && (
-            <span style={{ fontSize: "0.73rem", color: "rgba(255,255,255,0.2)", fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ fontSize: "0.73rem", color: "var(--text-muted)", fontVariantNumeric: "tabular-nums" }}>
               Updated {ts.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
           )}
           <button className="refbtn" onClick={() => load(true)} disabled={spinning} style={{
             display: "flex", alignItems: "center", gap: "0.4rem",
-            padding: "0.45rem 0.85rem", background: "#161b27",
-            border: "1px solid rgba(255,255,255,0.09)", borderRadius: 8,
-            cursor: "pointer", color: "rgba(255,255,255,0.5)",
+            padding: "0.45rem 0.85rem",
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: 8, cursor: "pointer",
+            color: "var(--text-muted)",
             fontSize: "0.77rem", fontWeight: 600, transition: "background .15s",
           }}>
             <RefreshCw size={12} style={{ animation: spinning ? "spin 0.8s linear infinite" : "none" }} />
@@ -311,12 +314,12 @@ export default function SafetyClient() {
       {/* ── Hero: Score + Chips ───────────────────────────────────────────── */}
       <Card style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap", marginBottom: "1rem" }}>
         <ScoreRing score={data.safetyScore} />
-        <div style={{ width: 1, height: 70, background: "rgba(255,255,255,0.07)", flexShrink: 0, alignSelf: "center" }} />
+        <div style={{ width: 1, height: 70, background: "var(--border)", flexShrink: 0, alignSelf: "center" }} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.7rem", flex: 1, minWidth: 260 }}>
-          <Chip label="DMs this hour"     value={String(data.dmCount)}      sub={`/ ${data.dmLimit}`}      icon={MessageCircle}  valueColor={rateColor(dmPct)} />
-          <Chip label="Comment replies"   value={String(data.commentCount)} sub={`/ ${data.commentLimit}`} icon={MessageSquare}  valueColor={rateColor(cmPct)} />
-          <Chip label="Queue depth"       value={String(data.pendingQueue)} sub="jobs"                     icon={Layers} />
-          <Chip label="API latency"       value={String(data.redisLatency)} sub="ms"                       icon={Cpu}            valueColor={latCol} />
+          <Chip label="DMs this hour"   value={String(data.dmCount)}      sub={`/ ${data.dmLimit}`}      icon={MessageCircle}  valueColor={rateColor(dmPct)} />
+          <Chip label="Comment replies" value={String(data.commentCount)} sub={`/ ${data.commentLimit}`} icon={MessageSquare}  valueColor={rateColor(cmPct)} />
+          <Chip label="Queue depth"     value={String(data.pendingQueue)} sub="jobs"                     icon={Layers} />
+          <Chip label="API latency"     value={String(data.redisLatency)} sub="ms"                       icon={Cpu}            valueColor={latCol} />
         </div>
       </Card>
 
@@ -328,7 +331,7 @@ export default function SafetyClient() {
             <span style={{
               fontSize: "0.67rem", fontWeight: 700, padding: "0.2rem 0.55rem",
               borderRadius: 99, background: "rgba(34,197,94,0.1)",
-              color: "#22c55e", border: "1px solid rgba(34,197,94,0.2)",
+              color: "#22c55e", border: "1px solid rgba(34,197,94,0.25)",
             }}>
               Meta-compliant
             </span>
@@ -348,13 +351,13 @@ export default function SafetyClient() {
           <SectionLabel
             text="Humanizer Engine"
             right={
-              <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.22)" }}>
+              <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
                 {data.automationSafety.filter(a => a.hasSpintax).length} / {data.automationSafety.length} randomised
               </span>
             }
           />
           {data.automationSafety.length === 0 ? (
-            <div style={{ padding: "1.5rem 0", textAlign: "center", color: "rgba(255,255,255,0.2)", fontSize: "0.82rem" }}>
+            <div style={{ padding: "1.5rem 0", textAlign: "center", color: "var(--text-muted)", fontSize: "0.82rem" }}>
               No automations yet.
             </div>
           ) : (
@@ -366,9 +369,9 @@ export default function SafetyClient() {
                       padding: "0 0 0.65rem",
                       textAlign: h === "Status" ? "right" : "left",
                       fontSize: "0.66rem", fontWeight: 700,
-                      color: "rgba(255,255,255,0.22)",
+                      color: "var(--text-muted)",
                       textTransform: "uppercase", letterSpacing: "0.07em",
-                      borderBottom: "1px solid rgba(255,255,255,0.07)",
+                      borderBottom: "1px solid var(--border)",
                     }}>{h}</th>
                   ))}
                 </tr>
@@ -394,7 +397,7 @@ export default function SafetyClient() {
             style={{
               display: "inline-flex", alignItems: "center", gap: "0.3rem",
               marginTop: "1rem", fontSize: "0.7rem",
-              color: "rgba(255,255,255,0.2)", textDecoration: "none",
+              color: "var(--text-muted)", textDecoration: "none", opacity: 0.6,
             }}>
             Meta developer docs <ChevronRight size={11} />
           </a>
