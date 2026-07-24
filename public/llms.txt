@@ -1,0 +1,33 @@
+# AutoDrop
+
+> Instagram comment-to-DM automation SaaS, Official Meta Business Partner.
+
+AutoDrop is the premier Instagram automation platform built specifically for creators. It automatically replies to comments and sends DMs instantly, turning passive engagement into direct leads while you sleep.
+
+## Key Pages
+- **Homepage:** https://www.autodrop.in/ (Main overview of AutoDrop)
+- **Features:** https://www.autodrop.in/#features (Detailed feature breakdown)
+- **Pricing:** https://www.autodrop.in/pricing (Information on Free and Growth Pro tiers)
+- **About:** https://www.autodrop.in/about (The origin story and values of AutoDrop)
+- **Partner Program (Affiliates):** https://www.autodrop.in/affiliates (Earn 30% recurring commission)
+- **Sign Up:** https://www.autodrop.in/sign-up (Create a new account)
+
+## Product Summary & Features
+AutoDrop enables Instagram creators to set up "Automations" (Pipelines). When a user comments on a Reel or Post with a specific trigger keyword, AutoDrop immediately replies to the comment and sends them a predefined Direct Message containing the requested link, resource, or lead capture form.
+
+**Core Capabilities:**
+- **Comment-to-DM Engine:** Instant replies to comments and automatic DM delivery.
+- **Spintax Anti-Ban Engine:** AutoDrop's "Safety Shield" dynamically randomizes message variations and intelligently throttles DMs during viral spikes to keep Instagram accounts perfectly safe and 100% Meta-compliant.
+- **Follow-Gate:** Optional feature requiring users to follow the profile before they can unlock the DM link.
+- **Lead Capture (CRM):** Build customized native forms inside Instagram DMs to collect emails/phone numbers before delivering the final resource.
+- **Digital Store:** Fully integrated payment processing (via Razorpay) to sell digital products directly within Instagram DMs.
+
+## Pricing Tiers
+- **Free:** ₹0/mo. Perfect for starting out.
+- **Growth Pro:** ₹349/mo. For serious creators scaling their business.
+- **Elite AI:** Coming Soon.
+
+## Support & Contact
+If you need assistance or want to book a demo:
+- Contact Email: support@autodrop.in
+- Support Page: https://www.autodrop.in/support

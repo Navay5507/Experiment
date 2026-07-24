@@ -1,0 +1,933 @@
+/* Dashboard Wrapper */
+.layout {
+  display: flex;
+  height: 100vh;
+  background-color: transparent;
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.brand {
+  padding: 1.5rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.brandIcon {
+  color: var(--primary);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  gap: 0.5rem;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+}
+
+/* Desktop sidebar: always visible */
+.desktopSidebar {
+  display: flex;
+}
+
+/* Mobile sidebar: managed by JS, hidden by default */
+.mobileSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 280px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 499;
+  cursor: pointer;
+}
+
+/* Hamburger button — hidden on desktop */
+.hamburgerBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+.hamburgerBtn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+/* Sidebar close button — hidden on desktop */
+.sidebarCloseBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.sidebarCloseBtn:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.active {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+/* Main Content Area */
+.mainContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  background: transparent;
+}
+
+/* Minimal Topbar */
+.header {
+  height: 64px;
+  min-height: 64px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  gap: 1rem;
+}
+
+.pageTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.metricCardBox {
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1;
+  min-height: 130px;
+  justify-content: space-between;
+}
+
+.roadmapCard {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  position: relative;
+  overflow: hidden;
+}
+
+.roadmapStepList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  flex: 1;
+}
+
+.roadmapStepItem {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+}
+
+.roadmapStepPanel {
+  flex: 1;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  flex-wrap: wrap;
+}
+
+.chartCard {
+  padding: 1.5rem;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+.chartWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 480px;
+}
+
+/* Page Containers */
+.content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Shared UI Components for Pages */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.metricsWrapper {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.secondaryMetricGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.metricCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metricTitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.metricIcon {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.metricTrend {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.trendUp { color: #10b981; }
+.trendDown { color: #ef4444; }
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  gap: 1rem;
+}
+
+.emptyState p {
+  color: var(--text-muted);
+}
+
+/* Base Data Tables */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 500px;
+}
+.table th {
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(255,255,255,0.01);
+  white-space: nowrap;
+}
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+.table tr:last-child td {
+  border-bottom: none;
+}
+.table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.btnAction {
+  background: var(--surface);
+  color: var(--text-heading);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+}
+.btnAction:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.titleArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+.titleArea h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.titleArea p {
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ===== TABLET (900px) ===== */
+@media (max-width: 900px) {
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===== MOBILE (768px) ===== */
+@media (max-width: 768px) {
+
+  /* Desktop sidebar hidden on mobile */
+  .desktopSidebar {
+    display: none;
+  }
+
+  /* Show hamburger on mobile */
+  .hamburgerBtn {
+    display: flex;
+  }
+
+  /* Show close button inside the mobile drawer */
+  .sidebarCloseBtn {
+    display: flex;
+  }
+
+  /* Main content: full width, normal scroll */
+  .mainContent {
+    flex: 1;
+    width: 100%;
+    height: auto;
+    overflow-y: visible;
+    overflow-x: hidden;
+  }
+
+  .layout {
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+  }
+
+  .header {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 1rem;
+    gap: 0.75rem;
+  }
+
+  .pageTitle {
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .content {
+    padding: 1rem;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .metricCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .metricTitle {
+    font-size: 0.75rem;
+  }
+
+  .metricTrend {
+    font-size: 0.72rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .titleArea {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .titleArea h1 {
+    font-size: 1.5rem;
+  }
+
+  .tableContainer {
+    border-radius: 12px;
+  }
+
+  .table th, .table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .btnAction {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .emptyState {
+    padding: 2rem 1rem;
+    border-radius: 12px;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+}
+
+/* Enforce fluid iOS touch scrolling for dashboard sub-panes */
+.mainContent,
+.nav,
+.tableContainer {
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Mobile-Only Dashboard Tabs Layout */
+.mobileTabsContainer {
+  display: none;
+}
+
+.showOnMobile {
+  display: block;
+}
+
+.hideOnMobile {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobileTabsContainer {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    padding: 0.35rem;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .mobileTabButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobileTabButton:hover {
+    color: var(--text-heading);
+  }
+
+  .mobileActiveTab {
+    background: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  }
+
+  .metricsWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .metricGrid, .secondaryMetricGrid {
+    display: contents;
+  }
+
+  .metricCard {
+    flex: none;
+    width: auto;
+    scroll-snap-align: none;
+    padding: 1rem;
+    border-radius: 12px;
+    gap: 0.35rem;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+  .content {
+    padding: 1rem;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .metricCard {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .metricTitle {
+    font-size: 0.75rem;
+  }
+
+  .metricTrend {
+    font-size: 0.72rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .titleArea {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .titleArea h1 {
+    font-size: 1.5rem;
+  }
+
+  .tableContainer {
+    border-radius: 12px;
+  }
+
+  .table th, .table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .btnAction {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+
+  .emptyState {
+    padding: 2rem 1rem;
+    border-radius: 12px;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+}
+
+/* ===== SMALL MOBILE (640px) ===== */
+@media (max-width: 640px) {
+  .header {
+    height: 50px;
+    min-height: 50px;
+    padding: 0 0.75rem;
+  }
+
+  .pageTitle {
+    font-size: 0.8rem;
+  }
+
+  .content {
+    padding: 0.75rem;
+  }
+
+  .metricsWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .metricGrid {
+    grid-template-columns: 1fr;
+    display: block; /* Override contents if needed */
+  }
+
+  .metricCard {
+    padding: 0.75rem;
+  }
+
+  .metricValue {
+    font-size: 1.25rem;
+  }
+
+  .titleArea h1 {
+    font-size: 1.3rem;
+  }
+
+  .table th, .table td {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Enforce fluid iOS touch scrolling for dashboard sub-panes */
+.mainContent,
+.nav,
+.tableContainer {
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Mobile-Only Dashboard Tabs Layout */
+.mobileTabsContainer {
+  display: none;
+}
+
+.showOnMobile {
+  display: block;
+}
+
+.hideOnMobile {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobileTabsContainer {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    padding: 0.35rem;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .mobileTabButton {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobileTabButton:hover {
+    color: var(--text-heading);
+  }
+
+  .mobileActiveTab {
+    background: var(--primary) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  }
+
+  .metricsWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .metricGrid, .secondaryMetricGrid {
+    display: contents;
+  }
+
+  .metricCard {
+    flex: none;
+    width: auto;
+    scroll-snap-align: none;
+    padding: 1rem;
+    border-radius: 12px;
+    gap: 0.35rem;
+  }
+
+  .metricValue {
+    font-size: 1.5rem;
+  }
+
+  .metricDescription {
+    display: none !important;
+  }
+
+  /* Make sure hideOnMobile wins over any layout display changes */
+  .hideOnMobile {
+    display: none !important;
+  }
+  
+  /* Make the first metric span full width, the rest form a 2x2 grid */
+  .metricGrid > div:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .metricCardBox {
+    padding: 0.85rem !important;
+    min-height: 110px !important;
+  }
+
+  .desktopSideBySide {
+    grid-template-columns: 1fr;
+  }
+
+  .roadmapCard {
+    padding: 1.25rem;
+    min-height: auto;
+  }
+  
+  .chartCard {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+  }
+  
+  .roadmapStepItem {
+    gap: 0.75rem;
+  }
+  
+  .roadmapStepPanel {
+    padding: 0.85rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .roadmapStepPanel .btnAction {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .chartWrapper {
+    min-height: auto;
+  }
+}
+
+.desktopSideBySide {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 1024px) {
+  .desktopSideBySide {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ===== SMALL MOBILE (480px) ===== */
+@media (max-width: 480px) {
+  .header {
+    height: 50px;
+    min-height: 50px;
+    padding: 0 0.75rem;
+  }
+  .pageTitle {
+    font-size: 0.8rem;
+  }
+  .content {
+    padding: 0.75rem;
+  }
+  .metricValue {
+    font-size: 1.25rem;
+  }
+  .titleArea h1 {
+    font-size: 1.3rem;
+  }
+  .table th, .table td {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+
+
+/* Global CSS Grid / Flex blowout safeguards */
+.metricsWrapper > *, .desktopSideBySide > *, .roadmapStepList > *, .roadmapStepItem > *, .roadmapStepPanel > * {
+  min-width: 0;
+}
+.roadmapCard, .chartWrapper, .metricCardBox {
+  min-width: 0;
+}
+
+

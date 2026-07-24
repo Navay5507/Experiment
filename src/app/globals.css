@@ -1,0 +1,242 @@
+:root {
+  --background: #000000;
+  --foreground: #f4f4f5;
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --secondary: #1f2937;
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.1);
+  --glass: rgba(10, 10, 10, 0.6);
+  --glass-blur: blur(12px);
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bg-primary: #000000;
+  --surface: #0a0a0a;
+  --surface-hover: #141414;
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --accent: #22D3EE;
+  --text-main: #E5E7EB;
+  --text-muted: #9CA3AF;
+  --text-heading: #ffffff;
+  --border: #222222;
+  --border-glow: #3b2a60;
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Theme Switcher Solid / Transparent Custom Variables */
+  --navbar-bg: rgba(0, 0, 0, 0.65);
+  --mobile-menu-bg: #000000;
+  --section-bg: transparent;
+  --footer-bg: #050505;
+  --card-bg: var(--bg-primary);
+  --price-pro-bg: linear-gradient(to bottom, #11151c, var(--bg-primary));
+  --feature-card-bg: linear-gradient(135deg, #1e1e26 0%, #0f0f14 100%);
+  --feature-card-border: #222222;
+}
+
+[data-theme="light"] {
+  --background: #f8f8f7;
+  --bg-primary: #f8f8f7;
+  --foreground: #111315;
+  --text-main: #1c1d1f;
+  --text-muted: #5d5f63;
+  --text-heading: #0c0d0e;
+  --surface: #ffffff;
+  --surface-hover: #f4f4f6;
+  --border: rgba(0, 0, 0, 0.09);
+  --border-glow: rgba(99, 102, 241, 0.15);
+  --glass: rgba(248, 248, 247, 0.8);
+
+  /* Theme Switcher Solid overrides in Light Mode */
+  --navbar-bg: rgba(248, 248, 247, 0.65);
+  --mobile-menu-bg: #f8f8f7;
+  --section-bg: transparent;
+  --footer-bg: #ffffff;
+  --card-bg: #fbfbfc;
+  --price-pro-bg: linear-gradient(to bottom, #ffffff, #f4f4f6);
+  --feature-card-bg: linear-gradient(135deg, #ffffff 0%, #f9f9fb 100%);
+  --feature-card-border: #f0f0f0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: transparent;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Premium GPU-accelerated fixed grid background to avoid scroll paint overhead */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: none;
+  background-size: 70px 70px;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+}
+
+[data-theme="light"] body::before {
+  background-image: none;
+}
+
+/* --- PREMIUM V2 VISUAL LAYER --- */
+
+.noise-bg {
+  display: none;
+}
+
+.glass-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #6366F1, #22D3EE);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.premium-btn {
+  background: var(--primary);
+  border-radius: 999px;
+  padding: 14px 28px;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.premium-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Base Utility Classes */
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #c084fc, #8b5cf6, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+/* Premium Responsive Feature Cards with Hardware Acceleration */
+.feature-card {
+  background: var(--feature-card-bg);
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--feature-card-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transform: translate3d(0, 0, 0); /* Force GPU Layer */
+}
+
+/* Optimize cursor glow & backdrop filters on mobile for buttery-smooth scrolling */
+@media (max-width: 768px) {
+  /* GPU layer promotion for hardware acceleration */
+  .feature-card,
+  .glass-panel {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Skip rendering offscreen sections until they enter the viewport to save CPU/GPU overhead */
+  #how-it-works,
+  #pricing,
+  #faq,
+  footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
+  }
+
+  .desktop-only-cursor-glow {
+    display: none !important;
+  }
+}
+
+/* GPU-accelerated interactive elements layer */
+a, button, .premium-btn, .feature-card, .glass-panel {
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Eliminate 300ms tap delay on mobile devices */
+a, button, input, select, textarea {
+  touch-action: manipulation;
+}

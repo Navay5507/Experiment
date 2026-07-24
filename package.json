@@ -1,0 +1,47 @@
+{
+  "name": "autodrop-web",
+  "version": "1.0.3",
+  "description": "Instagram Automation SaaS (Build Bust: 1712247000)",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "start:worker": "tsx workers/server.ts",
+    "lint": "eslint",
+    "graphify:watch": "npx nodemon --watch src --ext ts,tsx,json,md --exec python scripts/update_graphify.py"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^7.0.7",
+    "@supabase/supabase-js": "^2.100.1",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "bullmq": "^5.71.1",
+    "canvas-confetti": "^1.9.4",
+    "framer-motion": "^12.38.0",
+    "ioredis": "^5.10.1",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.1",
+    "openai": "^6.33.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "resend": "^6.12.2",
+    "svix": "^1.89.0",
+    "tsx": "^4.22.4"
+  },
+  "devDependencies": {
+    "@reticlehq/next": "^2.1.0",
+    "@reticlehq/react": "^2.1.0",
+    "@reticlehq/server": "^2.1.0",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^20.19.39",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "razorpay": "^2.9.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5",
+    "vitest": "^4.1.5"
+  }
+}
